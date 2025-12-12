@@ -1,7 +1,7 @@
 import app from './index.js';
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, () => {
-  console.log(`Servidor levantado en http://localhost:${PORT}`);
+  console.log(`Servidor levantado en el puerto: ${PORT}`);
 });

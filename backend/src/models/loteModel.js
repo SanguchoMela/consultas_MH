@@ -4,7 +4,7 @@ const loteSchema = new mongoose.Schema({
     infoLote: {
         etapa: { type: String, required: true },
         manzana: { type: String, required: true },
-        lote: { type: String, required: true },
+        lote: { type: Number, required: true },
         area: { type: String, required: true },
         valorM2: { type: Number, required: true },
         valorTotal: { type: Number, required: true },

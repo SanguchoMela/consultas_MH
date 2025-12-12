@@ -1,4 +1,39 @@
-import Cliente from '../models/clienteModel.js'
+import Cliente from "../models/clienteModel.js";
+
+export const buscarClientePorNombre = async (req, res) => {
+  try {
+    const { nombre } = req.query;
+    if (!nombre) {
+      return res.status(400).json({ error: 'Debe proporcionar un nombre para la búsqueda.' });
+    }
+    const cliente = await Cliente.find({
+      $or: [
+        { "datosPersonales.nombres": { $regex: nombre, $options: "i" } },
+        { "datosPersonales.apellidos": { $regex: nombre, $options: "i" } },
+      ],
+    }).populate('lotes');
+
+    return res.json(cliente);
+  } catch (error) {
+    console.error("🔥 Error en la búsqueda por nombre:", error);
+    return res.status(500).json({ error: error.message });    
+  }
+}
+
+export const buscarClientePorCedula = async (req, res) => {
+  try {
+    const { cedula } = req.query;
+    if (!cedula) {
+      return res.status(400).json({ error: 'Debe proporcionar una cédula para la búsqueda.' });
+    }
+    const cliente = await Cliente.findOne({ "datosPersonales.ci": cedula }).populate('lotes');
+    
+    return res.json(cliente ? [cliente] : []);
+  } catch (error) {
+    console.error("🔥 Error en la búsqueda por cédula:", error)
+    return res.status(500).json({ error: error.message });
+  }
+}
 
 export const getClientes = async (req, res) => {
     try {
@@ -6,22 +41,6 @@ export const getClientes = async (req, res) => {
         res.status(200).json(clientes)
     } catch (error) {
         console.error('Error al obtener clientes:', error.message)
-        res.status(500).json({ message: 'Error del servidor al obtener a los clientes' })
-    }
-}
-
-export const getClienteById = async (req, res) => {
-    try {
-        const { id } = req.params
-        const cliente = await Cliente.findById(id).populate('lotes')
-
-        if (!cliente) {
-            return res.status(404).json({ message: 'Cliente no encontrado' })
-        }
-
-        res.status(200).json(cliente)
-    } catch (error) {
-        console.error('Error al obtener cliente', error.message)
-        res.status(500).json({ message: 'Error del servidor al obtener el cliente' })
+        res.status(500).json({ message: 'Error al obtener clientes: ', error: error.message })
     }
 }

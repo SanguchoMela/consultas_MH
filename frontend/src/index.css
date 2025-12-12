@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+body {
+    @apply bg-gray-100 lg:p-5
+}
+
+.input-style {
+    @apply border-b border-cyan-700 px-3 py-1 focus:outline-none;
+}
+
+.label {
+    @apply font-semibold lg:text-lg;
+}
+
+.sub-label {
+    @apply font-medium text-gray-900 text-sm;
+}
+
+.tr-cli-style {
+    @apply flex flex-col md:flex-row justify-between items-center border-b border-dotted border-cyan-700/40 pt-2;
+}
+
+.tr-style {
+    @apply flex justify-between items-center border-b border-dotted border-cyan-700/20 pt-2 px-3;
+}
+
+.column-tbody {
+    @apply min-w-[80%] space-y-1 py-3;
+}
+
+.caption-style {
+    @apply font-medium bg-cyan-700/20 py-2;
+}
