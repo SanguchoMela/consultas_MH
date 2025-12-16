@@ -2,8 +2,7 @@ import mongoose from "mongoose";
 
 const clienteSchema = new mongoose.Schema({
   datosPersonales: {
-    nombres: { type: String, required: true },
-    apellidos: { type: String, required: true },
+    nombreCliente: { type: String, required: true },
     ci: { type: String, required: true, unique: true },
   },
   datosContacto: {
@@ -12,6 +11,7 @@ const clienteSchema = new mongoose.Schema({
 
   },
   datosAdicionales: {
+    fechaApartado: { type: String, required: true },
     ocupacion: { type: String, required: true },
     vendedor: { type: String }
   },

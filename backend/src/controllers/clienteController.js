@@ -6,12 +6,7 @@ export const buscarClientePorNombre = async (req, res) => {
     if (!nombre) {
       return res.status(400).json({ error: 'Debe proporcionar un nombre para la búsqueda.' });
     }
-    const cliente = await Cliente.find({
-      $or: [
-        { "datosPersonales.nombres": { $regex: nombre, $options: "i" } },
-        { "datosPersonales.apellidos": { $regex: nombre, $options: "i" } },
-      ],
-    }).populate('lotes');
+    const cliente = await Cliente.findOne({"datosPersonales.nombreCliente": nombre}).populate('lotes');
 
     return res.json(cliente);
   } catch (error) {
