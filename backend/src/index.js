@@ -13,7 +13,7 @@ app.use(express.json());
 connectDB();
 
 app.use(cors({
-  origin: process.env.FRONTEND_URL,
+  origin: process.env.FRONTEND_URL || "http://localhost:5173",
   methods: ['GET'],
   credentials: true,
 }));
