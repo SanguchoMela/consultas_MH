@@ -159,7 +159,7 @@ function App() {
           resultados.map((cliente) => (
             <div key={cliente._id} className="lg:p-8 md:p-6 p-4 bg-white shadow rounded">
               <h2 className="text-xl font-semibold text-center md:text-left">
-                {cliente.datosPersonales.nombres} {cliente.datosPersonales.apellidos}
+                {cliente.datosPersonales.nombrecliente}
               </h2>
               <hr className="my-2 text-cyan-700" />
 
@@ -177,6 +177,10 @@ function App() {
                   <tr className="tr-cli-style">
                     <td className="sub-label">Teléfono</td>
                     <td>{cliente.datosContacto.telefono}</td>
+                  </tr>
+                  <tr className="tr-cli-style">
+                    <td className="sub-label">Fecha del apartado</td>
+                    <td>{cliente.datosAdicionales.fechaapartado}</td>
                   </tr>
                 </tbody>
               </table>
