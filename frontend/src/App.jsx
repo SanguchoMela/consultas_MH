@@ -24,7 +24,7 @@ function App() {
     const ci = cedula.trim();
     const nom = nombre.trim();
 
-    if (!ci && !nom) return showError("Ingrese cédula o nombre");
+    if (!ci && !nom) return showError("Ingrese la cédula o el nombre del cliente");
 
     // Priorizar búsqueda por cédula si ambos campos están llenos
     let url = "";
@@ -37,10 +37,10 @@ function App() {
 
     try {
       const res = await fetch(url);
-
-      if (!res.ok) throw new Error(`Error (${res.status})`);
-
       const data = await res.json();
+
+      if (!res.ok) return showError(data.error || "Error en la búsqueda")
+
 
       if (!data.length) return showError("No se encontró información del cliente");
 
@@ -58,15 +58,15 @@ function App() {
     const lt = lote.trim();
     const mz = manzana.trim();
 
-    if (!lt || !mz) return showError("Ingrese lote y manzana");
+    if (!lt || !mz) return showError("Ingrese el lote y la manzana");
 
     try {
       const res = await fetch(`${backendUrl}/buscar-lote?lote=${lote}&manzana=${manzana}`);
+      const data = await res.json();
 
       // Verificar si la respuesta es exitosa (status 200)
-      if (!res.ok) throw new Error(`Error (${res.status})`);
+      if (!res.ok) return showError(data.error || "Error en la búsqueda")
 
-      const data = await res.json();
 
       if (!data.length) return showError("No se encontró información del lote");
 
@@ -99,10 +99,10 @@ function App() {
             />
           </div>
           <div className="flex flex-col">
-            <label className="sub-label">Nombres o apellidos</label>
+            <label className="sub-label">Nombre</label>
             <input
               type="text"
-              placeholder="Ej. Juan Manuel o Pérez González"
+              placeholder="Ej. Juan Perez"
               value={nombre}
               onChange={(e) => setNombre(e.target.value)}
               className="input-style"
@@ -157,11 +157,17 @@ function App() {
       <section className="m-3 sm:m-4 md:m-5 lg:m-7">
         {Array.isArray(resultados) && resultados.length > 0 ? (
           resultados.map((cliente) => (
-            <div key={cliente._id} className="lg:p-8 md:p-6 p-4 bg-white shadow rounded">
-              <h2 className="text-xl font-semibold text-center md:text-left">
-                {cliente.datosPersonales.nombrecliente}
-              </h2>
-              <hr className="my-2 text-cyan-700" />
+            <details key={cliente._id} className="lg:p-8 md:p-6 p-4 bg-white shadow rounded">
+              <summary className="cursor-pointer list-none flex justify-between items-center pb-2 border-b border-cyan-700/50">
+                <h2 className="text-xl font-semibold text-center md:text-left">
+                  {cliente.datosPersonales.nombrecliente}
+                </h2>
+                <span className="transition-transform group-open:rotate-180">                  
+                  <svg width="7vw" height="5vh" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M12.7071 14.7071C12.3166 15.0976 11.6834 15.0976 11.2929 14.7071L6.29289 9.70711C5.90237 9.31658 5.90237 8.68342 6.29289 8.29289C6.68342 7.90237 7.31658 7.90237 7.70711 8.29289L12 12.5858L16.2929 8.29289C16.6834 7.90237 17.3166 7.90237 17.7071 8.29289C18.0976 8.68342 18.0976 9.31658 17.7071 9.70711L12.7071 14.7071Z" fill="#005f78" />
+                  </svg>
+                </span>
+              </summary>
 
               {/* Datos del cliente */}
               <table className="w-full lg:max-w-[50%]">
@@ -282,7 +288,7 @@ function App() {
                   ))
                 )}
               </div>
-            </div>
+            </details >
           ))
         ) : (
           !error && (
