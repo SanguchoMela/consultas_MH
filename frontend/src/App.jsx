@@ -162,7 +162,7 @@ function App() {
         <section className="m-3 sm:m-4 md:m-5 lg:m-7 space-y-3">
           {Array.isArray(resultados) && resultados.length > 0 ? (
             resultados.map((cliente) => (
-              <details key={cliente._id} className="group lg:px-6 lg:py-3 md:px-5 px-3 py-2 rounded bg-white shadow shadow-cyan-900/70">
+              <details key={cliente._id} className="group lg:px-6 lg:py-4 md:px-5 p-3 rounded bg-white shadow shadow-cyan-900/70">
                 <summary className="cursor-pointer list-none flex justify-between items-center">
                   <h2 className="lg:text-xl md:text-lg text-md font-semibold text-center md:text-left">
                     {cliente.datosPersonales.nombrecliente}
