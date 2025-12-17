@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./App.css";
-import Footer from "./components/footer";
+import Footer from "./components/Footer"
 
 function App() {
   const [nombre, setNombre] = useState("");
