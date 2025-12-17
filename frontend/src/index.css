@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 body {
-    @apply bg-gray-100 lg:p-5
+    @apply bg-gray-100
 }
 
 .card-search {
