@@ -111,7 +111,7 @@ function App() {
           </div>
           <button
             onClick={buscarClienteAuto}
-            className="bg-cyan-600 text-white font-medium mt-3 px-5 py-2 rounded-lg hover:bg-cyan-700"
+            className="search-button bg-cyan-600 hover:bg-cyan-700"
           >
             Buscar Cliente
           </button>
@@ -144,7 +144,7 @@ function App() {
           {/* </div> */}
           <button
             onClick={buscarLote}
-            className="bg-lime-600 text-white font-medium mt-3 px-5 py-2 rounded-lg hover:bg-lime-700"
+            className="search-button bg-lime-600 hover:bg-lime-700"
           >
             Buscar Lote
           </button>
@@ -158,9 +158,9 @@ function App() {
       <section className="m-3 sm:m-4 md:m-5 lg:m-7 space-y-3">
         {Array.isArray(resultados) && resultados.length > 0 ? (
           resultados.map((cliente) => (
-            <details key={cliente._id} className="group lg:p-6 md:p-5 p-3 rounded bg-white shadow shadow-cyan-900/70">
+            <details key={cliente._id} className="group lg:p-6 md:p-5 p-4 rounded bg-white shadow shadow-cyan-900/70">
               <summary className="cursor-pointer list-none flex justify-between items-center">
-                <h2 className="text-xl font-semibold text-center md:text-left">
+                <h2 className="lg:text-xl md:text-lg text-md font-semibold text-center md:text-left">
                   {cliente.datosPersonales.nombrecliente}
                 </h2>
                 <svg 

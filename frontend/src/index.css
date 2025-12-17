@@ -5,7 +5,11 @@ body {
 }
 
 .card-search {
-    @apply bg-white p-6 rounded-lg shadow-md flex flex-col space-y-1 min-w-[42%]
+    @apply bg-white lg:p-6 p-4 rounded-lg shadow-md flex flex-col space-y-1 min-w-[42%]
+}
+
+.search-button {
+    @apply text-white font-medium mt-3 lg:px-5 px-4 lg:py-2 py-1 rounded-lg
 }
 
 .input-style {
