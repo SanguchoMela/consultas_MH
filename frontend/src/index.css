@@ -4,12 +4,16 @@ body {
     @apply bg-gray-100 lg:p-5
 }
 
+.card-search {
+    @apply bg-white p-6 rounded-lg shadow-md flex flex-col space-y-1 min-w-[42%]
+}
+
 .input-style {
     @apply border-b border-cyan-700 px-3 py-1 focus:outline-none;
 }
 
 .label {
-    @apply font-semibold lg:text-lg;
+    @apply font-semibold lg:text-lg mb-3;
 }
 
 .sub-label {
