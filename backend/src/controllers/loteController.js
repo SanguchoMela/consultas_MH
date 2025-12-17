@@ -42,7 +42,7 @@ export const buscarLote = async (req, res) => {
     // console.log('Lotes encontrados:', lotes.length);
 
     if (lotes.length === 0) {
-      return res.status(404).json({ error: 'No se encontraron lotes con esa consulta.' });
+      return res.status(404).json({ error: 'No se encontró el lote buscado.' });
     }
 
     // Obtener los clientes asociados a los lotes
@@ -58,7 +58,7 @@ export const buscarLote = async (req, res) => {
 
     return res.json(clientesFinal);
   } catch (error) {
-    console.error("🔥 Error en la búsqueda de lotes:", error);
+    console.error("🔥 Error en la búsqueda del lote:", error);
     return res.status(500).json({ error: error.message });
   }
 };

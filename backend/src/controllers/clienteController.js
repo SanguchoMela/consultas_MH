@@ -23,7 +23,7 @@ export const buscarClientePorNombre = async (req, res) => {
     const clientes = await Cliente.find({ $and: filtro }).populate('lotes')
 
     if (clientes.length === 0) {
-      return res.status(404).json({ error: 'No se encontraron clientes.' })
+      return res.status(404).json({ error: 'No se encontraron clientes con ese nombre.' })
     }
 
     return res.json(clientes);
@@ -40,6 +40,10 @@ export const buscarClientePorCedula = async (req, res) => {
       return res.status(400).json({ error: 'Debe proporcionar una cédula para la búsqueda.' });
     }
     const cliente = await Cliente.findOne({ "datosPersonales.ci": cedula }).populate('lotes');
+
+    if (!cliente) {
+      return res.status(404).json({ error: 'No se encontró el cliente asociado a la cédula ingresada.' });
+    }
 
     return res.json(cliente ? [cliente] : []);
   } catch (error) {
