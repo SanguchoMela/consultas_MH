@@ -262,7 +262,7 @@ function App() {
                                   <tbody>
                                     <tr className="tr-style">
                                       <td className="sub-label">Área</td>
-                                      <td>{lote.infoLote.area}</td>
+                                      <td>{lote.infoLote.area} m²</td>
                                     </tr>
                                     <tr className="tr-style">
                                       <td className="sub-label">Valor m²</td>
