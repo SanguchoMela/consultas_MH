@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./App.css";
 import Footer from "./components/Footer"
 import Spinner from "./components/Spinner";
+import ErrorCard from "./components/ErrorCard";
 
 function App() {
   const [nombre, setNombre] = useState("");
@@ -101,6 +102,9 @@ function App() {
           {/* <h1 className="text-3xl font-bold mb-4">Manta Hills</h1> */}
         </div>
 
+        {/* Mostrar mensaje de error */}
+        {error && <ErrorCard errorMessage={error} />}
+
         {/* BUSCADOR */}
         <div className="grid md:grid-cols-2 grid-cols-1 lg:gap-8 gap-4 lg:m-7 m-5">
           {/* BUSCAR CLIENTE */}
@@ -170,9 +174,6 @@ function App() {
 
         {/* Aviso de carga */}
         {loading && <Spinner />}
-
-        {/* Mostrar mensaje de error */}
-        {error && <p className="text-red-600 mt-12 text-center">{error}</p>}
 
         {/* RESULTADOS */}
         <section className="m-3 sm:m-4 md:m-5 lg:m-7 space-y-3">
