@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./App.css";
 import Footer from "./components/Footer"
+import Spinner from "./components/Spinner";
 
 function App() {
   const [nombre, setNombre] = useState("");
@@ -9,17 +10,24 @@ function App() {
   const [manzana, setManzana] = useState("");  // Estado para manzana
   const [resultados, setResultados] = useState([]);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false)
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const infoDate = import.meta.env.VITE_INFO_DATE
+
+  const showLoading = () => setLoading(true)
+  const hideLoading = () => setLoading(false)
 
   const showError = (message) => {
     setError(message);
     setResultados([]);
+    hideLoading()
   }
 
   // Función para buscar clientes automáticamente por cédula o nombre
   const buscarClienteAuto = async () => {
     setError(null);
+    showLoading()
 
     const ci = cedula.trim();
     const nom = nombre.trim();
@@ -38,6 +46,7 @@ function App() {
     try {
       const res = await fetch(url);
       const data = await res.json();
+      hideLoading()
 
       if (!res.ok) return showError(data.error || "Error en la búsqueda")
 
@@ -46,6 +55,7 @@ function App() {
 
       setResultados(data);
     } catch (error) {
+      hideLoading()
       console.error(error);
       showError("Error en conexión con el servidor");
     }
@@ -54,6 +64,7 @@ function App() {
   // Función para buscar lotes por manzana y lote
   const buscarLote = async () => {
     setError(null);
+    showLoading()
 
     const lt = lote.trim();
     const mz = manzana.trim();
@@ -63,6 +74,7 @@ function App() {
     try {
       const res = await fetch(`${backendUrl}/buscar-lote?lote=${lote}&manzana=${manzana}`);
       const data = await res.json();
+      hideLoading()
 
       // Verificar si la respuesta es exitosa (status 200)
       if (!res.ok) return showError(data.error || "Error en la búsqueda")
@@ -72,12 +84,11 @@ function App() {
 
       setResultados(data);
     } catch (err) {
-      showError("Error en conexión con el servidor");
+      hideLoading()
       console.error(err)
+      showError("Error en conexión con el servidor");
     }
   };
-
-  const infoDate = import.meta.env.VITE_INFO_DATE
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -156,6 +167,9 @@ function App() {
             </button>
           </div>
         </div>
+
+        {/* Aviso de carga */}
+        {loading && <Spinner />}
 
         {/* Mostrar mensaje de error */}
         {error && <p className="text-red-600 mt-12 text-center">{error}</p>}
