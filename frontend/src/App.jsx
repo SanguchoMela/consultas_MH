@@ -178,7 +178,7 @@ function App() {
           </div>
         </div>
 
-        {/* Aviso de carga */}
+        {/* Spinner de carga */}
         {loading && <Spinner />}
 
         {/* RESULTADOS */}
