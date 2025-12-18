@@ -77,11 +77,13 @@ function App() {
     }
   };
 
+  const infoDate = import.meta.env.VITE_INFO_DATE
+
   return (
     <div className="min-h-screen flex flex-col">
       <main className="grow">
         <p className="md:text-right text-center md:pr-8 pt-2">
-          Información hasta: 14/12/2025
+          Información hasta: {infoDate}
         </p>
         <div className="flex flex-col items-center lg:my-6 my-4 space-y-3">
           <img src="/mh.png" alt="Logo de Manta Hills" className="lg:h-28 md:h-24 h-20" />
