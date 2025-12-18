@@ -131,10 +131,11 @@ function App() {
               />
             </div>
             <button
+              disabled={loading}
               onClick={buscarClienteAuto}
               className="search-button bg-cyan-600 hover:bg-cyan-700"
             >
-              Buscar Cliente
+              {loading ? "Buscando..." : "Buscar Cliente"}
             </button>
           </div>
 
@@ -164,10 +165,11 @@ function App() {
             </div>
             {/* </div> */}
             <button
+              disabled={loading}
               onClick={buscarLote}
               className="search-button bg-lime-600 hover:bg-lime-700"
             >
-              Buscar Lote
+              {loading ? "Buscando..." : "Buscar Lote"}
             </button>
           </div>
         </div>
