@@ -117,6 +117,7 @@ function App() {
                 placeholder="Ej. 1723456789"
                 value={cedula}
                 onChange={(e) => setCedula(e.target.value)}
+                aria-label="Campo para cédula del cliente"
                 className="input-style"
               />
             </div>
@@ -127,6 +128,7 @@ function App() {
                 placeholder="Ej. Juan Perez"
                 value={nombre}
                 onChange={(e) => setNombre(e.target.value)}
+                aria-label="Campo para nombre del cliente"
                 className="input-style"
               />
             </div>
@@ -150,6 +152,7 @@ function App() {
                 placeholder="Ej. 1"
                 value={lote}
                 onChange={(e) => setLote(e.target.value)}
+                aria-label="Campo para número de lote"
                 className="input-style"
               />
             </div>
@@ -160,6 +163,7 @@ function App() {
                 placeholder="Ej. A"
                 value={manzana}
                 onChange={(e) => setManzana(e.target.value)}
+                aria-label="Campo para manzana del lote"
                 className="input-style"
               />
             </div>
