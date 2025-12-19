@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import "./App.css";
 import Footer from "./components/Footer"
 import Spinner from "./components/Spinner";
@@ -12,6 +12,8 @@ function App() {
   const [resultados, setResultados] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false)
+  const resultsRef = useRef(null)
+  const [showTop, setShowTop] = useState(false)
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const infoDate = import.meta.env.VITE_INFO_DATE
@@ -23,6 +25,15 @@ function App() {
     setError(message);
     setResultados([]);
     hideLoading()
+  }
+
+  const refScroll = () => {
+    setTimeout(() => {
+      resultsRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      })
+    }, 200)
   }
 
   // Función para buscar clientes automáticamente por cédula o nombre
@@ -55,6 +66,7 @@ function App() {
       if (!data.length) return showError("No se encontró información del cliente");
 
       setResultados(data);
+      refScroll()
     } catch (error) {
       hideLoading()
       console.error(error);
@@ -84,12 +96,21 @@ function App() {
       if (!data.length) return showError("No se encontró información del lote");
 
       setResultados(data);
+      refScroll()
     } catch (err) {
       hideLoading()
       console.error(err)
       showError("Error en conexión con el servidor");
     }
   };
+
+  useEffect(() => {
+    const onScroll = () => {
+      setShowTop(window.scrollY > 400)
+    }
+    window.addEventListener("scroll", onScroll)
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [])
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -182,7 +203,7 @@ function App() {
         {loading && <Spinner />}
 
         {/* RESULTADOS */}
-        <section className="m-3 sm:m-4 md:m-5 lg:m-7 space-y-3">
+        <section ref={resultsRef} className="m-3 sm:m-4 md:m-5 lg:m-7 space-y-3">
           {Array.isArray(resultados) && resultados.length > 0 ? (
             resultados.map((cliente) => (
               <details key={cliente._id} className="group lg:px-6 lg:py-4 md:px-5 p-3 rounded bg-white shadow shadow-cyan-900/70">
@@ -327,11 +348,25 @@ function App() {
               </details >
             ))
           ) : (
-            !error && (
+            !error && !loading && (
               <p className="text-center mt-12">Haz una búsqueda.</p>
             )
           )}
         </section>
+        {showTop && (
+          <button 
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} 
+            className="fixed bottom-4 md:bottom-6 right-4 md:right-6 bg-cyan-600 text-white p-3 rounded-full shadow-lg hover:bg-cyan-700 transition">
+            <svg className="w-5 md:w-6 h-5 md:h-6" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path 
+                d="M12 20L12 4M12 4L18 10M12 4L6 10" 
+                stroke="#ffffff" 
+                stroke-width="3" 
+                stroke-linecap="round" 
+                stroke-linejoin="round" />
+            </svg>
+          </button>
+        )}
       </main>
       <Footer />
     </div>
