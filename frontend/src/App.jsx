@@ -3,6 +3,7 @@ import "./App.css";
 import Footer from "./components/Footer"
 import Spinner from "./components/Spinner";
 import ErrorCard from "./components/ErrorCard";
+import ButtonToTop from "./components/ButtonToTop";
 
 function App() {
   const [nombre, setNombre] = useState("");
@@ -208,7 +209,7 @@ function App() {
             resultados.map((cliente) => (
               <details key={cliente._id} className="group lg:px-6 lg:py-4 md:px-5 p-3 rounded bg-white shadow shadow-cyan-900/70">
                 <summary className="cursor-pointer list-none flex justify-between items-center">
-                  <h2 className="lg:text-xl md:text-lg text-md font-semibold text-center md:text-left">
+                  <h2 className="lg:text-xl md:text-lg text-md font-semibold text-cyan-800 text-center md:text-left">
                     {cliente.datosPersonales.nombrecliente}
                   </h2>
                   <svg
@@ -353,20 +354,7 @@ function App() {
             )
           )}
         </section>
-        {showTop && (
-          <button 
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} 
-            className="fixed bottom-4 md:bottom-6 right-4 md:right-6 bg-cyan-600 text-white p-3 rounded-full shadow-lg hover:bg-cyan-700 transition">
-            <svg className="w-5 md:w-6 h-5 md:h-6" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path 
-                d="M12 20L12 4M12 4L18 10M12 4L6 10" 
-                stroke="#ffffff" 
-                stroke-width="3" 
-                stroke-linecap="round" 
-                stroke-linejoin="round" />
-            </svg>
-          </button>
-        )}
+        {showTop && (<ButtonToTop />)}
       </main>
       <Footer />
     </div>
