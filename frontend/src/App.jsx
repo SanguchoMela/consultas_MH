@@ -4,6 +4,7 @@ import Footer from "./components/Footer"
 import Spinner from "./components/Spinner";
 import ErrorCard from "./components/ErrorCard";
 import ButtonToTop from "./components/ButtonToTop";
+import FlujoPagos from "./components/FlujoCaja";
 
 function App() {
   const [nombre, setNombre] = useState("");
@@ -240,7 +241,7 @@ function App() {
                     </tr>
                     <tr className="tr-cli-style">
                       <td className="sub-label">Teléfono</td>
-                      <td>{cliente.datosContacto.telefono}</td>
+                      <td>+{cliente.datosContacto.telefono}</td>
                     </tr>
                     <tr className="tr-cli-style">
                       <td className="sub-label">Fecha del apartado</td>
@@ -342,6 +343,7 @@ function App() {
                             </tr>
                           </tbody>
                         </table>
+                        <FlujoPagos lote={lote.infoLote.lote} manzana={lote.infoLote.manzana} backUrl={backendUrl} />
                       </div>
                     ))
                   )}
