@@ -2,6 +2,7 @@ import express from 'express';
 import connectDB from './config/db.js';
 import clienteRoutes from './routes/clienteRoutes.js';
 import loteRoutes from './routes/loteRoutes.js';
+import pagosRoutes from './routes/pagosRoutes.js';
 import cors from 'cors';
 import dotenv from 'dotenv';
 
@@ -21,5 +22,6 @@ app.use(cors({
 // Rutas
 app.use('/api', clienteRoutes);
 app.use('/api', loteRoutes);
+app.use('/api', pagosRoutes);
 
 export default app;
