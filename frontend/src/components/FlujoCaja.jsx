@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { use, useEffect, useState } from "react"
 
 const FlujoPagos = ({ lote, manzana, backUrl }) => {
     // console.log("Lote:", lote, "Manzana:", manzana);

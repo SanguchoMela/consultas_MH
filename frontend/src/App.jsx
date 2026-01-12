@@ -5,6 +5,9 @@ import Spinner from "./components/Spinner";
 import ErrorCard from "./components/ErrorCard";
 import ButtonToTop from "./components/ButtonToTop";
 import FlujoPagos from "./components/FlujoCaja";
+import LoteItem from "./components/LoteItem";
+import LoteCard from "./components/LoteCard";
+import ClienteInfoCard from "./components/ClienteInfoCard";
 
 function App() {
   const [nombre, setNombre] = useState("");
@@ -229,122 +232,18 @@ function App() {
 
                 <hr className="text-cyan-700 mt-2" />
                 {/* Datos del cliente */}
-                <table className="w-full lg:max-w-[50%]">
-                  <tbody>
-                    <tr className="tr-cli-style">
-                      <td className="sub-label">Cédula</td>
-                      <td>{cliente.datosPersonales.ci}</td>
-                    </tr>
-                    <tr className="tr-cli-style">
-                      <td className="sub-label">Correo electrónico</td>
-                      <td>{cliente.datosContacto.email}</td>
-                    </tr>
-                    <tr className="tr-cli-style">
-                      <td className="sub-label">Teléfono</td>
-                      <td>+{cliente.datosContacto.telefono}</td>
-                    </tr>
-                    <tr className="tr-cli-style">
-                      <td className="sub-label">Fecha del apartado</td>
-                      <td>{cliente.datosAdicionales.fechaapartado}</td>
-                    </tr>
-                  </tbody>
-                </table>
+                <ClienteInfoCard cliente={cliente} />
 
                 {/* Lotes asociados al cliente */}
                 <h3 className="text-lg font-semibold mt-3 mb-1">Lotes</h3>
-                {/* <div className="grid gap-4 lg:gap-7 lg:grid-cols-2"> */}
+
                 <div className={`grid gap-4 lg:gap-7 ${cliente.lotes.length === 1 ? 'place-items-center' : 'lg:grid-cols-2'
                   }`}>
                   {cliente.lotes.length === 0 ? (
                     <p>Sin lotes asociados</p>
                   ) : (
                     cliente.lotes.map((lote) => (
-                      <div key={lote._id} className={`border border-cyan-700 p-4 rounded w-full
-                      ${cliente.lotes.length === 1 ? 'lg:w-1/2' : ''} `}>
-                        {/* Información del lote */}
-                        <table className="w-full">
-                          <caption className="caption-style">Información del lote</caption>
-                          <tbody>
-                            <tr className="grid sm:grid-cols-2 grid-cols-1 sm:gap-8 px-2 md:px-4">
-                              {/* COLUMNA 1 */}
-                              <td>
-                                <table className="w-full">
-                                  <tbody>
-                                    <tr className="tr-style">
-                                      <td className="sub-label">Etapa</td>
-                                      <td>{lote.infoLote.etapa}</td>
-                                    </tr>
-                                    <tr className="tr-style">
-                                      <td className="sub-label">Lote</td>
-                                      <td>{lote.infoLote.lote}</td>
-                                    </tr>
-                                    <tr className="tr-style">
-                                      <td className="sub-label">Manzana</td>
-                                      <td>{lote.infoLote.manzana}</td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                              </td>
-                              {/* COLUMNA 2 */}
-                              <td>
-                                <table className="w-full">
-                                  <tbody>
-                                    <tr className="tr-style">
-                                      <td className="sub-label">Área</td>
-                                      <td>{lote.infoLote.area} m²</td>
-                                    </tr>
-                                    <tr className="tr-style">
-                                      <td className="sub-label">Valor m²</td>
-                                      <td>{lote.infoLote.valorm2}</td>
-                                    </tr>
-                                    <tr className="tr-style">
-                                      <td className="sub-label">Valor total</td>
-                                      <td>{lote.infoLote.valortotal}</td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                        {/* Estado de cuenta del lote */}
-                        <table className="w-full mt-2">
-                          <caption className="caption-style">Estado de Cuenta</caption>
-                          <tbody>
-                            <tr className="grid sm:grid-cols-2 grid-cols-1 sm:gap-8 sm:px-4">
-                              <td>
-                                <table className="w-full">
-                                  <tbody>
-                                    <tr className="tr-style">
-                                      <td className="sub-label">Valor pagado</td>
-                                      <td>{lote.estadoCuenta.valorpagado}</td>
-                                    </tr>
-                                    <tr className="tr-style">
-                                      <td className="sub-label">Valor por pagar</td>
-                                      <td>{lote.estadoCuenta.valorporpagar}</td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                              </td>
-                              <td>
-                                <table className="w-full">
-                                  <tbody>
-                                    <tr className="tr-style">
-                                      <td className="sub-label">Valor vigente</td>
-                                      <td className="text-green-600">{lote.estadoCuenta.valorvigente}</td>
-                                    </tr>
-                                    <tr className="tr-style">
-                                      <td className="sub-label">Valor vencido</td>
-                                      <td className="text-red-600">{lote.estadoCuenta.valorvencido}</td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                        <FlujoPagos lote={lote.infoLote.lote} manzana={lote.infoLote.manzana} backUrl={backendUrl} />
-                      </div>
+                      <LoteCard key={lote._id} lote={lote} cliente={cliente} backendUrl={backendUrl} />
                     ))
                   )}
                 </div>
