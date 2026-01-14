@@ -4,8 +4,6 @@ import Footer from "./components/Footer"
 import Spinner from "./components/Spinner";
 import ErrorCard from "./components/ErrorCard";
 import ButtonToTop from "./components/ButtonToTop";
-import FlujoPagos from "./components/FlujoCaja";
-import LoteItem from "./components/LoteItem";
 import LoteCard from "./components/LoteCard";
 import ClienteInfoCard from "./components/ClienteInfoCard";
 
