@@ -119,7 +119,7 @@ function App() {
     <div className="min-h-screen flex flex-col">
       <main className="grow">
         <p className="md:text-right text-center md:pr-8 pt-2">
-          Información hasta: {infoDate}
+          Información hasta: <strong>{infoDate}</strong>
         </p>
         <div className="flex flex-col items-center lg:my-6 my-4 space-y-3">
           <img src="/mh.png" alt="Logo de Manta Hills" className="lg:h-28 md:h-24 h-20" />
@@ -133,7 +133,7 @@ function App() {
         <div className="grid md:grid-cols-2 grid-cols-1 lg:gap-8 gap-4 lg:m-7 m-5">
           {/* BUSCAR CLIENTE */}
           <div className="card-search">
-            <h2 className="label text-cyan-700">🔍 Búsqueda por cliente</h2>
+            <h2 className="label text-cyan-800">🔍 Búsqueda por cliente</h2>
             <div className="flex flex-col">
               <label className="sub-label">Cédula</label>
               <input
@@ -159,7 +159,7 @@ function App() {
             <button
               disabled={loading}
               onClick={buscarClienteAuto}
-              className="search-button bg-cyan-600 hover:bg-cyan-700"
+              className="search-button bg-cyan-700 hover:bg-cyan-800"
             >
               {loading ? "Buscando..." : "Buscar Cliente"}
             </button>
@@ -167,7 +167,7 @@ function App() {
 
           {/* BUSCAR LOTE */}
           <div className="card-search">
-            <h2 className="label text-lime-700">🧱 Búsqueda por lote</h2>
+            <h2 className="label text-lime-800">🧱 Búsqueda por lote</h2>
             {/* <div className=""> */}
             <div className="flex flex-col ">
               <label className="sub-label">Lote</label>
@@ -195,7 +195,7 @@ function App() {
             <button
               disabled={loading}
               onClick={buscarLote}
-              className="search-button bg-lime-600 hover:bg-lime-700"
+              className="search-button bg-lime-700 hover:bg-lime-800"
             >
               {loading ? "Buscando..." : "Buscar Lote"}
             </button>
