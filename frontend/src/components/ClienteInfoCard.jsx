@@ -1,6 +1,6 @@
 const ClienteInfoCard = ({ cliente }) => {
     return (
-        <table className="w-full lg:max-w-[50%]">
+        <table className="w-full">
             <tbody>
                 <tr className="tr-cli-style">
                     <td className="sub-label">Cédula</td>
