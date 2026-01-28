@@ -55,14 +55,6 @@ export const generarPdfLote = async (cliente, lote, backendUrl) => {
       ),
       head: [head],
       body,
-      didParseCell: function (data) {
-        if (options.highlightValorVencido &&
-          data.section === 'body' &&
-          data.column.index === 0
-        ) {
-          data.cell.styles.textColor = [200, 0, 0];
-        }
-      }
     });
 
     return doc.lastAutoTable.finalY;
