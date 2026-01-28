@@ -1,8 +1,8 @@
 function ErrorCard({errorMessage}) {
     if (!errorMessage) return null
     return (
-        <div class="error-card" role="alert">
-            <p class="block sm:inline">{errorMessage}</p>
+        <div className="error-card mb-3" role="alert">
+            <p className="block sm:inline">{errorMessage}</p>
         </div>
     )
 }

@@ -1,7 +1,7 @@
 function Spinner() {
     return (
         <>
-            <p className="text-center text-base md:text-md">Cargando resultados...</p>
+            {/* <p className="text-center text-base md:text-md">Cargando resultados...</p> */}
             <div class="fixed inset-0 bg-gray-300/50 z-50 grid min-h-screen w-full place-items-center transition-opacity duration-700 opacity-100">
                 <svg class="w-12 h-12 md:w-16 md:h-16 animate-spin text-cyan-700/50" viewBox="0 0 64 64" fill="none"
                     xmlns="http://www.w3.org/2000/svg">

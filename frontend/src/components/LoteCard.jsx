@@ -1,9 +1,16 @@
 import FlujoPagos from "./FlujoCaja"
+import { generarPdfLote } from "../utils/generarPdfLote"
 
 const LoteCard = ({ lote, cliente, backendUrl }) => {
     return (
-        <div key={lote._id} className={`border border-cyan-700 p-4 rounded w-full
+        <div key={lote._id} className={`relative border border-cyan-700 p-4 rounded w-full
             ${cliente.lotes.length === 1 ? 'lg:w-1/2' : ''} `}>
+            <button
+                onClick={() => generarPdfLote(cliente, lote, backendUrl)}
+                className="absolute top-1 right-2 z-10 cursor-pointer bg-gray-200 shadow-md shadow-cyan-900/50 p-2 rounded"
+            >
+               <img src="/pdf.png" alt="Descargar PDF" className="w-5" />
+            </button>
             {/* Información del lote */}
             <table className="w-full">
                 <caption className="caption-style">Información del lote</caption>

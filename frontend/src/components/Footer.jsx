@@ -1,9 +1,9 @@
 function Footer() {
     return (
-        <footer className="border-t border-gray-200 md:mt-0 mt-4">
-            <div className="text-sm max-w-7xl mx-auto text-center md:p-5 p-3">
+        <footer className="border-t border-cyan-900/10 md:mt-0 mt-4">
+            <div className="text-xs font-thin max-w-7xl mx-auto text-center p-2">
                 <p className="text-gray-600">
-                    © {new Date().getFullYear()} Manta Hills. Todos los derechos reservados.
+                    © {new Date().getFullYear()} Manta Hills - ms. Todos los derechos reservados.
                 </p>
             </div>
         </footer>
