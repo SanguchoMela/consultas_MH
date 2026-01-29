@@ -11,7 +11,7 @@ export default function Sidebar() {
         if (role === "admin") {
             return "Administrador";
         } else if (role === "user") {
-            return "Usuario";
+            return "Vendedor";
         } else if (role === "guest") {
             return "Invitado";
         }

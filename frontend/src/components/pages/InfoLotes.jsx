@@ -9,7 +9,7 @@ import Header from "../Header";
 import { useAuth } from "../../context/authContext";
 
 const InfoLotes = () => {
-  const {role} = useAuth()
+  const { role } = useAuth()
   const [nombre, setNombre] = useState("");
   const [cedula, setCedula] = useState("");
   const [lote, setLote] = useState("");  // Estado para lote
@@ -168,40 +168,42 @@ const InfoLotes = () => {
           </div>
 
           {/* BUSCAR LOTE */}
-          <div className="card-search">
-            <h2 className="label text-lime-800">Búsqueda por lote</h2>
-            {/* <div className=""> */}
-            <div className="flex flex-col ">
-              <label className="sub-label">Lote</label>
-              <input
-                type="text"
-                placeholder="Ej. 1"
-                value={lote}
-                onChange={(e) => setLote(e.target.value)}
-                aria-label="Campo para número de lote"
-                className="input-style"
-              />
+          {(role === "admin") && (
+            <div className="card-search">
+              <h2 className="label text-lime-800">Búsqueda por lote</h2>
+              {/* <div className=""> */}
+              <div className="flex flex-col ">
+                <label className="sub-label">Lote</label>
+                <input
+                  type="text"
+                  placeholder="Ej. 1"
+                  value={lote}
+                  onChange={(e) => setLote(e.target.value)}
+                  aria-label="Campo para número de lote"
+                  className="input-style"
+                />
+              </div>
+              <div className="flex flex-col">
+                <label className="sub-label">Manzana</label>
+                <input
+                  type="text"
+                  placeholder="Ej. A"
+                  value={manzana}
+                  onChange={(e) => setManzana(e.target.value)}
+                  aria-label="Campo para manzana del lote"
+                  className="input-style"
+                />
+              </div>
+              {/* </div> */}
+              <button
+                disabled={loading}
+                onClick={buscarLote}
+                className="search-button bg-lime-700 hover:bg-lime-800"
+              >
+                {loading ? "Buscando..." : "Buscar Lote"}
+              </button>
             </div>
-            <div className="flex flex-col">
-              <label className="sub-label">Manzana</label>
-              <input
-                type="text"
-                placeholder="Ej. A"
-                value={manzana}
-                onChange={(e) => setManzana(e.target.value)}
-                aria-label="Campo para manzana del lote"
-                className="input-style"
-              />
-            </div>
-            {/* </div> */}
-            <button
-              disabled={loading}
-              onClick={buscarLote}
-              className="search-button bg-lime-700 hover:bg-lime-800"
-            >
-              {loading ? "Buscando..." : "Buscar Lote"}
-            </button>
-          </div>
+          )}
         </div>
 
         {/* Spinner de carga */}
