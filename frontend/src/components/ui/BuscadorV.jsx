@@ -1,5 +1,6 @@
 import { useState } from "react";
 import ErrorCard from "../ErrorCard";
+import Spinner from "../Spinner";
 
 export default function BuscadorV() {
     const [nombre, setNombre] = useState("");
@@ -59,8 +60,8 @@ export default function BuscadorV() {
         <>
             {error && <ErrorCard errorMessage={error} />}
             <p className="mb-2">Ingresa el nombre o número de cédula del cliente para ver el lote correspondiente</p>
-            <form className="w-[60%] mx-auto">
-                <div className="flex gap-4">
+            <form className="w-full md:w-[60%] mx-auto">
+                <div className="flex flex-col md:flex-row gap-4">
                     <div className="flex flex-col bg-white rounded-lg py-3 px-4 w-full">
                         <label className="sub-label">Nombre</label>
                         <input
@@ -92,10 +93,13 @@ export default function BuscadorV() {
                     {loading ? "Buscando..." : "Buscar Lote"}
                 </button>
             </form>
-            <div className="my-5 grid place-content-center md:grid-cols-3 gap-4">
+            
+            {loading && <Spinner />}
+
+            <div className="my-5 grid place-content-center grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {Array.isArray(resultados) && resultados.length > 0 ? (
                     resultados.map((cliente) => (
-                        <div key={cliente._id} className="w-full rounded-md shadow-md bg-white text-center py-3">
+                        <div key={cliente._id} className="w-full rounded-md shadow-md bg-white text-center px-3 py-4">
                             <p className="text-center font-medium">
                                 {cliente.datosPersonales.nombrecliente}
                             </p>

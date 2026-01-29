@@ -24,6 +24,9 @@ export default function Login() {
         <img src="/mh-bg.png" alt="Manta Hills Fondo" className="w-full h-full object-cover" />
       </div>
       <div className="w-full lg:w-1/2 lg:p-36 md:p-52 p-8 items-center">
+        <div className="w-full flex justify-center">
+          <img src="/mh.png" alt="Manta Hills Logo" className="w-48 lg:hidden mb-5" />
+        </div>
         <form onSubmit={handleLogin} className="space-y-3">
           <h2 className="label text-center">Iniciar sesión</h2>
           <div>

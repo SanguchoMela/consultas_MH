@@ -25,7 +25,7 @@ export default function Sidebar() {
             {/* Mobile */}
             <div className={`
                 md:hidden fixed top-0 py-2 px-8 z-50 
-                flex justify-between items-center text-white 
+                flex justify-between items-center text-cyan-950 
                 ${open ? "bg-none" : "bg-[#b7c9d4]"}
                 w-full backdrop-blur-sm`
             }>
@@ -48,7 +48,9 @@ export default function Sidebar() {
                 className={`
                 fixed md:static top-0 left-0 z-50 
                 min-h-full w-64 
-                bg-[#b7c9d4] font-medium text-gray-50 
+                bg-[#b7c9d4
+                
+                ] font-medium text-gray-50 
                 rounded-r-2xl md:rounded-2xl
                 transform transition-transform duration-300
                 ${open ? "translate-x-0" : "-translate-x-full"}
