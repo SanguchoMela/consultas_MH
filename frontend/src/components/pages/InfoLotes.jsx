@@ -7,6 +7,7 @@ import LoteCard from "../LoteCard";
 import ClienteInfoCard from "../ClienteInfoCard";
 import Header from "../Header";
 import { useAuth } from "../../context/authContext";
+import BuscadorV from "../ui/BuscadorV";
 
 const InfoLotes = () => {
   const { role } = useAuth()
@@ -121,9 +122,11 @@ const InfoLotes = () => {
     <div className="flex flex-col">
       <Header title="Información de Lotes" />
       <main className="grow">
-        <p className="md:text-right text-center md:pr-2 md:pb-3">
-          Información hasta: <strong>{infoDate}</strong>
-        </p>
+        {(role === "admin") && (
+          <p className="md:text-right text-center md:pr-2 md:pb-3">
+            Información hasta: <strong>{infoDate}</strong>
+          </p>
+        )}
         {/* <div className="flex flex-col items-center lg:my-6 my-4 space-y-3">
             <img src="/mh.png" alt="Logo de Manta Hills" className="lg:h-28 md:h-24 h-20" />
           </div> */}
@@ -132,43 +135,44 @@ const InfoLotes = () => {
         {error && <ErrorCard errorMessage={error} />}
 
         {/* BUSCADOR */}
-        <div className="grid md:grid-cols-2 grid-cols-1 lg:gap-8 gap-4">
-          {/* BUSCAR CLIENTE */}
-          <div className="card-search">
-            <h2 className="label text-cyan-800">Búsqueda por cliente</h2>
-            <div className="flex flex-col">
-              <label className="sub-label">Cédula</label>
-              <input
-                type="text"
-                placeholder="Ej. 1723456789"
-                value={cedula}
-                onChange={(e) => setCedula(e.target.value)}
-                aria-label="Campo para cédula del cliente"
-                className="input-style"
-              />
+        {(role === "admin") && (
+          <div className="grid md:grid-cols-2 grid-cols-1 lg:gap-8 gap-4">
+            {/* BUSCAR CLIENTE */}
+            <div className="card-search">
+              <h2 className="label text-cyan-800">Búsqueda por cliente</h2>
+              <div className="flex flex-col">
+                <label className="sub-label">Cédula</label>
+                <input
+                  type="text"
+                  placeholder="Ej. 1723456789"
+                  value={cedula}
+                  onChange={(e) => setCedula(e.target.value)}
+                  aria-label="Campo para cédula del cliente"
+                  className="input-style"
+                />
+              </div>
+              <div className="flex flex-col">
+                <label className="sub-label">Nombre</label>
+                <input
+                  type="text"
+                  placeholder="Ej. Juan Perez"
+                  value={nombre}
+                  onChange={(e) => setNombre(e.target.value)}
+                  aria-label="Campo para nombre del cliente"
+                  className="input-style"
+                />
+              </div>
+              <button
+                disabled={loading}
+                onClick={buscarClienteAuto}
+                className="search-button bg-cyan-700 hover:bg-cyan-800"
+              >
+                {loading ? "Buscando..." : "Buscar Cliente"}
+              </button>
             </div>
-            <div className="flex flex-col">
-              <label className="sub-label">Nombre</label>
-              <input
-                type="text"
-                placeholder="Ej. Juan Perez"
-                value={nombre}
-                onChange={(e) => setNombre(e.target.value)}
-                aria-label="Campo para nombre del cliente"
-                className="input-style"
-              />
-            </div>
-            <button
-              disabled={loading}
-              onClick={buscarClienteAuto}
-              className="search-button bg-cyan-700 hover:bg-cyan-800"
-            >
-              {loading ? "Buscando..." : "Buscar Cliente"}
-            </button>
-          </div>
 
-          {/* BUSCAR LOTE */}
-          {(role === "admin") && (
+            {/* BUSCAR LOTE */}
+
             <div className="card-search">
               <h2 className="label text-lime-800">Búsqueda por lote</h2>
               {/* <div className=""> */}
@@ -203,8 +207,11 @@ const InfoLotes = () => {
                 {loading ? "Buscando..." : "Buscar Lote"}
               </button>
             </div>
-          )}
-        </div>
+          </div>
+        )}
+        {(role === "user") && (
+          <BuscadorV />
+        )}
 
         {/* Spinner de carga */}
         {loading && <Spinner />}
@@ -253,7 +260,8 @@ const InfoLotes = () => {
             ))
           ) : (
             !error && !loading && (
-              <p className="text-center mt-12">Haz una búsqueda.</p>
+              // <p className="text-center mt-12">Haz una búsqueda</p>
+              <p></p>
             )
           )}
         </section>

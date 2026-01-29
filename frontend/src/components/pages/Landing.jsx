@@ -124,7 +124,7 @@ export default function Landing() {
                                 Regresar
                             </button> */}
                         <div className="w-full my-5 flex justify-center">
-                            {Array.isArray(resultados) && resultados.length > 0 ? (
+                            {Array.isArray(resultados) && resultados.length > 0 && (
                                 resultados.map((cliente) => (
                                     <div key={cliente._id} className="w-[40%]">
                                         <p className="bg-cyan-800 text-white text-center py-2 font-medium">{cliente.datosPersonales.nombrecliente}</p>
@@ -166,8 +166,6 @@ export default function Landing() {
                                     </div>
                                 ))
 
-                            ) : (
-                                <p className="text-center mt-5">Haz una búsqueda</p>
                             )}
                         </div>
                     </section>
