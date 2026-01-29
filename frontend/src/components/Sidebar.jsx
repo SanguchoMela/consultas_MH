@@ -2,7 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../context/authContext";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Sidebar() {
     const { role } = useAuth();
@@ -20,6 +20,10 @@ export default function Sidebar() {
         `block py-2 px-4 rounded-lg hover:bg-cyan-900/30 ${location.pathname === path ? "font-semibold bg-cyan-900/30 text-white" : ""
         }`;
 
+    useEffect(() => {
+        setOpen(false)
+    }, [location.pathname])
+
     return (
         <>
             {/* Mobile */}
@@ -29,7 +33,7 @@ export default function Sidebar() {
                 ${open ? "bg-none" : "bg-[#b7c9d4]"}
                 w-full backdrop-blur-sm`
             }>
-                <p className={`font-semibold text-lg transition-opacity duration-200 ${open ? "opacity-0" : "opacity-100" }`}>Manta Hills</p>
+                <p className={`font-semibold text-lg transition-opacity duration-200 ${open ? "opacity-0" : "opacity-100"}`}>Manta Hills</p>
                 <button onClick={() => setOpen(!open)}
                     className="text-lg font-medium p-1 hover:bg-cyan-800 rounded-md transition-colors"
                     aria-label={open ? "Cerrar menú" : "Abrir menú"}
