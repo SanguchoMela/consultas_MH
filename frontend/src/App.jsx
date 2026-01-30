@@ -7,6 +7,7 @@ import Admin from "./components/pages/Admin";
 import AppLayout from "./layout/AppLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Docs from "./components/pages/Docs";
+import Manuales from "./components/pages/Manuales";
 
 function App() {
   return (
@@ -26,10 +27,16 @@ function App() {
                 <InfoLotes />
               </AppLayout>
             </ProtectedRoute>} />
-          <Route path="/docs" element={
+          <Route path="/documentos" element={
             <ProtectedRoute>
               <AppLayout>
                 <Docs />
+              </AppLayout>
+            </ProtectedRoute>} />
+          <Route path="/manuales" element={
+            <ProtectedRoute>
+              <AppLayout>
+                <Manuales />
               </AppLayout>
             </ProtectedRoute>} />
           <Route path="/admin" element={
