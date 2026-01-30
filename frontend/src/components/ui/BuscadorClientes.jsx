@@ -2,32 +2,29 @@ import { useState } from "react";
 import ErrorCard from "../ErrorCard";
 import Spinner from "../Spinner";
 
-export default function BuscadorV() {
+export default function BuscadorClientes({ onResultados, loading, setLoading }) {
     const [nombre, setNombre] = useState("");
     const [cedula, setCedula] = useState("");
-    const [resultados, setResultados] = useState([]);
-    const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null);
 
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-    const showLoading = () => setLoading(true)
     const hideLoading = () => setLoading(false)
 
     const showError = (message) => {
         setError(message);
-        setResultados([]);
         hideLoading()
     }
 
-    const buscarClienteAuto = async () => {
+    const buscarCliente = async (e) => {
+        e.preventDefault()
         setError(null);
-        showLoading()
+        setLoading(true)
 
         const ci = cedula.trim();
         const nom = nombre.trim();
 
-        if (!ci && !nom) return showError("Ingrese la cédula o el nombre del cliente");
+        if (!ci && !nom) return showError("Ingrese el nombre o la cédula del cliente");
 
         // Priorizar búsqueda por cédula si ambos campos están llenos
         let url = "";
@@ -41,26 +38,25 @@ export default function BuscadorV() {
         try {
             const res = await fetch(url);
             const data = await res.json();
-            hideLoading()
 
             if (!res.ok) return showError(data.error || "Error en la búsqueda")
 
-
             if (!data.length) return showError("No se encontró información del cliente");
 
-            setResultados(data);
-            // refScroll()
+            onResultados(data)
         } catch (error) {
-            hideLoading()
-            console.error(error);
-            showError("Error en conexión con el servidor");
+            onResultados([])
+            showError(error.message || "Error en conexión con el servidor");
+        } finally {
+            setLoading(false)
         }
     }
     return (
         <>
-            {error && <ErrorCard errorMessage={error} />}
             <p className="mb-2">Ingresa el nombre o número de cédula del cliente para ver el lote correspondiente</p>
-            <form className="w-full md:w-[60%] mx-auto">
+            {error && <ErrorCard errorMessage={error} />}
+
+            <form onSubmit={buscarCliente} className="w-full md:w-[60%] mx-auto">
                 <div className="flex flex-col md:flex-row gap-4">
                     <div className="flex flex-col bg-white rounded-lg py-3 px-4 w-full">
                         <label className="sub-label">Nombre</label>
@@ -87,41 +83,11 @@ export default function BuscadorV() {
                 </div>
                 <button
                     disabled={loading}
-                    onClick={buscarClienteAuto}
                     className="text-white font-medium w-full mt-3 lg:px-5 px-4 lg:py-2 py-1 rounded-lg bg-cyan-800 hover:bg-cyan-900"
                 >
-                    {loading ? "Buscando..." : "Buscar Lote"}
+                    {loading ? "Buscando..." : "Buscar Cliente"}
                 </button>
             </form>
-            
-            {loading && <Spinner />}
-
-            <div className="my-5 grid place-content-center grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {Array.isArray(resultados) && resultados.length > 0 ? (
-                    resultados.map((cliente) => (
-                        <div key={cliente._id} className="w-full rounded-md shadow-md bg-white text-center px-3 py-4">
-                            <p className="text-center font-medium">
-                                {cliente.datosPersonales.nombrecliente}
-                            </p>
-                            <p className="text-sm text-gray-800 mb-2">
-                                ({cliente.lotes.length} lote{cliente.lotes.length !== 1 && "s"})
-                            </p>
-                            {cliente.lotes.length === 0 ? (
-                                <p>El cliente que ingresaste no tiene lotes asociados</p>
-                            ) : (
-                                cliente.lotes.map((lote, index) => (
-                                    <div key={lote._id} className=" border-cyan-900/40">
-                                        <p>{lote.infoLote.lote} {lote.infoLote.manzana}</p>
-                                    </div>
-                                ))
-                            )}
-                        </div>
-                    ))
-
-                ) : (
-                    <p className="text-center mt-5">Haz una búsqueda</p>
-                )}
-            </div>
         </>
     )
 }

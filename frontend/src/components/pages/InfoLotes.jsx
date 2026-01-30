@@ -7,14 +7,11 @@ import LoteCard from "../LoteCard";
 import ClienteInfoCard from "../ClienteInfoCard";
 import Header from "../Header";
 import { useAuth } from "../../context/authContext";
-import BuscadorV from "../ui/BuscadorV";
+import ConsultaClientesV from "../ui/ConsultaClientesV";
+import ConsultaClientesAd from "../ui/ConsultaClientesAd";
 
 const InfoLotes = () => {
   const { role } = useAuth()
-  const [nombre, setNombre] = useState("");
-  const [cedula, setCedula] = useState("");
-  const [lote, setLote] = useState("");  // Estado para lote
-  const [manzana, setManzana] = useState("");  // Estado para manzana
   const [resultados, setResultados] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false)
@@ -42,74 +39,6 @@ const InfoLotes = () => {
     }, 200)
   }
 
-  // Función para buscar clientes automáticamente por cédula o nombre
-  const buscarClienteAuto = async () => {
-    setError(null);
-    showLoading()
-
-    const ci = cedula.trim();
-    const nom = nombre.trim();
-
-    if (!ci && !nom) return showError("Ingrese la cédula o el nombre del cliente");
-
-    // Priorizar búsqueda por cédula si ambos campos están llenos
-    let url = "";
-
-    if (ci) {
-      url = `${backendUrl}/buscar-cedula?cedula=${ci}`;
-    } else {
-      url = `${backendUrl}/buscar-nombre?nombre=${nom}`;
-    }
-
-    try {
-      const res = await fetch(url);
-      const data = await res.json();
-      hideLoading()
-
-      if (!res.ok) return showError(data.error || "Error en la búsqueda")
-
-
-      if (!data.length) return showError("No se encontró información del cliente");
-
-      setResultados(data);
-      refScroll()
-    } catch (error) {
-      hideLoading()
-      console.error(error);
-      showError("Error en conexión con el servidor");
-    }
-  }
-
-  // Función para buscar lotes por manzana y lote
-  const buscarLote = async () => {
-    setError(null);
-    showLoading()
-
-    const lt = lote.trim();
-    const mz = manzana.trim();
-
-    if (!lt || !mz) return showError("Ingrese el lote y la manzana");
-
-    try {
-      const res = await fetch(`${backendUrl}/buscar-lote?lote=${lote}&manzana=${manzana}`);
-      const data = await res.json();
-      hideLoading()
-
-      // Verificar si la respuesta es exitosa (status 200)
-      if (!res.ok) return showError(data.error || "Error en la búsqueda")
-
-
-      if (!data.length) return showError("No se encontró información del lote");
-
-      setResultados(data);
-      refScroll()
-    } catch (err) {
-      hideLoading()
-      console.error(err)
-      showError("Error en conexión con el servidor");
-    }
-  };
-
   useEffect(() => {
     const onScroll = () => {
       setShowTop(window.scrollY > 400)
@@ -120,154 +49,21 @@ const InfoLotes = () => {
 
   return (
     <div className="flex flex-col">
-      <Header title="Información de Lotes" />
+      <Header title="Consulta de Clientes" />
       <main className="grow">
-        {(role === "admin") && (
-          <p className="md:text-right text-center md:pr-2 md:pb-3">
-            Información hasta: <strong>{infoDate}</strong>
-          </p>
-        )}
-        {/* <div className="flex flex-col items-center lg:my-6 my-4 space-y-3">
-            <img src="/mh.png" alt="Logo de Manta Hills" className="lg:h-28 md:h-24 h-20" />
-          </div> */}
-
-        {/* Mostrar mensaje de error */}
-        {error && <ErrorCard errorMessage={error} />}
-
-        {/* BUSCADOR */}
-        {(role === "admin") && (
-          <div className="grid md:grid-cols-2 grid-cols-1 lg:gap-8 gap-4">
-            {/* BUSCAR CLIENTE */}
-            <div className="card-search">
-              <h2 className="label text-cyan-800">Búsqueda por cliente</h2>
-              <div className="flex flex-col">
-                <label className="sub-label">Cédula</label>
-                <input
-                  type="text"
-                  placeholder="Ej. 1723456789"
-                  value={cedula}
-                  onChange={(e) => setCedula(e.target.value)}
-                  aria-label="Campo para cédula del cliente"
-                  className="input-style"
-                />
-              </div>
-              <div className="flex flex-col">
-                <label className="sub-label">Nombre</label>
-                <input
-                  type="text"
-                  placeholder="Ej. Juan Perez"
-                  value={nombre}
-                  onChange={(e) => setNombre(e.target.value)}
-                  aria-label="Campo para nombre del cliente"
-                  className="input-style"
-                />
-              </div>
-              <button
-                disabled={loading}
-                onClick={buscarClienteAuto}
-                className="search-button bg-cyan-700 hover:bg-cyan-800"
-              >
-                {loading ? "Buscando..." : "Buscar Cliente"}
-              </button>
-            </div>
-
-            {/* BUSCAR LOTE */}
-
-            <div className="card-search">
-              <h2 className="label text-lime-800">Búsqueda por lote</h2>
-              {/* <div className=""> */}
-              <div className="flex flex-col ">
-                <label className="sub-label">Lote</label>
-                <input
-                  type="text"
-                  placeholder="Ej. 1"
-                  value={lote}
-                  onChange={(e) => setLote(e.target.value)}
-                  aria-label="Campo para número de lote"
-                  className="input-style"
-                />
-              </div>
-              <div className="flex flex-col">
-                <label className="sub-label">Manzana</label>
-                <input
-                  type="text"
-                  placeholder="Ej. A"
-                  value={manzana}
-                  onChange={(e) => setManzana(e.target.value)}
-                  aria-label="Campo para manzana del lote"
-                  className="input-style"
-                />
-              </div>
-              {/* </div> */}
-              <button
-                disabled={loading}
-                onClick={buscarLote}
-                className="search-button bg-lime-700 hover:bg-lime-800"
-              >
-                {loading ? "Buscando..." : "Buscar Lote"}
-              </button>
-            </div>
-          </div>
-        )}
-        {(role === "user") && (
-          <BuscadorV />
+        {(role === "admin") ? (
+          <>
+            <p className="md:text-right text-center md:pr-2 md:pb-3">
+              Información hasta: <strong>{infoDate}</strong>
+            </p>
+            <ConsultaClientesAd />
+          </>
+        ) : (
+          <ConsultaClientesV />
         )}
 
-        {/* Spinner de carga */}
-        {loading && <Spinner />}
-
-        {/* RESULTADOS */}
-        <section ref={resultsRef} className="m-3 sm:m-4 md:m-5 lg:m-7 space-y-3">
-          {Array.isArray(resultados) && resultados.length > 0 ? (
-            resultados.map((cliente) => (
-              <details key={cliente._id} className="group lg:px-6 lg:py-4 md:px-5 p-3 rounded bg-white shadow shadow-cyan-900/70">
-                <summary className="cursor-pointer list-none flex justify-between items-center">
-                  <h2 className="lg:text-xl md:text-lg text-md font-semibold text-cyan-800 text-center md:text-left">
-                    {cliente.datosPersonales.nombrecliente}
-                  </h2>
-                  <svg
-                    className="w-7 h-7 transition-transform duration-500 group-open:rotate-180"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M12.7071 14.7071C12.3166 15.0976 11.6834 15.0976 11.2929 14.7071L6.29289 9.70711C5.90237 9.31658 5.90237 8.68342 6.29289 8.29289C6.68342 7.90237 7.31658 7.90237 7.70711 8.29289L12 12.5858L16.2929 8.29289C16.6834 7.90237 17.3166 7.90237 17.7071 8.29289C18.0976 8.68342 18.0976 9.31658 17.7071 9.70711L12.7071 14.7071Z"
-                      fill="#005f78"
-                    />
-                  </svg>
-                </summary>
-
-                <hr className="text-cyan-700 mt-2" />
-                {/* Datos del cliente */}
-                <ClienteInfoCard cliente={cliente} />
-
-                {/* Lotes asociados al cliente */}
-                <h3 className="text-lg font-semibold mt-3 mb-1">Lotes</h3>
-
-                <div className={`grid gap-4 lg:gap-7 ${cliente.lotes.length === 1 ? 'place-items-center' : 'lg:grid-cols-2'
-                  }`}>
-                  {cliente.lotes.length === 0 ? (
-                    <p>Sin lotes asociados</p>
-                  ) : (
-                    cliente.lotes.map((lote) => (
-                      <LoteCard key={lote._id} lote={lote} cliente={cliente} backendUrl={backendUrl} />
-                    ))
-                  )}
-                </div>
-              </details >
-            ))
-          ) : (
-            !error && !loading && (
-              // <p className="text-center mt-12">Haz una búsqueda</p>
-              <p></p>
-            )
-          )}
-        </section>
-        {showTop && (<ButtonToTop />)}
+        {/* {showTop && (<ButtonToTop />)} */}
       </main>
-      {/* <Footer /> */}
     </div>
   );
 };
