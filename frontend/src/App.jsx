@@ -2,7 +2,6 @@ import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Login from "./components/pages/Login";
 import InfoLotes from "./components/pages/InfoLotes";
-import Dashboard from "./components/pages/Dashboard";
 import Admin from "./components/pages/Admin";
 import AppLayout from "./layout/AppLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -15,12 +14,6 @@ function App() {
       <Router>
         <Routes>
           <Route index element={<Login />} />
-          <Route path="/dashboard" element={
-            <ProtectedRoute>
-              <AppLayout>
-                <Dashboard />
-              </AppLayout>
-            </ProtectedRoute>} />
           <Route path="/lotes" element={
             <ProtectedRoute>
               <AppLayout>

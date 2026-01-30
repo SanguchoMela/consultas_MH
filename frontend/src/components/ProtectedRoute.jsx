@@ -10,7 +10,7 @@ export default function ProtectedRoute({ children, adminOnly = false }) {
   if (!user) return <Navigate to="/" />;
 
   if (adminOnly && role !== "admin") {
-    return <Navigate to="/dashboard" />;
+    return <Navigate to="/lotes" />;
   }
 
   return children;
