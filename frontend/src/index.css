@@ -37,7 +37,7 @@ body {
 }
 
 .caption-style {
-    @apply font-medium bg-cyan-900/20 py-2;
+    @apply font-medium bg-cyan-900/90 text-white py-2;
 }
 
 .error-card {
@@ -45,7 +45,7 @@ body {
 }
 
 .table-fc-label {
-    @apply px-4 py-2 text-left bg-[#9acee0];
+    @apply px-4 py-1 text-left bg-[#e8edef];
 }
 
 .table-fc-sublabel {

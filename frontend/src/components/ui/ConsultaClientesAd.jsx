@@ -7,6 +7,7 @@ import ClienteInfoCard from "../ClienteInfoCard";
 export default function ConsultaClientesAd() {
     const [resultados, setResultados] = useState([])
     const [loading, setLoading] = useState(false)
+    const [backendUrl, setBackendUrl] = useState(import.meta.env.VITE_BACKEND_URL)
 
     return (
         <>
@@ -50,13 +51,12 @@ export default function ConsultaClientesAd() {
                             {/* Lotes asociados al cliente */}
                             <h3 className="text-lg font-semibold mt-3 mb-1">Lotes</h3>
 
-                            <div className={`grid gap-4 ${cliente.lotes.length === 1 ? 'place-items-center' : 'lg:grid-cols-2'
-                                }`}>
+                            <div className="grid gap-4 place-items-center">
                                 {cliente.lotes.length === 0 ? (
                                     <p>Sin lotes asociados</p>
                                 ) : (
                                     cliente.lotes.map((lote) => (
-                                        <LoteCard key={lote._id} lote={lote} cliente={cliente} />
+                                        <LoteCard key={lote._id} lote={lote} cliente={cliente} backendUrl={backendUrl} />
                                     ))
                                 )}
                             </div>

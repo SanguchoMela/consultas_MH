@@ -1,9 +1,10 @@
-import { use, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 
 const FlujoPagos = ({ lote, manzana, backUrl }) => {
-    // console.log("Lote:", lote, "Manzana:", manzana);
     const loteBuscar = lote + manzana
     const [flujo, setFlujo] = useState(null)
+
+    console.log(backUrl)
 
     const formatDateUTC = (dateString) => {
         const date = new Date(dateString);
@@ -22,8 +23,6 @@ const FlujoPagos = ({ lote, manzana, backUrl }) => {
             try {
                 const res = await fetch(`${backUrl}/pagos/${loteBuscar}`)
                 const data = await res.json()
-
-                // console.log("Datos de flujo de caja:", data);
 
                 setFlujo(data)
             } catch (error) {
@@ -55,7 +54,7 @@ const FlujoPagos = ({ lote, manzana, backUrl }) => {
             <details className="group" onToggle={(e) =>
                 e.currentTarget.classList.toggle("open", e.currentTarget.open)
             }>
-                <summary className="caption-style mt-3 px-5 flex justify-between items-center cursor-pointer list-none">
+                <summary className="font-medium border-b border-cyan-700 mt-3 px-5 flex justify-between items-center cursor-pointer list-none">
                     <h4>Flujo de Caja</h4>
 
                     <svg

@@ -81,7 +81,7 @@ export default function BuscadorClientes({ onResultados, loading, setLoading }) 
                 </div>
                 <button
                     disabled={loading}
-                    className="text-white font-medium w-full mt-3 lg:px-5 px-4 lg:py-2 py-1 rounded-lg bg-cyan-800 hover:bg-cyan-900"
+                    className="text-white font-medium w-full mt-3 lg:px-5 px-4 lg:py-2 py-1 rounded-lg bg-cyan-900/80 hover:bg-cyan-900/90"
                 >
                     {loading ? "Buscando..." : "Buscar Cliente"}
                 </button>

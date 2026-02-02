@@ -13,11 +13,11 @@ export default function Sidebar() {
         if (role === "admin") return "Administrador";
         if (role === "user") return "Vendedor";
         if (role === "guest") return "Invitado";
-        return role; // si no coincide, devuelve el valor original
+        return role;
     }
 
     const linkClass = (path) =>
-        `block py-2 px-4 mx-4 my-3 rounded-md hover:bg-cyan-900/60 hover:text-white ${location.pathname === path ? "font-semibold bg-cyan-900/60 text-white" : ""
+        `block py-2 px-4 mx-4 my-3 rounded-md hover:bg-cyan-900/80 hover:text-white ${location.pathname === path ? "font-semibold bg-cyan-900/80 text-white" : ""
         }`;
 
     useEffect(() => {
