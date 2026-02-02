@@ -1,6 +1,5 @@
 import { useState } from "react";
 import ErrorCard from "../ErrorCard";
-import Spinner from "../Spinner";
 
 export default function BuscadorClientes({ onResultados, loading, setLoading }) {
     const [nombre, setNombre] = useState("");
@@ -53,7 +52,6 @@ export default function BuscadorClientes({ onResultados, loading, setLoading }) 
     }
     return (
         <>
-            <p className="mb-2">Ingresa el nombre o número de cédula del cliente para ver el lote correspondiente</p>
             {error && <ErrorCard errorMessage={error} />}
 
             <form onSubmit={buscarCliente} className="w-full md:w-[60%] mx-auto">

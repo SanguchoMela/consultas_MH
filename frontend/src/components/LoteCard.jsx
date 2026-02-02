@@ -57,11 +57,8 @@ const LoteCard = ({ lote, cliente, backendUrl }) => {
                     </tr>
                 </tbody>
             </table>
-            {/* <hr className="text-cyan-900/40 mt-2" /> */}
             {/* Estado de cuenta del lote */}
-            <table className="w-full mt-2">
-                {/* <caption className="caption-style">Estado de Cuenta</caption> */}
-                {/* <caption className="font-medium border-b border-cyan-900/80 mt-1">Estado de cuenta</caption> */}
+            <table className="w-full mt-2">                
                 <tbody>
                     <tr className="grid sm:grid-cols-2 grid-cols-1 sm:gap-4 px-2">
                         <td>

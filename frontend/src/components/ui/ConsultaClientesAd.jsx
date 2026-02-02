@@ -20,6 +20,14 @@ export default function ConsultaClientesAd() {
                             <summary className="cursor-pointer list-none flex justify-between items-center">
                                 <h2 className="lg:text-xl md:text-lg text-md font-semibold text-cyan-800 text-center md:text-left">
                                     {cliente.datosPersonales.nombrecliente}
+                                    <span className="text-base font-medium ml-2">/
+                                        {cliente.lotes.length === 1 ? " Lote: " : " Lotes: "}
+                                    </span>
+                                    <span className="text-base font-normal">
+                                        {cliente.lotes
+                                            .map(lote => `${lote.infoLote.lote}${lote.infoLote.manzana}`)
+                                            .join(' - ')}
+                                    </span>
                                 </h2>
                                 <svg
                                     className="w-7 h-7 transition-transform duration-500 group-open:rotate-180"
