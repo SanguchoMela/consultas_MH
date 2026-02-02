@@ -5,7 +5,7 @@ import Spinner from "./Spinner";
 export default function ProtectedRoute({ children, adminOnly = false }) {
   const { user, role, loading } = useAuth();
 
-  if (loading) return <Spinner />;
+  if (loading) return <Spinner overlay />;
   
   if (!user) return <Navigate to="/" />;
 

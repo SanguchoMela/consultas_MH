@@ -11,7 +11,7 @@ export default function ConsultaClientesAd() {
     return (
         <>
             <BuscadorClientes onResultados={(data) => setResultados(data)} loading={loading} setLoading={setLoading} />
-            {loading && <Spinner />}
+            {loading && <Spinner overlay />}
 
             <section className=" mt-6 space-y-3">
                 {resultados.length > 0 ? (
