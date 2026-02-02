@@ -12,7 +12,7 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
-        const tokenResult = await firebaseUser.getIdTokenResult(true);
+        const tokenResult = await firebaseUser.getIdTokenResult();
         setUser(firebaseUser);
         setRole(tokenResult.claims.role || "user");
       } else {

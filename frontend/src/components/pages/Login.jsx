@@ -1,22 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase.js";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/authContext.jsx";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const {user, loading} = useAuth()
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate("/lotes");
     } catch (error) {
       alert("Credenciales incorrectas");
     }
   };
+
+  useEffect(() => {
+    if(!loading && user){
+      navigate("/lotes")
+    }
+  }, [user, loading, navigate])
 
   return (
     <div className="flex justify-center items-center h-screen">
