@@ -11,10 +11,10 @@ export default function ConsultaClientesV() {
             <BuscadorClientes onResultados={(data) => setResultados(data)} loading={loading} setLoading={setLoading} />
             {loading && <Spinner />}
 
-            <div className="my-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="my-5">
                 {resultados.length > 0 ? (
                     resultados.map((cliente) => (
-                        <div key={cliente._id} className="w-full rounded-md shadow-md bg-white text-center px-3 py-4">
+                        <div key={cliente._id} className="lg:w-[50%] md:w-[70%] w-full mx-auto mb-4 rounded-md shadow-md bg-white text-center px-3 py-4">
                             <p className="text-center font-medium">
                                 {cliente.datosPersonales.nombrecliente}
                             </p>

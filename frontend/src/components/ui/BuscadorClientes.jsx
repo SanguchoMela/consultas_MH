@@ -54,7 +54,7 @@ export default function BuscadorClientes({ onResultados, loading, setLoading }) 
         <>
             {error && <ErrorCard errorMessage={error} />}
 
-            <form onSubmit={buscarCliente} className="w-full md:w-[60%] mx-auto">
+            <form onSubmit={buscarCliente} className="w-full lg:w-[60%] mx-auto">
                 <div className="flex flex-col md:flex-row gap-4">
                     <div className="flex flex-col bg-white rounded-lg py-3 px-4 w-full">
                         <label className="sub-label">Nombre</label>
