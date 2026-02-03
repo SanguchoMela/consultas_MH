@@ -84,8 +84,7 @@ export const generarPdfLote = async (cliente, lote, backendUrl) => {
         lote.infoLote.etapa,
         lote.infoLote.manzana,
         lote.infoLote.lote,
-        "Sin datos",
-        // lote.infoLote.financiamiento,
+        lote.infoLote.financiamiento,
       ]]
     },
     {
@@ -94,16 +93,16 @@ export const generarPdfLote = async (cliente, lote, backendUrl) => {
         lote.infoLote.area,
         lote.infoLote.valorm2,
         lote.infoLote.valortotal,
-        "Sin datos",
+        lote.infoLote.valordscto,
       ]]
     },
     {
-      head: ["Valor Entrada", "Valor Cuota", "Cuotas Pagadas", "Valor Cuotas Pagadas"],
+      head: ["Valor Entrada + Reserva", "Valor Cuota", "Cuotas Pagadas (Total o Parcialmente)", "Valor Cuotas Pagadas"],
       body: [[
-        "Sin datos",
-        "Sin datos",
-        "Sin datos",
-        "Sin datos",
+        lote.infoLote.entradareserva,
+        lote.infoLote.valorcuota,
+        lote.estadoCuenta.cuotaspagadas,
+        lote.estadoCuenta.valorcuotaspagadas,
       ]]
     },
     {
@@ -112,7 +111,7 @@ export const generarPdfLote = async (cliente, lote, backendUrl) => {
         lote.estadoCuenta.valorvencido,
         lote.estadoCuenta.valorpagado,
         lote.estadoCuenta.valorporpagar,
-        "Sin datos",
+        lote.estadoCuenta.dividendosporpagar,        
       ]],
     },
   ]
@@ -196,14 +195,14 @@ export const generarPdfLote = async (cliente, lote, backendUrl) => {
       y = drawSectionBar(doc, y, "FLUJO DE CAJA");
       const filas = [];
       data[0].pagos.forEach(pago => {
-        pago.detalles.forEach(det => {
-          filas.push([
-            formatearFecha(pago.fechaPago),
-            `$ ${pago.totalPorFecha}`,
-            pago.formaPago,
-            det.detalle,
-          ]);
-        });
+        const detalles = pago.detalles.map(det => `${det.detalle}`).join("\n")
+
+        filas.push([
+          formatearFecha(pago.fechaPago),
+          `$ ${pago.totalPorFecha}`,
+          pago.formaPago,
+          detalles,
+        ]);
       });
       autoTable(doc, {
         startY: y,
@@ -211,17 +210,18 @@ export const generarPdfLote = async (cliente, lote, backendUrl) => {
         margin: { left: 10, right: 10 },
         theme: "grid",
         head: [["Fecha de Pago", "Valor Pagado", "Forma de Pago", "Detalle del Pago"]],
-        body:
-          filas,
+        body: filas,
         styles: {
           fontSize: 9,
           cellPadding: 1.2,
           overflow: "linebreak",
           textColor: 0,
+          valign: "middle"
         },
         headStyles: {
           fillColor: [155, 198, 209],
           textColor: 0,
+          valign: "middle"
         },
         columnStyles: {
           0: { cellWidth: cellWidth },
