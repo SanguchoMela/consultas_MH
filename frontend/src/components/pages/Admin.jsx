@@ -24,13 +24,25 @@ export default function Admin() {
     return (
         <>
             <Header title="Administración" />
-            <section>
-                <input placeholder="Email" onChange={e => setEmail(e.target.value)} />
-                <input
-                    placeholder="Password"
-                    onChange={e => setPassword(e.target.value)}
-                />
-                <button onClick={createUser}>Crear usuario</button>
+            <p>Ingresa la información para registrar un nuevo usuario con el rol de vendedor</p>
+            <section className="md:max-w-[70%] mx-auto mt-2">
+                <div>
+                    <label className="sub-label">Correo electrónico</label>
+                    <input
+                        // placeholder="Email"
+                        onChange={e => setEmail(e.target.value)}
+                        className="input-style block w-full"
+                    />
+                </div>
+                <div>
+                    <label className="sub-label">Contraseña</label>
+                    <input
+                        // placeholder="Password"
+                        onChange={e => setPassword(e.target.value)}
+                        className="input-style block w-full"
+                    />
+                </div>
+                <button onClick={createUser} className="search-button w-full bg-cyan-900/70 hover:bg-cyan-900/80">Crear usuario</button>
             </section>
         </>
     );

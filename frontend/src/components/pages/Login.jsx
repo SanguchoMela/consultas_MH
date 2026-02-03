@@ -52,10 +52,7 @@ export default function Login() {
               className="input-style block w-full"
             />
           </div>
-          <button className="search-button w-full bg-cyan-900 hover:bg-cyan-800
-          
-          
-          ">Iniciar Sesión</button>
+          <button className="search-button w-full bg-cyan-900 hover:bg-cyan-800">Iniciar Sesión</button>
         </form>
 
       </div>
