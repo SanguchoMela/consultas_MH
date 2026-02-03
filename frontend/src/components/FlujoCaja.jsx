@@ -35,7 +35,7 @@ const FlujoPagos = ({ lote, manzana, backUrl }) => {
     }, [lote])
 
     if (!lote) return null
-    if (!flujo || !flujo[0] || !flujo[0].pagos || flujo[0].pagos.length === 0) return <p>No hay pagos registrados</p>;
+    if (!flujo || !flujo[0] || !flujo[0].pagos || flujo[0].pagos.length === 0) return <p></p>;
 
     // Ordenar los detalles de cada pago por el número de la cuota
     flujo[0].pagos.forEach(pago => {
@@ -54,7 +54,7 @@ const FlujoPagos = ({ lote, manzana, backUrl }) => {
             <details className="group" onToggle={(e) =>
                 e.currentTarget.classList.toggle("open", e.currentTarget.open)
             }>
-                <summary className="font-medium border-b border-cyan-700 mt-3 px-5 flex justify-between items-center cursor-pointer list-none">
+                <summary className="font-medium text-cyan-900 border-b border-cyan-700 mt-3 px-5 flex justify-between items-center cursor-pointer list-none">
                     <h4>Flujo de Caja</h4>
 
                     <svg
