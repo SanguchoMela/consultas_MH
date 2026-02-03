@@ -9,6 +9,13 @@ export const generarPdfLote = async (cliente, lote, backendUrl) => {
   const cellWidth = tableWidth / 4;
   let y = 15;
 
+  // Formatear fecha
+  const formatearFecha = (fecha) => {
+    if (!fecha) return ""
+    const [year, month, day] = fecha.split("T")[0].split("-")
+    return `${day}/${month}/${year}`
+  }
+
   // Formato de barras de sección
   const drawSectionBar = (doc, y, texto, colorRGB = [81, 128, 144], altura = 7) => {
     const pageWidth = doc.internal.pageSize.getWidth();
@@ -191,7 +198,7 @@ export const generarPdfLote = async (cliente, lote, backendUrl) => {
       data[0].pagos.forEach(pago => {
         pago.detalles.forEach(det => {
           filas.push([
-            new Date(pago.fechaPago).toLocaleDateString("es-EC"),
+            formatearFecha(pago.fechaPago),
             `$ ${pago.totalPorFecha}`,
             pago.formaPago,
             det.detalle,
