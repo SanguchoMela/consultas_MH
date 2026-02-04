@@ -7,6 +7,7 @@ import AppLayout from "./layout/AppLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Docs from "./components/pages/Docs";
 import Manuales from "./components/pages/Manuales";
+import NotFound from "./components/pages/NotFound";
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
                 <Admin />
               </AppLayout>
             </ProtectedRoute>} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
     </>
