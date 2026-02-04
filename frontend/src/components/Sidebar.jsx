@@ -28,14 +28,14 @@ export default function Sidebar() {
         <>
             {/* Mobile */}
             <div className={`
-                md:hidden fixed top-0 py-2 px-8 z-50 
-                flex justify-between items-center text-cyan-950 
-                ${open ? "bg-none" : "bg-[#d2dde3]"}
+                md:hidden fixed top-0 py-2 px-8 z-50
+                flex justify-between items-center text-white
+                ${open ? "bg-none" : "bg-cyan-900/80"}
                 w-full backdrop-blur-sm`
             }>
                 <p className={`font-semibold text-lg transition-opacity duration-200 ${open ? "opacity-0" : "opacity-100"}`}>Manta Hills</p>
                 <button onClick={() => setOpen(!open)}
-                    className="text-lg font-medium p-1 hover:bg-cyan-800 rounded-md transition-colors"
+                    className="text-lg font-medium p-1 hover:bg-cyan-900 rounded-md transition-colors"
                     aria-label={open ? "Cerrar menú" : "Abrir menú"}
                 >
                     {open ? "✕" : "☰"}
