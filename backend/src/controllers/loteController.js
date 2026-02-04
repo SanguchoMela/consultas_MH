@@ -1,8 +1,9 @@
 import Lote from '../models/loteModel.js';
 import Cliente from '../models/clienteModel.js';
-import mongoose from 'mongoose';
+import { cors } from "../utils/cors.js"
 
 export const buscarLote = async (req, res) => {
+  if (cors(req, res)) return
   try {
     // // Estado de la conexión a MongoDB
     // console.log('MongoDB Connection Status:', mongoose.connection.readyState);
@@ -37,7 +38,7 @@ export const buscarLote = async (req, res) => {
       "infoLote.lote": loteNum,  // Query with lote as a number
       "infoLote.manzana": manzana.toUpperCase() // Normalizar la manzana a mayúsculas
     }).populate('cliente');
-    
+
     // // Debugging log
     // console.log('Lotes encontrados:', lotes.length);
 
@@ -64,13 +65,14 @@ export const buscarLote = async (req, res) => {
 };
 
 export const getLotes = async (req, res) => {
-    try {
-        const lotes = await Lote.find().populate('cliente')
-        res.status(200).json(lotes)
-    } catch (error) {
-        console.error('Error al obtener lotes:', error.message)
-        res.status(500).json({ message: 'Error al obtener lotes: ', error: error.message })
-    }
+  if (cors(req, res)) return
+  try {
+    const lotes = await Lote.find().populate('cliente')
+    res.status(200).json(lotes)
+  } catch (error) {
+    console.error('Error al obtener lotes:', error.message)
+    res.status(500).json({ message: 'Error al obtener lotes: ', error: error.message })
+  }
 }
 
 // export const getLoteById = async (req, res) => {
