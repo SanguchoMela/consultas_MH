@@ -1,6 +1,8 @@
 import Cliente from "../models/clienteModel.js";
+import { cors } from "../utils/cors.js"
 
 export const buscarClientePorNombre = async (req, res) => {
+  if (cors(req, res)) return
   try {
     const { nombre } = req.query;
 
@@ -34,6 +36,7 @@ export const buscarClientePorNombre = async (req, res) => {
 }
 
 export const buscarClientePorCedula = async (req, res) => {
+  if (cors(req, res)) return
   try {
     const { cedula } = req.query;
     if (!cedula) {
