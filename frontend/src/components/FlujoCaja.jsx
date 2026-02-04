@@ -4,8 +4,6 @@ const FlujoPagos = ({ lote, manzana, backUrl }) => {
     const loteBuscar = lote + manzana
     const [flujo, setFlujo] = useState(null)
 
-    console.log(backUrl)
-
     const formatDateUTC = (dateString) => {
         const date = new Date(dateString);
 
