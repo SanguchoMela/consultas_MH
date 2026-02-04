@@ -1,17 +1,17 @@
 export const cors = (req, res) => {
-    const origin = req.headers.origin
+    const origin = req.headers.origin;
 
     res.setHeader(
-        "Access-Control-Allow-Origin", 
-        origin || process.env.FRONTEND_URL);
+        "Access-Control-Allow-Origin",
+        origin || process.env.FRONTEND_URL
+    );
     res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
     res.setHeader(
         "Access-Control-Allow-Headers",
         "Content-Type, Authorization"
     );
-    res.setHeader("Access-Control-Max-Age", "86400")
+    res.setHeader("Access-Control-Max-Age", "86400");
 
-    // Preflight
     if (req.method === "OPTIONS") {
         res.status(200).end();
         return true;

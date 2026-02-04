@@ -3,7 +3,9 @@ import Cliente from '../models/clienteModel.js';
 import { cors } from "../utils/cors.js"
 
 export const buscarLote = async (req, res) => {
-  if (cors(req, res)) return
+  const isPreflight = cors(req, res)
+  if (isPreflight) { return; }
+
   try {
     // // Estado de la conexión a MongoDB
     // console.log('MongoDB Connection Status:', mongoose.connection.readyState);
@@ -65,7 +67,9 @@ export const buscarLote = async (req, res) => {
 };
 
 export const getLotes = async (req, res) => {
-  if (cors(req, res)) return
+  const isPreflight = cors(req, res)
+  if (isPreflight) { return; }
+
   try {
     const lotes = await Lote.find().populate('cliente')
     res.status(200).json(lotes)
