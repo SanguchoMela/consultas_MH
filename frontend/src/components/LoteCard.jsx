@@ -18,8 +18,7 @@ const LoteCard = ({ lote, cliente, backendUrl }) => {
         }
     }
     return (
-        <div key={lote._id} className={`relative border border-cyan-700 p-4 rounded w-full
-            ${cliente.lotes.length === 1 ? 'lg:w-1/2' : ''} `}>
+        <div key={lote._id} className="relative border border-cyan-700 p-4 rounded w-full">
             <button
                 onClick={() => handleGenerarPdf(cliente, lote)}
                 disabled={loadingPdf === lote._id}

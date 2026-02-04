@@ -24,12 +24,14 @@ export default function Admin() {
     return (
         <>
             <Header title="Administración" />
+            <h2 className="font-medium text-lg text-cyan-900">Crear usuario vendedor</h2>
             <p>Ingresa la información para registrar un nuevo usuario con el rol de vendedor</p>
-            <section className="md:max-w-[70%] mx-auto mt-2">
+            <section className="lg:max-w-[50%] md:max-w-[70%] mx-auto mt-2">
                 <div>
                     <label className="sub-label">Correo electrónico</label>
                     <input
-                        // placeholder="Email"
+                        type="email"
+                        placeholder="Ej: vendedor@mh.com"
                         onChange={e => setEmail(e.target.value)}
                         className="input-style block w-full"
                     />
@@ -37,7 +39,8 @@ export default function Admin() {
                 <div>
                     <label className="sub-label">Contraseña</label>
                     <input
-                        // placeholder="Password"
+                        type="password"
+                        placeholder="*******"
                         onChange={e => setPassword(e.target.value)}
                         className="input-style block w-full"
                     />
