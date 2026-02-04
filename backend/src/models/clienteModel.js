@@ -8,10 +8,9 @@ const clienteSchema = new mongoose.Schema({
   datosContacto: {
     email: { type: String, required: true },
     telefono: { type: String, required: true },
-
   },
   datosAdicionales: {
-    fechaApartado: { type: String, required: true },
+    fechaReserva: { type: String, required: true },
     ocupacion: { type: String, required: true },
     vendedor: { type: String }
   },
