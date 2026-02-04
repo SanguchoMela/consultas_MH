@@ -111,7 +111,7 @@ export const generarPdfLote = async (cliente, lote, backendUrl) => {
         lote.estadoCuenta.valorvencido,
         lote.estadoCuenta.valorpagado,
         lote.estadoCuenta.valorporpagar,
-        lote.estadoCuenta.dividendosporpagar,        
+        lote.estadoCuenta.dividendosporpagar,
       ]],
     },
   ]
@@ -195,8 +195,15 @@ export const generarPdfLote = async (cliente, lote, backendUrl) => {
       y = drawSectionBar(doc, y, "FLUJO DE CAJA");
       const filas = [];
       data[0].pagos.forEach(pago => {
-        const detalles = pago.detalles.map(det => `${det.detalle}`).join("\n")
-
+        const detalles = pago.detalles
+          .slice()
+          .sort((a, b) => {
+            const numA = parseInt(a.detalle.replace(/\D/g, ""), 10)
+            const numB = parseInt(b.detalle.replace(/\D/g, ""), 10)
+            return numB - numA
+          })
+          .map(det => `${det.detalle}`)
+          .join("\n")
         filas.push([
           formatearFecha(pago.fechaPago),
           `$ ${pago.totalPorFecha}`,
