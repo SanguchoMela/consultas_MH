@@ -1,6 +1,6 @@
 import { useState } from "react";
 import BuscadorClientes from "./BuscadorClientes";
-import Spinner from "../Spinner";
+import Spinner from "../feedback/Spinner";
 
 export default function ConsultaClientesV() {
     const [resultados, setResultados] = useState([])

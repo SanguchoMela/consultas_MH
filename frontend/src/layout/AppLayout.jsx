@@ -1,5 +1,5 @@
-import Footer from "../components/Footer";
-import Sidebar from "../components/Sidebar";
+import Footer from "../components/layout/Footer";
+import Sidebar from "../components/ui/Sidebar";
 
 export default function AppLayout({ children }) {
     return (

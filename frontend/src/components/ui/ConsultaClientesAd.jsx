@@ -1,8 +1,8 @@
 import { useState } from "react";
 import BuscadorClientes from "./BuscadorClientes";
-import Spinner from "../Spinner";
-import LoteCard from "../LoteCard";
-import ClienteInfoCard from "../ClienteInfoCard";
+import Spinner from "../feedback/Spinner";
+import LoteCard from "./LoteCard";
+import ClienteInfoCard from "./ClienteInfoCard";
 
 export default function ConsultaClientesAd() {
     const [resultados, setResultados] = useState([])

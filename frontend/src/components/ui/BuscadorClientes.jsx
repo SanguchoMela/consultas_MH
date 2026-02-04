@@ -1,5 +1,5 @@
 import { useState } from "react";
-import ErrorCard from "../ErrorCard";
+import ErrorCard from "../feedback/ErrorCard";
 
 export default function BuscadorClientes({ onResultados, loading, setLoading }) {
     const [nombre, setNombre] = useState("");

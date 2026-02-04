@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../context/authContext";
-import Spinner from "./Spinner";
+import { useAuth } from "./authContext";
+import Spinner from "../components/feedback/Spinner";
 
 export default function ProtectedRoute({ children, adminOnly = false }) {
   const { user, role, loading } = useAuth();

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { auth } from "../../firebase.js";
-import Header from "../Header.jsx";
+import Header from "../layout/Header.jsx";
 
 export default function Admin() {
     const [email, setEmail] = useState("");

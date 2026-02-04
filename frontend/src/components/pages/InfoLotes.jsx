@@ -1,4 +1,4 @@
-import Header from "../Header";
+import Header from "../layout/Header";
 import { useAuth } from "../../context/authContext";
 import ConsultaClientesV from "../ui/ConsultaClientesV";
 import ConsultaClientesAd from "../ui/ConsultaClientesAd";

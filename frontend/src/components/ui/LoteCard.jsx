@@ -1,7 +1,7 @@
 import FlujoPagos from "./FlujoCaja"
-import { generarPdfLote } from "../utils/generarPdfLote"
+import { generarPdfLote } from "../../utils/generarPdfLote"
 import { useState } from "react"
-import Spinner from "./Spinner"
+import Spinner from "../feedback/Spinner"
 
 const LoteCard = ({ lote, cliente, backendUrl }) => {
     const [loadingPdf, setLoadingPdf] = useState(null)

@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
-import { useAuth } from "../context/authContext";
+import { useAuth } from "../../context/authContext";
 import { signOut } from "firebase/auth";
-import { auth } from "../firebase";
+import { auth } from "../../firebase";
 import { useEffect, useState } from "react";
 
 export default function Sidebar() {
