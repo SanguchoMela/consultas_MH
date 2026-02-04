@@ -15,7 +15,7 @@ const ClienteInfoCard = ({ cliente }) => {
                     <td>+{cliente.datosContacto.telefono}</td>
                 </tr>
                 <tr className="tr-cli-style">
-                    <td className="sub-label">Fecha del apartado</td>
+                    <td className="sub-label">Fecha de reserva</td>
                     <td>{cliente.datosAdicionales.fechareserva}</td>
                 </tr>
             </tbody>
