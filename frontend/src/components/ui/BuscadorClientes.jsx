@@ -45,7 +45,7 @@ export default function BuscadorClientes({ onResultados, loading, setLoading }) 
             onResultados(data)
         } catch (error) {
             onResultados([])
-            showError(error.message || "Error en conexión con el servidor");
+            showError("Error de conexión con el servidor");
         } finally {
             setLoading(false)
         }
