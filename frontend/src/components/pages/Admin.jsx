@@ -45,7 +45,7 @@ export default function Admin() {
                         className="input-style block w-full"
                     />
                 </div>
-                <button onClick={createUser} className="search-button w-full bg-cyan-900/70 hover:bg-cyan-900/80">Crear usuario</button>
+                <button onClick={createUser} className="search-button w-full mt-3">Crear usuario</button>
             </section>
         </>
     );
