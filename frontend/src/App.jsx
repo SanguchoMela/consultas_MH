@@ -1,13 +1,13 @@
 import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Login from "./components/pages/Login";
-import InfoLotes from "./components/pages/InfoLotes";
-import Admin from "./components/pages/Admin";
+import Login from "./pages/Login";
+import InfoLotes from "./pages/InfoLotes";
+import Admin from "./pages/Admin";
 import AppLayout from "./layout/AppLayout";
 import ProtectedRoute from "./context/ProtectedRoute";
-import Docs from "./components/pages/Docs";
-import Manuales from "./components/pages/Manuales";
-import NotFound from "./components/pages/NotFound";
+import Docs from "./pages/Docs";
+import Manuales from "./pages/Manuales";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (

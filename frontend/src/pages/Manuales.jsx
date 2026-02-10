@@ -1,4 +1,4 @@
-import Header from "../layout/Header";
+import Header from "../components/layout/Header";
 
 export default function Manuales() {
     return (
