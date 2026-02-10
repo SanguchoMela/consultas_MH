@@ -9,7 +9,7 @@ export default function ConsultaClientesV() {
     return (
         <>
             <BuscadorClientes onResultados={(data) => setResultados(data)} loading={loading} setLoading={setLoading} />
-            {loading && <Spinner />}
+            {loading && <Spinner overlay />}
 
             <div className="my-5">
                 {resultados.length > 0 ? (
