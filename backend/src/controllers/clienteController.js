@@ -1,5 +1,6 @@
 import Cliente from "../models/clienteModel.js";
 import { cors } from "../utils/cors.js"
+import { filtrarClientePorRol } from "../utils/filterClienteByRole.js";
 
 export const buscarClientePorNombre = async (req, res) => {
   const isPreflight = cors(req, res)
@@ -24,11 +25,15 @@ export const buscarClientePorNombre = async (req, res) => {
     }))
 
     // Buscar clientes que coincidan con todas las palabras
-    const clientes = await Cliente.find({ $and: filtro }).populate('lotes')
+    let clientes = await Cliente.find({ $and: filtro }).populate('lotes').lean();
 
     if (clientes.length === 0) {
       return res.status(404).json({ error: 'No se encontraron clientes con ese nombre.' })
     }
+
+    // Filtrar segun rol
+    const role = req.user.role
+    clientes = clientes.map(cliente => filtrarClientePorRol(cliente, role))
 
     return res.json(clientes);
   } catch (error) {
@@ -46,13 +51,17 @@ export const buscarClientePorCedula = async (req, res) => {
     if (!cedula) {
       return res.status(400).json({ error: 'Debe proporcionar una cédula para la búsqueda.' });
     }
-    const cliente = await Cliente.findOne({ "datosPersonales.ci": cedula }).populate('lotes');
+    const cliente = await Cliente.findOne({ "datosPersonales.ci": cedula }).populate('lotes').lean();
 
     if (!cliente) {
       return res.status(404).json({ error: 'No se encontró el cliente asociado a la cédula ingresada.' });
     }
 
-    return res.json(cliente ? [cliente] : []);
+    // Filtrar segun rol
+    const role = req.user.role
+    const clienteFiltrado = filtrarClientePorRol(cliente, role)
+
+    return res.json([clienteFiltrado]);
   } catch (error) {
     console.error("🔥 Error en la búsqueda por cédula:", error)
     return res.status(500).json({ error: error.message });
@@ -64,8 +73,12 @@ export const getClientes = async (req, res) => {
   if (isPreflight) { return; }
 
   try {
-    const clientes = await Cliente.find().populate('lotes')
-    res.status(200).json(clientes)
+    const clientes = await Cliente.find().populate('lotes').lean();
+
+    const role = req.user.role;
+    const clientesFiltrados = clientes.map(cliente => filtrarClientePorRol(cliente, role));
+    
+    res.status(200).json(clientesFiltrados)
   } catch (error) {
     console.error('Error al obtener clientes:', error.message)
     res.status(500).json({ message: 'Error al obtener clientes: ', error: error.message })

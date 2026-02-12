@@ -1,30 +1,33 @@
-// routes/users.js
 import express from "express";
-import admin from "../firebaseAdmin.js";
-import { verifyToken, onlyAdmin } from "../middlewares/auth.js";
+import { verifyToken, authorize } from "../middlewares/auth.js";
+import { createUser } from "../models/userModel.js";
+import { checkPermission } from "../middlewares/permissions.js";
+import { PERMISSIONS } from "../constants/permissions.js";
 
 const router = express.Router();
 
-router.post("/create", verifyToken, onlyAdmin, async (req, res) => {
-  const { email, password } = req.body;
+router.post("/create", verifyToken, checkPermission(PERMISSIONS.CREATE_USER), async (req, res) => {
+  const { email, password, name, role } = req.body;
 
-  if (!email || !password) {
+  if (!email || !password || !name) {
     return res.status(400).json({ message: "Datos incompletos" });
   }
 
   try {
-    const user = await admin.auth().createUser({
+    const user = await createUser({
       email,
       password,
+      name,
+      role,
     });
 
-    await admin.auth().setCustomUserClaims(user.uid, {
-      role: "user",
-    });
+    res.status(201).json({
+      message: "Usuario creado correctamente",
+      user: user.uid,
+    })
 
-    res.json({ message: "Usuario creado correctamente" });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ message: "Error al crear el usuario", error: error.message });
   }
 });
 
