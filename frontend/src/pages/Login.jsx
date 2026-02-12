@@ -7,20 +7,24 @@ import { useAuth } from "../context/authContext.jsx";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const {user, loading} = useAuth()
+  const { user, loading } = useAuth()
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
+      // const userCredential = 
       await signInWithEmailAndPassword(auth, email, password);
+      // const token = await userCredential.user.getIdToken();
+      // console.log("Token de ID:", token);
+      // localStorage.setItem("token", token);
     } catch (error) {
       alert("Credenciales incorrectas");
     }
   };
 
   useEffect(() => {
-    if(!loading && user){
+    if (!loading && user) {
       navigate("/lotes")
     }
   }, [user, loading, navigate])

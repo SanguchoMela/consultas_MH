@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react"
+import { auth } from "../../firebase";
 
 const FlujoPagos = ({ lote, manzana, backUrl }) => {
     const loteBuscar = lote + manzana
+    // console.log(loteBuscar)
     const [flujo, setFlujo] = useState(null)
 
     const formatDateUTC = (dateString) => {
@@ -19,7 +21,26 @@ const FlujoPagos = ({ lote, manzana, backUrl }) => {
 
         const fetchPagos = async () => {
             try {
-                const res = await fetch(`${backUrl}/pagos/${loteBuscar}`)
+                // Obtener token del usuario autenticado
+                const user = auth.currentUser;
+                if (!user) {
+                    return showError("Usuario no autenticado. Por favor, inicie sesión.");
+                }
+
+                const token = await user.getIdToken();
+
+                // Realizar la solicitud con el token en el encabezado
+                const res = await fetch(`${backUrl}/pagos/${loteBuscar}`, {
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+
+                if(!res.ok) {
+                    const text = await res.text()
+                    throw new Error(text || "Error al obtener los pagos")
+                }
+
                 const data = await res.json()
 
                 setFlujo(data)
@@ -30,13 +51,13 @@ const FlujoPagos = ({ lote, manzana, backUrl }) => {
         }
 
         fetchPagos()
-    }, [lote])
+    }, [lote, manzana, backUrl])
 
     if (!lote) return null
-    if (!flujo || !flujo[0] || !flujo[0].pagos || flujo[0].pagos.length === 0) return <p></p>;
+    if (!flujo || !flujo.pagos || flujo.pagos.length === 0) return <p></p>;
 
     // Ordenar los detalles de cada pago por el número de la cuota
-    flujo[0].pagos.forEach(pago => {
+    flujo?.pagos?.forEach(pago => {
         if (pago.detalles && Array.isArray(pago.detalles)) {
             pago.detalles.sort((a, b) => {
                 // Extraer el número de la cuota de la cadena de texto
@@ -80,7 +101,7 @@ const FlujoPagos = ({ lote, manzana, backUrl }) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {flujo[0].pagos.map((pago, index) => (
+                            {flujo?.pagos?.map((pago, index) => (
                                 <tr key={index} className="border-t border-gray-200">
                                     <td className="table-fc-sublabel">{formatDateUTC(pago.fechaPago)}</td>
                                     <td className="table-fc-sublabel">$ {pago.totalPorFecha}</td>
@@ -100,7 +121,7 @@ const FlujoPagos = ({ lote, manzana, backUrl }) => {
                 </div>
                 {/* Mobile view */}
                 <div className="block md:hidden mt-2 space-y-2 max-h-[70vh] overflow-y-auto">
-                    {flujo[0].pagos.map((pago, index) => (
+                    {flujo?.pagos?.map((pago, index) => (
                         <div
                             key={index}
                             className="rounded-lg border border-gray-200 shadow-sm p-3 bg-white"

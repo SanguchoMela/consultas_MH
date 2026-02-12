@@ -1,5 +1,6 @@
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import { auth } from "../firebase";
 import logo from "/mh.png"
 
 export const generarPdfLote = async (cliente, lote, backendUrl) => {
@@ -189,12 +190,22 @@ export const generarPdfLote = async (cliente, lote, backendUrl) => {
   // ====== FLUJO DE PAGOS (API) ====== 
   const loteBuscar = lote.infoLote.lote + lote.infoLote.manzana;
   try {
-    const res = await fetch(`${backendUrl}/pagos/${loteBuscar}`);
+    const user = auth.currentUser;
+    if (!user) {
+      return showError("Usuario no autenticado. Por favor, inicie sesión.");
+    }
+
+    const token = await user.getIdToken();
+    const res = await fetch(`${backendUrl}/pagos/${loteBuscar}`, {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
     const data = await res.json();
-    if (data?.[0]?.pagos?.length) {
+    if (data?.pagos?.length) {
       y = drawSectionBar(doc, y, "FLUJO DE CAJA");
       const filas = [];
-      data[0].pagos.forEach(pago => {
+      data.pagos.forEach(pago => {
         const detalles = pago.detalles
           .slice()
           .sort((a, b) => {

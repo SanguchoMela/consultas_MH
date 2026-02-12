@@ -11,8 +11,8 @@ export default function Sidebar() {
 
     function translateRole(role) {
         if (role === "admin") return "Administrador";
-        if (role === "user") return "Vendedor";
-        if (role === "guest") return "Invitado";
+        if (role === "supervisor") return "Supervisor";
+        if (role === "seller") return "Vendedor";
         return role;
     }
 

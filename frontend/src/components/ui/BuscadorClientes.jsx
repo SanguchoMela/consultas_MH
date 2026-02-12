@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { auth } from "../../firebase";
 import ErrorCard from "../feedback/ErrorCard";
 
 export default function BuscadorClientes({ onResultados, loading, setLoading }) {
@@ -35,7 +36,21 @@ export default function BuscadorClientes({ onResultados, loading, setLoading }) 
         }
 
         try {
-            const res = await fetch(url);
+            // Obtener token del usuario autenticado
+            const user = auth.currentUser;
+            if (!user) {
+                return showError("Usuario no autenticado. Por favor, inicie sesión.");
+            }
+
+            const token = await user.getIdToken();
+
+            // Realizar la solicitud con el token en el encabezado
+            const res = await fetch(url, {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+            
             const data = await res.json();
 
             if (!res.ok) return showError(data.error || "Error en la búsqueda")
