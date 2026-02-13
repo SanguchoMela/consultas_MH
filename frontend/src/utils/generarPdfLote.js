@@ -196,7 +196,7 @@ export const generarPdfLote = async (cliente, lote, backendUrl) => {
     }
 
     const token = await user.getIdToken();
-    const res = await fetch(`${backendUrl}/pagos/${loteBuscar}`, {
+    const res = await fetch(`${backendUrl}/api/pagos/${loteBuscar}`, {
       headers: {
         "Authorization": `Bearer ${token}`
       }
