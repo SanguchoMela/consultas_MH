@@ -51,9 +51,6 @@ export default function Admin() {
                 setError(
                     `Error al crear el usuario\n${data.error || ""}`
                 );
-                setTimeout(() => {
-                    setError("")
-                }, 3000)
                 return
             }
 
