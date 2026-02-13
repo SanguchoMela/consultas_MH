@@ -30,9 +30,9 @@ export default function BuscadorClientes({ onResultados, loading, setLoading }) 
         let url = "";
 
         if (ci) {
-            url = `${backendUrl}/buscar-cedula?cedula=${ci}`;
+            url = `${backendUrl}/api/buscar-cedula?cedula=${ci}`;
         } else {
-            url = `${backendUrl}/buscar-nombre?nombre=${nom}`;
+            url = `${backendUrl}/api/buscar-nombre?nombre=${nom}`;
         }
 
         try {

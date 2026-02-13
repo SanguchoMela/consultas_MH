@@ -30,7 +30,7 @@ const FlujoPagos = ({ lote, manzana, backUrl }) => {
                 const token = await user.getIdToken();
 
                 // Realizar la solicitud con el token en el encabezado
-                const res = await fetch(`${backUrl}/pagos/${loteBuscar}`, {
+                const res = await fetch(`${backUrl}/api/pagos/${loteBuscar}`, {
                     headers: {
                         "Authorization": `Bearer ${token}`
                     }
