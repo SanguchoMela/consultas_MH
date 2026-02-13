@@ -8,6 +8,7 @@ import ProtectedRoute from "./context/ProtectedRoute";
 import Docs from "./pages/Docs";
 import Manuales from "./pages/Manuales";
 import NotFound from "./pages/NotFound";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
@@ -15,6 +16,12 @@ function App() {
       <Router>
         <Routes>
           <Route index element={<Login />} />
+          <Route path="/inicio" element={
+            <ProtectedRoute>
+              <AppLayout>
+                <Dashboard />
+              </AppLayout>
+            </ProtectedRoute>} />
           <Route path="/lotes" element={
             <ProtectedRoute>
               <AppLayout>

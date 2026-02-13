@@ -71,6 +71,9 @@ export default function Sidebar() {
 
                 {/* Nav */}
                 <nav>
+                    <Link to="/inicio" className={linkClass("/inicio")}>
+                        Inicio
+                    </Link>
                     <Link to="/lotes" className={linkClass("/lotes")}>
                         Consulta de Clientes
                     </Link>
