@@ -1,4 +1,4 @@
-const ClienteInfoCard = ({ cliente }) => {
+export default function ClienteInfoCard({ cliente }) {
     return (
         <table className="w-full">
             <tbody>
@@ -22,5 +22,3 @@ const ClienteInfoCard = ({ cliente }) => {
         </table >
     )
 }
-
-export default ClienteInfoCard

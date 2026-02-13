@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { auth } from "../../firebase";
 
-const FlujoPagos = ({ lote, manzana, backUrl }) => {
+export default function FlujoPagos({ lote, manzana, backUrl }) {
     const loteBuscar = lote + manzana
     // console.log(loteBuscar)
     const [flujo, setFlujo] = useState(null)
@@ -157,5 +157,3 @@ const FlujoPagos = ({ lote, manzana, backUrl }) => {
         </article>
     )
 }
-
-export default FlujoPagos

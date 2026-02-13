@@ -1,4 +1,4 @@
-function ErrorCard({errorMessage}) {
+export default function ErrorCard({errorMessage}) {
     if (!errorMessage) return null
     return (
         <div className="error-card mb-3 whitespace-pre-line" role="alert">
@@ -6,5 +6,3 @@ function ErrorCard({errorMessage}) {
         </div>
     )
 }
-
-export default ErrorCard

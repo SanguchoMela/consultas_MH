@@ -1,4 +1,4 @@
-function Footer() {
+export default function Footer() {
     return (
         <footer className="border-t border-cyan-900/10 md:mt-0 mt-4">
             <div className="text-xs font-thin max-w-7xl mx-auto text-center p-2">
@@ -9,5 +9,3 @@ function Footer() {
         </footer>
     );
 }
-
-export default Footer;

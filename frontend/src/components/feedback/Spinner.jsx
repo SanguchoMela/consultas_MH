@@ -1,4 +1,4 @@
-function Spinner({ overlay = false, size = "md", visible = true }) {
+export default function Spinner({ overlay = false, size = "md", visible = true }) {
     const sizes = {
         sm: 'w-5 h-5',
         md: 'w-12 h-12 md:w-16 md:h-16',
@@ -28,5 +28,3 @@ function Spinner({ overlay = false, size = "md", visible = true }) {
         </>
     )
 }
-
-export default Spinner

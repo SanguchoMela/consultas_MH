@@ -1,4 +1,4 @@
-function ButtonToTop() {
+export default function ButtonToTop() {
     return (
         <button
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
@@ -14,5 +14,3 @@ function ButtonToTop() {
         </button>
     )
 }
-
-export default ButtonToTop

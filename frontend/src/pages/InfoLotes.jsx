@@ -3,7 +3,7 @@ import { useAuth } from "../context/authContext";
 import ConsultaClientesV from "../components/ui/ConsultaClientesV";
 import ConsultaClientesAd from "../components/ui/ConsultaClientesAd";
 
-const InfoLotes = () => {
+export default function InfoLotes ()  {
   const { role } = useAuth()
   const infoDate = import.meta.env.VITE_INFO_DATE
   const textInst = "Ingresa el nombre o número de cédula del cliente para ver el lote correspondiente"
@@ -30,5 +30,3 @@ const InfoLotes = () => {
     </div>
   );
 };
-
-export default InfoLotes;

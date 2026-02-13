@@ -3,7 +3,7 @@ import { generarPdfLote } from "../../utils/generarPdfLote"
 import { useState } from "react"
 import Spinner from "../feedback/Spinner"
 
-const LoteCard = ({ lote, cliente, backendUrl }) => {
+export default function LoteCard({ lote, cliente, backendUrl }) {
     const [loadingPdf, setLoadingPdf] = useState(null)
     const [error, setError] = useState(false)
 
@@ -117,5 +117,3 @@ const LoteCard = ({ lote, cliente, backendUrl }) => {
         </div>
     )
 }
-
-export default LoteCard
