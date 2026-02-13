@@ -1,12 +1,16 @@
 import express from "express";
-import { verifyToken, authorize } from "../middlewares/auth.js";
+import { verifyToken } from "../middlewares/auth.js";
 import { createUser } from "../models/userModel.js";
 import { checkPermission } from "../middlewares/permissions.js";
 import { PERMISSIONS } from "../constants/permissions.js";
+import { cors } from "../utils/cors.js";
 
 const router = express.Router();
 
 router.post("/create", verifyToken, checkPermission(PERMISSIONS.CREATE_USER), async (req, res) => {
+  const isPreflight = cors(req, res)
+  if (isPreflight) { return; }
+
   const { email, password, name, role } = req.body;
 
   if (!email || !password || !name) {
