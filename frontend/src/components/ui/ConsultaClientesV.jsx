@@ -6,6 +6,8 @@ export default function ConsultaClientesV() {
     const [resultados, setResultados] = useState([])
     const [loading, setLoading] = useState(false)
 
+    console.log(JSON.stringify(resultados, null, 2))
+
     return (
         <>
             <BuscadorClientes onResultados={(data) => setResultados(data)} loading={loading} setLoading={setLoading} />
@@ -26,7 +28,7 @@ export default function ConsultaClientesV() {
                             ) : (
                                 cliente.lotes.map((lote, index) => (
                                     <div key={lote._id} className=" border-cyan-900/40">
-                                        <p>{lote.infoLote.lote} {lote.infoLote.manzana}</p>
+                                        <p>{lote.lote} {lote.manzana}</p>
                                     </div>
                                 ))
                             )}
