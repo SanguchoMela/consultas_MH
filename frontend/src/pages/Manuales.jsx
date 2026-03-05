@@ -16,7 +16,7 @@ export default function Manuales() {
                             </span>
                         </div>
                         <a
-                            href="https://drive.google.com/file/d/1tDMimqdeFi9utXw5F-Fl1xY_jQEQO70I/view?usp=sharing"
+                            href="https://drive.google.com/file/d/1_8rYPcfo-YJ4xhIKyfnYShxd1XE6LeZm/view?usp=sharing"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="search-button text-center">
