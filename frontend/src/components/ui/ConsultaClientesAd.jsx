@@ -7,10 +7,42 @@ import ClienteInfoCard from "./ClienteInfoCard";
 export default function ConsultaClientesAd() {
     const [resultados, setResultados] = useState([])
     const [loading, setLoading] = useState(false)
+    const [loadingDownload, setLoadingDownload] = useState(false)
     const [backendUrl, setBackendUrl] = useState(import.meta.env.VITE_BACKEND_URL)
+
+    const handleDescargarTodosPdfs = async () => {
+        try {
+            setLoadingDownload(true);
+            // window.open(`${backendUrl}/api/exportar-pdfs`, '_blank');
+            const res = await fetch(`${backendUrl}/api/exportar-pdfs`)
+            const blob = await res.blob();
+
+            const url = window.URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'estados_cuenta.zip';
+            // document.body.appendChild(a);
+            a.click();
+            // a.remove();
+        } catch (error) {
+            console.error("Error al generar archivo: ", error)
+        } finally {
+            setLoadingDownload(false)
+        }
+    }
 
     return (
         <>
+            <div className="flex justify-end mb-5">
+                <button
+                    onClick={handleDescargarTodosPdfs}
+                    disabled={loadingDownload}
+                    className="text-white text-center font-medium lg:px-5 px-4 py-2 rounded-lg bg-teal-900/80 hover:bg-teal-900/90"
+                >
+                    {loadingDownload ? "Generando PDFs..." : "Descargar PDFs de todos los lotes"}
+                </button>
+            </div>
             <BuscadorClientes onResultados={(data) => setResultados(data)} loading={loading} setLoading={setLoading} />
             {loading && <Spinner overlay />}
 
