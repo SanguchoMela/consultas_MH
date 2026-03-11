@@ -14,7 +14,7 @@ export default function LoteCard({ lote, cliente, backendUrl }) {
         } catch (error) {
             setError("No se pudo generar el PDF")
         } finally {
-            setLoadingPdf(null)
+            setLoadingPdf(false)
         }
     }
     return (
