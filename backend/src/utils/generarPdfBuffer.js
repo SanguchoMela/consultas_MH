@@ -1,7 +1,6 @@
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
-import fs from "fs";
-import path from "path";
+import { logoBase64 } from "../assets/mh.js";
 
 export const generarPdfBuffer = async (cliente, lote, pagos = []) => {
 
@@ -14,8 +13,7 @@ export const generarPdfBuffer = async (cliente, lote, pagos = []) => {
   let y = 15;
 
   // Logo
-  const logoPath = path.join(process.cwd(), "public", "mh.png");
-  const logo = fs.readFileSync(logoPath).toString("base64");
+  const logo = logoBase64;
 
   // Formateo de fecha
   const formatearFecha = (fecha) => {
