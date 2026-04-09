@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
-import {auth, db} from "../firebase";
-import {doc, getDoc} from "firebase/firestore";
+import { auth, db } from "../firebase";
+import { doc, getDoc } from "firebase/firestore";
+import useTranslatedRole from "../hooks/useTranslatedRole";
 
 export default function Dashboard() {
+    const role = useTranslatedRole();
+    const [loading, setLoading] = useState(true);
     const [userData, setUserData] = useState({
         name: "",
         role: ""
@@ -10,18 +13,27 @@ export default function Dashboard() {
 
     useEffect(() => {
         const fetchUserData = async () => {
-            const user = auth.currentUser;
+            const storedUserData = localStorage.getItem("userData");
+            if (storedUserData) {
+                setUserData(JSON.parse(storedUserData));
+                setLoading(false);
+            } else {
+                const user = auth.currentUser;
 
-            if (user) {
-                const docRef = doc(db, "users", user.uid);
-                const docSnap = await getDoc(docRef);
+                if (user) {
+                    const docRef = doc(db, "users", user.uid);
+                    const docSnap = await getDoc(docRef);
 
-                if (docSnap.exists()) {
-                    setUserData(docSnap.data());
-                } else {
-                    console.log("No existe el documento del usuario");
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+                        setUserData(data);
+                        localStorage.setItem("userData", JSON.stringify(data));
+                    } else {
+                        console.log("No existe el documento del usuario");
+                    }
                 }
             }
+            setLoading(false);
         }
         fetchUserData();
     }, [])
@@ -32,7 +44,7 @@ export default function Dashboard() {
                 {/* Imagen fondo */}
                 <div className="absolute inset-0 bg-[url('/fondo3.jpg')] bg-cover bg-center" />
                 {/* Overlay */}
-                <div className="absolute inset-0 bg-black/60" />
+                <div className="absolute inset-0 bg-black/50" />
                 {/* Contenido */}
                 <div className="relative z-10 flex flex-col justify-center h-full text-white px-10">
                     <h1 className="text-4xl font-semibold mb-2">Manta Hills</h1>
@@ -40,7 +52,7 @@ export default function Dashboard() {
                     <div className="bg-white/10 backdrop-blur-lg p-4 rounded-xl w-fit space-y-1">
                         <p className="text-sm text-gray-300">Bienvenido/a</p>
                         <p className="text-lg font-semibold">{userData.name || "Usuario"}</p>
-                        <p className="text-sm text-gray-200">{userData.role || ""}</p>
+                        <p className="text-sm text-gray-200">{role || ""}</p>
                     </div>
                 </div>
             </div>

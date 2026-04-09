@@ -3,17 +3,16 @@ import { useAuth } from "../../context/authContext";
 import { signOut } from "firebase/auth";
 import { auth } from "../../firebase";
 import { useEffect, useState } from "react";
+import useTranslatedRole from "../../hooks/useTranslatedRole";
 
 export default function Sidebar() {
-    const { role } = useAuth();
+    const role = useTranslatedRole();
     const location = useLocation();
     const [open, setOpen] = useState(false)
 
-    function translateRole(role) {
-        if (role === "admin") return "Administrador";
-        if (role === "supervisor") return "Supervisor";
-        if (role === "seller") return "Vendedor";
-        return role;
+    const handleLogout = () => {
+        localStorage.clear();
+        signOut(auth);
     }
 
     const linkClass = (path) =>
@@ -66,7 +65,7 @@ export default function Sidebar() {
                     <img src="/mh.png" alt="Manta Hills Logo" className="w-32" />
                 </div>
                 <div className="flex flex-col text-sm items-center py-2 border-b border-cyan-900/30">
-                    <p>{translateRole(role)}</p>
+                    <p>{role}</p>
                 </div>
 
                 {/* Nav */}
@@ -97,7 +96,7 @@ export default function Sidebar() {
                 {/* Logout */}
                 <div className="w-full px-4 fixed bottom-0 mb-4">
                     <button
-                        onClick={() => signOut(auth)}
+                        onClick={handleLogout}
                         className="w-full bg-red-500 text-white font-medium py-2 rounded-md hover:bg-red-600"
                     >
                         Cerrar sesión

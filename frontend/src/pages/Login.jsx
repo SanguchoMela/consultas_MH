@@ -25,7 +25,7 @@ export default function Login() {
 
   useEffect(() => {
     if (!loading && user) {
-      navigate("/lotes")
+      navigate("/inicio")
     }
   }, [user, loading, navigate])
 
