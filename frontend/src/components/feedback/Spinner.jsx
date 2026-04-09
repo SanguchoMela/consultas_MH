@@ -1,4 +1,4 @@
-export default function Spinner({ overlay = false, size = "md", visible = true }) {
+export default function Spinner({ overlay = false, size = "md", visible = true, color = "text-cyan-700/50" }) {
     const sizes = {
         sm: 'w-5 h-5',
         md: 'w-12 h-12 md:w-16 md:h-16',
@@ -6,13 +6,12 @@ export default function Spinner({ overlay = false, size = "md", visible = true }
     return (
         <>
             <div className={`
-                ${overlay ? "fixed inset-0 min-h-screen" : ""}    
-                ${overlay ? "bg-gray-300/50" : ""}    
+                ${overlay ? "fixed inset-0 min-h-screen bg-gray-300/50" : ""}  
                 z-50 grid place-items-center 
                 transition-opacity duration-700 ease-in-out
                 ${visible ? "opacity-100" : "opacity-0 pointer-events-none"}
             `}>
-                <svg className={`${sizes[size]} animate-spin text-cyan-700/50`} 
+                <svg className={`${sizes[size]} animate-spin ${color}`} 
                     viewBox="0 0 64 64" 
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg">
@@ -21,7 +20,7 @@ export default function Spinner({ overlay = false, size = "md", visible = true }
                         stroke="currentColor" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round"></path>
                     <path
                         d="M32 3C36.5778 3 41.0906 4.08374 45.1692 6.16256C49.2477 8.24138 52.7762 11.2562 55.466 14.9605C58.1558 18.6647 59.9304 22.9531 60.6448 27.4748C61.3591 31.9965 60.9928 36.6232 59.5759 40.9762"
-                        stroke="currentColor" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" className="text-cyan-700">
+                        stroke="currentColor" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round">
                     </path>
                 </svg>
             </div>

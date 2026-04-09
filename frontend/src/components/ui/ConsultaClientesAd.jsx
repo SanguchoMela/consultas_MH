@@ -38,9 +38,18 @@ export default function ConsultaClientesAd() {
                 <button
                     onClick={handleDescargarTodosPdfs}
                     disabled={loadingDownload}
-                    className="text-white text-center font-medium lg:px-5 px-4 py-2 rounded-lg bg-teal-900/80 hover:bg-teal-900/90"
+                    className={`text-white text-center font-medium lg:px-5 px-4 py-2 rounded-lg bg-teal-800 hover:bg-teal-700
+                        ${loadingDownload ? "cursor-not-allowed opacity-70" : ""}    
+                    `}
                 >
-                    {loadingDownload ? "Generando PDFs..." : "Descargar PDFs de todos los lotes"}
+                    {loadingDownload ? (
+                        <span className="flex items-center gap-2">
+                            <Spinner size="sm" color="text-white" />
+                            Generando PDFs...
+                        </span>
+                    ) : (
+                        "Descargar PDFs de todos los lotes"
+                    )}
                 </button>
             </div>
             <BuscadorClientes onResultados={(data) => setResultados(data)} loading={loading} setLoading={setLoading} />

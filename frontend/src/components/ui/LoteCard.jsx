@@ -7,27 +7,60 @@ export default function LoteCard({ lote, cliente, backendUrl }) {
     const [loadingPdf, setLoadingPdf] = useState(null)
     const [error, setError] = useState(false)
 
+    // console.log(lote._id)
+    // console.log(`Lote: ${lote}`)
+    
+    // const handleGenerarPdf = async (cliente, lote) => {
+    //     try {
+    //         setLoadingPdf(lote._id)
+    //         await generarPdfLote(cliente, lote, backendUrl)
+    //         console.log("Cliente: ", cliente)
+    //         console.log("Lote: ", lote)
+    //     } catch (error) {
+    //         setError("No se pudo generar el PDF")
+    //     } finally {
+    //         setLoadingPdf(false)
+    //     }
+    // }
+
     const handleGenerarPdf = async (cliente, lote) => {
         try {
             setLoadingPdf(lote._id)
-            await generarPdfLote(cliente, lote, backendUrl)
-        } catch (error) {
+            setError(false)
+
+            const res = await fetch(`${backendUrl}/api/generar-pdf/${cliente._id}/${lote._id}`)
+
+            if (!res.ok) {
+                throw new Error("Error generando PDF")
+            }
+
+            const blob = await res.blob()
+            const url = window.URL.createObjectURL(blob)
+
+            const a = document.createElement("a")
+            a.href = url
+            a.download = `EC_${lote.infoLote.lote}${lote.infoLote.manzana}`
+            a.click()
+
+            window.URL.revokeObjectURL(url)
+        } catch (err) {
             setError("No se pudo generar el PDF")
         } finally {
-            setLoadingPdf(false)
+            setLoadingPdf(null)
         }
     }
+
     return (
         <div key={lote._id} className="relative border border-cyan-700 p-4 rounded w-full">
             <button
                 onClick={() => handleGenerarPdf(cliente, lote)}
                 disabled={loadingPdf === lote._id}
-                className={`absolute top-1 right-2 z-10 cursor-pointer bg-gray-200 shadow-md shadow-cyan-900/50 p-2 rounded
-                    ${loadingPdf === lote._id} ? "cursor-not-allowed opacity-70" : "hover:bg-gray-300"
+                className={`absolute top-1 right-2 z-10 cursor-pointer bg-gray-200 hover:bg-gray-300 shadow-md shadow-cyan-900/50 p-2 rounded
+                    ${loadingPdf === lote._id ? "cursor-not-allowed opacity-70" : ""}
                 `}
             >
                 {loadingPdf === lote._id ? (
-                    <Spinner overlay />
+                    <Spinner size="sm" color="text-red-600" />
                 ) : (
                     <img src="/pdf.png" alt="Descargar PDF" className="w-5" />
                 )}
