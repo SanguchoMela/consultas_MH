@@ -1,27 +1,10 @@
 import FlujoPagos from "./FlujoCaja"
-import { generarPdfLote } from "../../utils/generarPdfLote"
 import { useState } from "react"
 import Spinner from "../feedback/Spinner"
 
 export default function LoteCard({ lote, cliente, backendUrl }) {
     const [loadingPdf, setLoadingPdf] = useState(null)
     const [error, setError] = useState(false)
-
-    // console.log(lote._id)
-    // console.log(`Lote: ${lote}`)
-    
-    // const handleGenerarPdf = async (cliente, lote) => {
-    //     try {
-    //         setLoadingPdf(lote._id)
-    //         await generarPdfLote(cliente, lote, backendUrl)
-    //         console.log("Cliente: ", cliente)
-    //         console.log("Lote: ", lote)
-    //     } catch (error) {
-    //         setError("No se pudo generar el PDF")
-    //     } finally {
-    //         setLoadingPdf(false)
-    //     }
-    // }
 
     const handleGenerarPdf = async (cliente, lote) => {
         try {
