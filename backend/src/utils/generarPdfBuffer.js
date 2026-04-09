@@ -243,69 +243,6 @@ export const generarPdfBuffer = async (cliente, lote, pagos = []) => {
     });
   }
 
-  // const loteBuscar = lote.infoLote.lote + lote.infoLote.manzana;
-  // try {
-  //   const user = auth.currentUser;
-  //   if (!user) {
-  //     return showError("Usuario no autenticado. Por favor, inicie sesión.");
-  //   }
-
-  //   const token = await user.getIdToken();
-  //   const res = await fetch(`${backendUrl}/api/pagos/${loteBuscar}`, {
-  //     headers: {
-  //       "Authorization": `Bearer ${token}`
-  //     }
-  //   });
-  //   const data = await res.json();
-  //   if (data?.pagos?.length) {
-  //     y = drawSectionBar(doc, y, "FLUJO DE CAJA");
-  //     const filas = [];
-  //     data.pagos.forEach(pago => {
-  //       const detalles = pago.detalles
-  //         .slice()
-  //         .sort((a, b) => {
-  //           const numA = parseInt(a.detalle.replace(/\D/g, ""), 10)
-  //           const numB = parseInt(b.detalle.replace(/\D/g, ""), 10)
-  //           return numB - numA
-  //         })
-  //         .map(det => `${det.detalle}`)
-  //         .join("\n")
-  //       filas.push([
-  //         formatearFecha(pago.fechaPago),
-  //         `$ ${pago.totalPorFecha}`,
-  //         pago.formaPago,
-  //         detalles,
-  //       ]);
-  //     });
-  //     autoTable(doc, {
-  //       startY: y,
-  //       tableWidth,
-  //       margin: { left: 10, right: 10 },
-  //       theme: "grid",
-  //       head: [["Fecha de Pago", "Valor Pagado", "Forma de Pago", "Detalle del Pago"]],
-  //       body: filas,
-  //       styles: {
-  //         fontSize: 9,
-  //         cellPadding: 1.2,
-  //         overflow: "linebreak",
-  //         textColor: 0,
-  //         valign: "middle"
-  //       },
-  //       headStyles: {
-  //         fillColor: [155, 198, 209],
-  //         textColor: 0,
-  //         valign: "middle"
-  //       },
-  //       columnStyles: {
-  //         0: { cellWidth: cellWidth },
-  //         1: { cellWidth: cellWidth },
-  //         2: { cellWidth: cellWidth },
-  //         3: { cellWidth: cellWidth },
-  //       }
-  //     });
-  //   }
-  // } catch (err) { doc.text("No se pudo cargar el flujo de pagos", 14, y); }
-
   // Tabla Informacion Importante
   y = doc.lastAutoTable.finalY + 5;
   y = drawSectionBar(doc, y, "INFORMACIÓN IMPORTANTE");
@@ -332,7 +269,6 @@ export const generarPdfBuffer = async (cliente, lote, pagos = []) => {
   // =============================
   // DEVOLVER BUFFER
   // =============================
-
   return Buffer.from(doc.output("arraybuffer"));
 
 };

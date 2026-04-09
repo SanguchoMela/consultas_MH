@@ -1,7 +1,44 @@
 import archiver from "archiver";
 import Cliente from "../models/clienteModel.js";
+import Lote from "../models/loteModel.js";
 import Pagos from "../models/pagoModel.js"
 import { generarPdfBuffer } from "../utils/generarPdfBuffer.js";
+
+export const exportarPdfPorLote = async (req, res) => {
+    try {
+        const { clienteId, loteId } = req.params
+
+        const cliente = await Cliente.findById(clienteId).lean()
+        if (!cliente) {
+            return res.status(404).json({ error: "Cliente no encontrado" })
+        }
+
+        // Buscar lote directamente por ID
+        const lote = await Lote.findById(loteId).lean()
+        if (!lote || !lote.infoLote) {
+            return res.status(404).json({ error: "Lote no encontrado" })
+        }
+
+        const loteKey = lote.infoLote.lote + lote.infoLote.manzana
+
+        const pagosDoc = await Pagos.findOne({ lote: loteKey }).lean()
+        const pagos = pagosDoc?.pagos || []
+
+        const pdfBuffer = await generarPdfBuffer(cliente, lote, pagos)
+
+        res.setHeader("Content-Type", "application/pdf")
+        res.setHeader(
+            "Content-Disposition",
+            `attachment; filename=EC_${loteKey}.pdf`
+        )
+
+        res.send(pdfBuffer)
+
+    } catch (error) {
+        console.error("ERROR GENERANDO PDF:", error)
+        res.status(500).json({ error: "Error generando PDF" })
+    }
+}
 
 export const exportarTodosLosPdfs = async (req, res) => {
     try {
