@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { auth, db } from "../firebase";
 import { doc, getDoc } from "firebase/firestore";
 import useTranslatedRole from "../hooks/useTranslatedRole";
+import Spinner from "../components/feedback/Spinner";
 
 export default function Dashboard() {
     const role = useTranslatedRole();
@@ -51,8 +52,14 @@ export default function Dashboard() {
                     <p className="text-lg italic mb-6">Construye tu futuro, invierte en tu familia</p>
                     <div className="bg-white/10 backdrop-blur-lg p-4 rounded-xl w-fit space-y-1">
                         <p className="text-sm text-gray-300">Bienvenido/a</p>
-                        <p className="text-lg font-semibold">{userData.name || "Usuario"}</p>
-                        <p className="text-sm text-gray-200">{role || ""}</p>
+                        {loading ? (
+                            <Spinner size="sm" color="text-white" />
+                        ) : (
+                            <div className="space-y-1">
+                                <p className="text-lg font-semibold">{userData.name || "Usuario"}</p>
+                                <p className="text-sm text-gray-200">{role || ""}</p>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
