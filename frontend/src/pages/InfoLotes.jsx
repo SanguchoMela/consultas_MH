@@ -15,9 +15,9 @@ export default function InfoLotes ()  {
         {(role === "admin") ? (
           <>
             <p className="mb-2">{textInst}</p>
-            <p className="md:text-right text-center md:pr-2 pb-3">
+            {/* <p className="md:text-right text-center md:pr-2 pb-3">
               Información hasta: <strong>{infoDate}</strong>
-            </p>
+            </p> */}
             <ConsultaClientesAd />
           </>
         ) : (
