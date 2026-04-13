@@ -85,7 +85,7 @@ export default function Sidebar() {
                         Manuales de Procedimientos
                     </Link>
 
-                    {role === "admin" && (
+                    {role === "Administrador" && (
                         <Link to="/admin" className={linkClass("/admin")}>
                             Administración
                         </Link>
