@@ -5,7 +5,53 @@ export default function Docs() {
         <>
             <Header title="Documentos Importantes" />
 
-            <section className="max-w-3xl mx-auto px-4">
+            <section className="max-w-3xl mx-auto px-4 py-5 border-b border-cyan-900">
+                <p className="font-semibold text-lg mb-2 text-cyan-900">Formularios para reserva de lotes</p>
+                                <ul className="space-y-5">
+                    <li className="card-list">
+                        <p className="md-label">
+                            Formulario de datos personales para reserva de lotes
+                        </p>
+                        <a
+                            href="https://drive.google.com/file/d/1L2Y7DoB2BKRm2pzVp211PspnRAHtWvC7/view?usp=sharing"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="search-button"
+                        >
+                            Ver documento
+                        </a>
+                    </li>
+                    <li className="card-list">
+                        <p className="md-label">
+                            Formulario de reservación
+                        </p>
+                        <a
+                            href="https://drive.google.com/file/d/13P0Cwcur18Vl0nc2zc8wlg-bYw_SUkP2/view?usp=sharing"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="search-button"
+                        >
+                            Ver documento
+                        </a>
+                    </li>
+                    <li className="card-list">
+                        <p className="md-label">
+                            Formulario de origen lícito de fondos
+                        </p>
+                        <a
+                            href="https://drive.google.com/file/d/1cAJDZ-V8DIIMTy2WLBw2zMMlXJk0gDVY/view?usp=sharing"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="search-button"
+                        >
+                            Ver documento
+                        </a>
+                    </li>
+                </ul>
+            </section>
+
+
+            <section className="max-w-3xl mx-auto px-4 mt-5">
                 <ul className="space-y-5">
                     <li className="card-list">
                         <p className="md-label">
