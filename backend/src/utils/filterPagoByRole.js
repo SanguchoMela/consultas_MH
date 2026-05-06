@@ -8,7 +8,7 @@ export const filtrarPagosPorRol = (pagosObj, role) => {
         lote: pagosObj.lote,
         pagos: pagosObj.pagos.map(pago => ({
             fechaPago: pago.fechaPago,
-            totalPorFecha: pago.totalPorFecha
+            totalPorComprobante: pago.totalPorComprobante
         })),
         totalPagado: pagosObj.totalPagado
       };

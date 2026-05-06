@@ -104,7 +104,7 @@ export default function FlujoPagos({ lote, manzana, backUrl }) {
                             {flujo?.pagos?.map((pago, index) => (
                                 <tr key={index} className="border-t border-gray-200">
                                     <td className="table-fc-sublabel">{formatDateUTC(pago.fechaPago)}</td>
-                                    <td className="table-fc-sublabel">$ {pago.totalPorFecha}</td>
+                                    <td className="table-fc-sublabel">$ {pago.totalPorComprobante}</td>
                                     <td className="table-fc-sublabel">{pago.formaPago}</td>
                                     <td className="table-fc-sublabel">
                                         <ul>
@@ -134,7 +134,7 @@ export default function FlujoPagos({ lote, manzana, backUrl }) {
                             </div>
                             <div className="card-pagos-label">
                                 <span className="sub-label">Valor pagado</span>
-                                <span>$ {pago.totalPorFecha}</span>
+                                <span>$ {pago.totalPorComprobante}</span>
                             </div>
                             <div className="card-pagos-label">
                                 <span className="sub-label">Forma de pago</span>

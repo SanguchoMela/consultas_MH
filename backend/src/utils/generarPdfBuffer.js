@@ -210,7 +210,7 @@ export const generarPdfBuffer = async (cliente, lote, pagos = []) => {
         .join("\n")
       filas.push([
         formatearFecha(pago.fechaPago),
-        `$ ${pago.totalPorFecha}`,
+        `$ ${pago.totalPorComprobante}`,
         pago.formaPago,
         detalles,
       ]);

@@ -11,7 +11,7 @@ const pagoSchema = new mongoose.Schema(
     {
         fechaPago: { type: Date, required: true },
         formaPago: { type: String, required: true },
-        totalPorFecha: { type: Number, required: true },
+        totalPorComprobante: { type: Number, required: true },
         detalles: [detalleSchema]
     },
     { _id: false }
