@@ -206,11 +206,16 @@ export const generarPdfBuffer = async (cliente, lote, pagos = []) => {
           const numB = parseInt((b.detalle || "").replace(/\D/g, ""), 10)
           return numB - numA
         })
-        .map(det => `${det.detalle}: $ ${Number(det.valorPagado).toFixed(2)}`)
+        .map(det => {
+          const valor = Number(det.valorPagado);
+          return Number.isFinite(valor)
+            ? `${det.detalle}: $ ${valor.toFixed(2)}`
+            : `${det.detalle}`;
+        })
         .join("\n")
       filas.push([
         formatearFecha(pago.fechaPago),
-        `$ ${pago.totalPorComprobante}`,
+        `$ ${Number(pago.totalPorComprobante).toFixed(2)}`,
         pago.formaPago,
         detalles,
       ]);
