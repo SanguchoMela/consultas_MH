@@ -254,8 +254,8 @@ export const generarPdfBuffer = async (cliente, lote, pagos = []) => {
 
   doc.setTextColor(0, 0, 0);
 
-  const infoTexto = "Adjunto a la presente sírvase encontrar su estado de cuenta de todos los pagos realizados a Manta Hills por el terreno reservado por usted, de igual manera le agradecemos que revise todos los datos que se encuentran consignados en este documento."
-
+  const infoTexto = "Adjunto a la presente sírvase encontrar su estado de cuenta correspondiente a todos los pagos realizados a Manta Hills por el terreno reservado por usted, generado con fecha de corte al 30 de abril de 2026. Los pagos realizados después de esta fecha no se encuentran reflejados en este documento y serán considerados en la próxima actualización correspondiente. Le agradecemos revisar cuidadosamente los datos consignados y conservar este documento para su control e información."
+  
   const textLines = doc.splitTextToSize(infoTexto, tableWidth - 4);
   const alturaCuadro = textLines.length * 4 + 2;
 
@@ -275,7 +275,7 @@ export const generarPdfBuffer = async (cliente, lote, pagos = []) => {
   // // Nueva posicion debajo del primer cuadro
   // y = y + alturaCuadro;
 
-  // const infoAdicional = "El presente estado de cuenta ha sido generado con fecha de corte al 30 de abril de 2026. Los pagos realizados después de esta fecha no se encuentran reflejados en este documento y serán considerados en la próxima actualización correspondiente. Le recomendamos conservar este documento para su control e información.";
+  // const infoAdicional = "Adjunto a la presente sírvase encontrar su estado de cuenta de todos los pagos realizados a Manta Hills por el terreno reservado por usted, de igual manera le agradecemos que revise todos los datos que se encuentran consignados en este documento.";
 
   // const textLinesAdicional = doc.splitTextToSize(infoAdicional, tableWidth - 4);
   // const alturaCuadroAdicional = textLinesAdicional.length * 4 + 2;
