@@ -206,7 +206,7 @@ export const generarPdfBuffer = async (cliente, lote, pagos = []) => {
           const numB = parseInt((b.detalle || "").replace(/\D/g, ""), 10)
           return numB - numA
         })
-        .map(det => `${det.detalle}`)
+        .map(det => `${det.detalle}: $ ${Number(det.valorPagado).toFixed(2)}`)
         .join("\n")
       filas.push([
         formatearFecha(pago.fechaPago),
@@ -265,6 +265,27 @@ export const generarPdfBuffer = async (cliente, lote, pagos = []) => {
   textLines.forEach((line, index) => {
     doc.text(line, 10 + 2, offsetY + index * 4, { align: "justify" });
   });
+
+  // // Cuadro adicional de información importante
+  // // Nueva posicion debajo del primer cuadro
+  // y = y + alturaCuadro;
+
+  // const infoAdicional = "El presente estado de cuenta ha sido generado con fecha de corte al 30 de abril de 2026. Los pagos realizados después de esta fecha no se encuentran reflejados en este documento y serán considerados en la próxima actualización correspondiente. Le recomendamos conservar este documento para su control e información.";
+
+  // const textLinesAdicional = doc.splitTextToSize(infoAdicional, tableWidth - 4);
+  // const alturaCuadroAdicional = textLinesAdicional.length * 4 + 2;
+
+  // // Dibujar el segundo rectangulo
+  // doc.setDrawColor(200, 200, 200);
+  // doc.rect(10, y, tableWidth, alturaCuadroAdicional, "S");
+
+  // // Centrado vertical
+  // const offsetYAdicional = y + (alturaCuadroAdicional - textLinesAdicional.length * 4) / 2 + 2.5;
+
+  // // Escribir el texto dentro del segundo rectangulo
+  // textLinesAdicional.forEach((line, index) => {
+  //   doc.text(line, 12, offsetYAdicional + index * 4, { align: "justify" });
+  // })
 
   // =============================
   // DEVOLVER BUFFER
