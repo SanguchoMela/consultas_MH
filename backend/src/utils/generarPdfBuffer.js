@@ -254,8 +254,8 @@ export const generarPdfBuffer = async (cliente, lote, pagos = []) => {
 
   doc.setTextColor(0, 0, 0);
 
-  const infoTexto = "Adjunto a la presente sírvase encontrar su estado de cuenta de todos los pagos realizados a Manta Hills por el terreno reservado por usted hasta el 30 de abril de 2026, de igual manera le agradecemos que revise todos los datos que se encuentran consignados en este documento. De no estar de acuerdo con el mismo sírvase comunicarse a los números telefónicos 0983516817, 0987324065, 0992542227 o al correo contabilidad.mantahills@gmail.com"
-  
+  const infoTexto = `Adjunto a la presente sírvase encontrar su estado de cuenta de todos los pagos realizados a Manta Hills por el terreno reservado por usted hasta el ${fechaInfo}, de igual manera le agradecemos que revise todos los datos que se encuentran consignados en este documento. De no estar de acuerdo con el mismo sírvase comunicarse a los números telefónicos 0983516817, 0987324065, 0992542227 o al correo contabilidad.mantahills@gmail.com`;
+
   const textLines = doc.splitTextToSize(infoTexto, tableWidth - 4);
   const alturaCuadro = textLines.length * 4 + 2;
 
