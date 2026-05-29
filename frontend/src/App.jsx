@@ -40,12 +40,12 @@ function App() {
                 <Manuales />
               </AppLayout>
             </ProtectedRoute>} />
-          <Route path="/admin" element={
+          {/* <Route path="/admin" element={
             <ProtectedRoute adminOnly>
               <AppLayout>
                 <Admin />
               </AppLayout>
-            </ProtectedRoute>} />
+            </ProtectedRoute>} /> */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
