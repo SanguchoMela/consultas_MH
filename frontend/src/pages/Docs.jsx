@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { auth } from "../firebase";
 import Header from "../components/layout/Header";
+import Spinner from "../components/feedback/Spinner";
 
 export default function Docs() {
     const [documents, setDocuments] = useState([]);
@@ -40,6 +41,7 @@ export default function Docs() {
     return (
         <>
             <Header title="Documentos Importantes" />
+            {loading && <Spinner overlay />}
 
             <section className="max-w-3xl mx-auto px-4 py-5 border-b border-cyan-900">
                 <p className="font-semibold text-lg mb-2 text-cyan-900">Formularios para reserva de lotes</p>
