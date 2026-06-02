@@ -5,6 +5,7 @@ import loteRoutes from './routes/loteRoutes.js';
 import pagosRoutes from './routes/pagosRoutes.js';
 import usersRoutes from './routes/users.js';
 import exportRoutes from './routes/exportRoutes.js';
+import documentRoutes from './routes/documentRoutes.js';
 import cors from 'cors';
 import dotenv from 'dotenv';
 
@@ -28,5 +29,6 @@ app.use('/api', loteRoutes);
 app.use('/api', pagosRoutes);
 app.use('/api', exportRoutes);
 app.use('/users', usersRoutes);
+app.use('/api', documentRoutes);
 
 export default app;
