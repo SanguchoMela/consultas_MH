@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Header from "../components/layout/Header";
 import { auth } from "../firebase";
+import Spinner from "../components/feedback/Spinner";
 
 export default function Manuales() {
     const [documents, setDocuments] = useState([]);
@@ -39,6 +40,8 @@ export default function Manuales() {
     return (
         <>
             <Header title="Manuales de Procedimientos" />
+            {loading && <Spinner overlay />}
+
             <section className="max-w-3xl mx-auto px-4">
                 <ul className="space-y-5">
                     {documents
