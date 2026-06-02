@@ -23,6 +23,7 @@ if (process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON) {
   credential = admin.credential.cert(serviceAccount)
 }
 
-admin.initializeApp({ credential});
+admin.initializeApp({ credential });
 
-export default admin;
+export const db = admin.firestore();
+export { admin };
