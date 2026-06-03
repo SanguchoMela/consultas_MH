@@ -84,7 +84,7 @@ export const generarPdfBuffer = async (cliente, lote, pagos = []) => {
         "Manta Hills",
         cliente.datosPersonales.nombrecliente,
         cliente.datosContacto.email,
-        `+${cliente.datosContacto.telefono}`,
+        cliente.datosContacto.telefono,
       ]]
     },
     {
