@@ -12,7 +12,7 @@ export default function ClienteInfoCard({ cliente }) {
                 </tr>
                 <tr className="tr-cli-style">
                     <td className="sub-label">Teléfono</td>
-                    <td>+{cliente.datosContacto.telefono}</td>
+                    <td>{cliente.datosContacto.telefono}</td>
                 </tr>
                 <tr className="tr-cli-style">
                     <td className="sub-label">Fecha de reserva</td>
