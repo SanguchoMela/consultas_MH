@@ -66,6 +66,32 @@ export const generarPdfBuffer = async (cliente, lote, pagos = []) => {
         fillColor: [155, 198, 209],
         textColor: 0,
       },
+      didParseCell: (data) => {
+        const esTablaValorVencido = head[0] === "Valor Vencido";
+        const valorVencido = Number(body[0][0]) || 0;
+
+        if (esTablaValorVencido && valorVencido > 0) {
+          if (
+            data.section === "head" &&
+            data.column.index === 0
+          ) {
+            data.cell.styles.fillColor = [220, 53, 69];
+            data.cell.styles.textColor = [255, 255, 255];
+            data.cell.styles.fontStyle = "bold";
+          }
+
+          if (
+            data.section === "body" &&
+            data.column.index === 0
+          ) {
+            data.cell.styles.fillColor = [255, 220, 220];
+            data.cell.styles.textColor = [180, 0, 0];
+            data.cell.styles.fontStyle = "bold";
+          }
+
+        }
+
+      },
       columnStyles: Object.fromEntries(
         head.map((_, index) => [index, { cellWidth: colWidthFixed }])
       ),
