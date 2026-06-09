@@ -7,6 +7,7 @@ import AppLayout from "./layout/AppLayout";
 import ProtectedRoute from "./context/ProtectedRoute";
 import Docs from "./pages/Docs";
 import Manuales from "./pages/Manuales";
+import Reports from "./pages/Reports";
 import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Dashboard";
 
@@ -38,6 +39,12 @@ function App() {
             <ProtectedRoute>
               <AppLayout>
                 <Manuales />
+              </AppLayout>
+            </ProtectedRoute>} />
+          <Route path="/reportes" element={
+            <ProtectedRoute>
+              <AppLayout>
+                <Reports />
               </AppLayout>
             </ProtectedRoute>} />
           <Route path="/admin" element={

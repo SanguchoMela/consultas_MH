@@ -84,6 +84,9 @@ export default function Sidebar() {
                     <Link to="/manuales" className={linkClass("/manuales")}>
                         Manuales de Procedimientos
                     </Link>
+                    <Link to="/reportes" className={linkClass("/reportes")}>
+                        Reportes
+                    </Link>
 
                     {role === "Administrador" && (
                         <Link to="/admin" className={linkClass("/admin")}>
