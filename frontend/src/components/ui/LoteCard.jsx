@@ -1,10 +1,12 @@
 import FlujoPagos from "./FlujoCaja"
 import { useState } from "react"
+import CalculadoraRef from "./CalculadoraRef"
 import Spinner from "../feedback/Spinner"
 
 export default function LoteCard({ lote, cliente, backendUrl }) {
     const [loadingPdf, setLoadingPdf] = useState(null)
     const [error, setError] = useState(false)
+    const [showCalculadora, setShowCalculadora] = useState(false)
 
     const handleGenerarPdf = async (cliente, lote) => {
         try {
@@ -125,10 +127,36 @@ export default function LoteCard({ lote, cliente, backendUrl }) {
                                     </tr>
                                 </tbody>
                             </table>
+
+                            {Number(lote.estadoCuenta.valorvencido) > 0 && (
+                                <div className="text-right mt-2">
+                                    <button onClick={() => setShowCalculadora(true)}
+                                        className="search-button">
+                                        Refinanciar
+                                    </button>
+                                </div>
+                            )}
                         </td>
                     </tr>
                 </tbody>
             </table>
+            {showCalculadora && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-xl max-h-[95vh] overflow-y-auto relative">
+
+                        <button
+                            onClick={() => setShowCalculadora(false)}
+                            className="absolute top-3 right-4 text-gray-600 hover:text-gray-900 text-xl hover:font-bold "
+                        >
+                            ✕
+                        </button>
+
+                        <CalculadoraRef
+                            estadoCuenta={lote.estadoCuenta}
+                        />
+                    </div>
+                </div>
+            )}
             <FlujoPagos lote={lote.infoLote.lote} manzana={lote.infoLote.manzana} backUrl={backendUrl} />
         </div>
     )
