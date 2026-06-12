@@ -132,7 +132,7 @@ export default function LoteCard({ lote, cliente, backendUrl }) {
                                 <div className="text-right mt-2">
                                     <button onClick={() => setShowCalculadora(true)}
                                         className="search-button">
-                                        Refinanciar
+                                        Interés de mora
                                     </button>
                                 </div>
                             )}

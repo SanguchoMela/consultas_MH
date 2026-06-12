@@ -104,7 +104,7 @@ export default function CalculadoraRef({ estadoCuenta, cliente }) {
             </button>
 
             <div ref={printRef} className="print:p-8">
-                <Header title="Calculadora de Refinanciamiento" />
+                <Header title="Calculadora de Interés de Mora" />
 
                 <div>
                     <p className="text-sm italic mb-2">
@@ -156,7 +156,7 @@ export default function CalculadoraRef({ estadoCuenta, cliente }) {
                     Interés generado: <span className="text-red-600">${interesMora.toFixed(2)}</span>
                 </p>
                 <p className="border font-bold p-2 rounded-lg bg-cyan-700/10 text-center">
-                    Saldo a refinanciar:{" "}
+                    Saldo a pagar:{" "}
                     <span className="text-cyan-800">
                         ${totalConMora.toFixed(2)}
                     </span>
