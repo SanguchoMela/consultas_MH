@@ -3,6 +3,7 @@ import { auth, db } from "../firebase";
 import { doc, getDoc } from "firebase/firestore";
 import useTranslatedRole from "../hooks/useTranslatedRole";
 import Spinner from "../components/feedback/Spinner";
+import Header from "../components/layout/Header";
 
 export default function Dashboard() {
     const role = useTranslatedRole();
@@ -63,12 +64,29 @@ export default function Dashboard() {
                     </div>
                 </div>
             </div>
-            <div>
-                <h2 className="label my-4">Accesos rápidos</h2>
-                <div>
+            <section className="mt-3">
+                <Header title="Accesos rápidos" />
+                <h3 className="label">Resumen de resultados</h3>
+                <p className="italic">Accede a los documentos de Google Sheets para registrar las novedades</p>
+                <div className="mt-4">
+                    <a
+                        href="https://docs.google.com/spreadsheets/d/1sSrx3EoR76xyCFJ4WrMFs8DOKmvgHWjYbnbAtRdxdc4/edit?usp=sharing"
+                        target="_blank"
+                        className="search-button mr-3"
+                    >
+                        Avances Cartera Vencida
+                    </a>
+                    <a
+                        href="https://docs.google.com/spreadsheets/d/1PhkKi5G494j9HNECoKvvshYK8zq6P9sbWXIIUOH_OzQ/edit?usp=sharing"
+                        target="_blank"
+                        className="search-button"
+                    >
+                        Control de visitas semanal
+                    </a>
 
                 </div>
-            </div>
+            </section>
+
         </section>
     )
 }
