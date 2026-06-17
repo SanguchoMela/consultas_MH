@@ -68,11 +68,11 @@ export default function Dashboard() {
                 <Header title="Accesos rápidos" />
                 <h3 className="label">Resumen de resultados</h3>
                 <p className="italic">Accede a los documentos de Google Sheets para registrar las novedades</p>
-                <div className="mt-4">
+                <div className="mt-4 flex flex-col sm:flex-row gap-3">
                     <a
                         href="https://docs.google.com/spreadsheets/d/1sSrx3EoR76xyCFJ4WrMFs8DOKmvgHWjYbnbAtRdxdc4/edit?usp=sharing"
                         target="_blank"
-                        className="search-button mr-3"
+                        className="search-button"
                     >
                         Avances Cartera Vencida
                     </a>
