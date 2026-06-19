@@ -95,17 +95,44 @@ export default function LoteCard({
             </table>
             {/* Estado de cuenta del lote */}
             {tieneEstadoCuenta && (
-                <table className="w-full mt-2">
-                    <tbody>
-                        <tr className="grid sm:grid-cols-2 grid-cols-1 sm:gap-4 px-2">
-                            <td><InfoTable rows={estadoCuentaCol1} /></td>
-                            <td><InfoTable rows={estadoCuentaCol2} /></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <>
+                    <table className="w-full mt-2">
+                        <tbody>
+                            <tr className="grid sm:grid-cols-2 grid-cols-1 sm:gap-4 px-2">
+                                <td><InfoTable rows={estadoCuentaCol1} /></td>
+                                <td><InfoTable rows={estadoCuentaCol2} /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    {Number(lote.estadoCuenta.valorvencido) > 0 && (
+                        <div className="text-right mt-2">
+                            <button onClick={() => setShowCalculadora(true)}
+                                className="search-button">
+                                Interés de mora
+                            </button>
+                        </div>
+                    )}
+                </>
             )}
             {/* Error PDF */}
             {error && <p className="text-red-600 mt-2">{error}</p>}
+            {showCalculadora && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-xl max-h-[95vh] overflow-y-auto relative">
+
+                        <button
+                            onClick={() => setShowCalculadora(false)}
+                            className="absolute top-3 right-4 text-gray-600 hover:text-gray-900 text-xl hover:font-bold "
+                        >
+                            ✕
+                        </button>
+
+                        <CalculadoraRef
+                            estadoCuenta={lote.estadoCuenta}
+                        />
+                    </div>
+                </div>
+            )}
             {/* Flujo de pagos */}
             {showFlujoPagos && lote.infoLote?.lote && lote.infoLote?.manzana && (
                 <FlujoPagos lote={lote.infoLote.lote} manzana={lote.infoLote.manzana} backUrl={backendUrl} />
