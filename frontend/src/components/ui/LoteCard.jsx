@@ -1,5 +1,6 @@
 import FlujoPagos from "./FlujoCaja"
 import { useState } from "react"
+import CalculadoraRef from "./CalculadoraRef"
 import Spinner from "../feedback/Spinner"
 import InfoTable from "./InfoTable"
 
@@ -12,6 +13,7 @@ export default function LoteCard({
 }) {
     const [loadingPdf, setLoadingPdf] = useState(null)
     const [error, setError] = useState(false)
+    const [showCalculadora, setShowCalculadora] = useState(false)
 
     const handleGenerarPdf = async (cliente, lote) => {
         try {

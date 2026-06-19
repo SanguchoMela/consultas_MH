@@ -276,7 +276,6 @@ export const generarPdfBuffer = async (cliente, lote, pagos = []) => {
 
   // Tabla Informacion Importante
   y = doc.lastAutoTable.finalY + 5;
-  
   const infoTexto = `Adjunto a la presente sírvase encontrar su estado de cuenta de todos los pagos realizados a Manta Hills por el terreno reservado por usted hasta el ${fechaInfo}, de igual manera le agradecemos que revise todos los datos que se encuentran consignados en este documento. De no estar de acuerdo con el mismo sírvase comunicarse a los números telefónicos 0983516817, 0987324065, 0992542227 o al correo contabilidad.mantahills@gmail.com`;
 
   const textLines = doc.splitTextToSize(infoTexto, tableWidth - 4);
@@ -299,33 +298,43 @@ export const generarPdfBuffer = async (cliente, lote, pagos = []) => {
   doc.rect(10, y, tableWidth, alturaCuadro, "S");
 
   // Calcular offset para centrar el texto verticalmente
-  const offsetY = y + (alturaCuadro - textLines.length * 4) / 2 + 2.5;
+  const offsetY = y + (alturaCuadro - textLines.length * 4) / 2 + 3;
 
   // Escribir el texto dentro del rectangulo
   textLines.forEach((line, index) => {
     doc.text(line, 10 + 2, offsetY + index * 4, { align: "justify" });
   });
 
-  // // Cuadro adicional de información importante
-  // // Nueva posicion debajo del primer cuadro
-  // y = y + alturaCuadro;
+  // Cuadro adicional de información importante
+  // Nueva posicion debajo del primer cuadro
+  y = y + alturaCuadro;
 
-  // const infoAdicional = "Adjunto a la presente sírvase encontrar su estado de cuenta de todos los pagos realizados a Manta Hills por el terreno reservado por usted, de igual manera le agradecemos que revise todos los datos que se encuentran consignados en este documento.";
+  const textoUAFE = "Todos estos ingresos han sido revisados y verificados tanto por la Sociedad Civil Comercial MANTA HILLS como por el Oficial de Cumplimiento de la UAFE.";
 
-  // const textLinesAdicional = doc.splitTextToSize(infoAdicional, tableWidth - 4);
-  // const alturaCuadroAdicional = textLinesAdicional.length * 4 + 2;
+  // Texto
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(10);
 
-  // // Dibujar el segundo rectangulo
-  // doc.setDrawColor(200, 200, 200);
-  // doc.rect(10, y, tableWidth, alturaCuadroAdicional, "S");
+  const linesUAFE = doc.splitTextToSize(textoUAFE, tableWidth - 4);
+  const alturaUAFE = linesUAFE.length * 4 + 2;
 
-  // // Centrado vertical
-  // const offsetYAdicional = y + (alturaCuadroAdicional - textLinesAdicional.length * 4) / 2 + 2.5;
+  if (y + alturaUAFE > pageHeight - 10) {
+    doc.addPage()
+    y = 15
+  }
 
-  // // Escribir el texto dentro del segundo rectangulo
-  // textLinesAdicional.forEach((line, index) => {
-  //   doc.text(line, 12, offsetYAdicional + index * 4, { align: "justify" });
-  // })
+  // Fondo destacado
+  doc.setFillColor(245, 249, 252);
+  doc.setDrawColor(200, 200, 200);
+  doc.rect(10, y, tableWidth, alturaUAFE, "FD");
+
+  // Centrado vertical
+  const offsetYUAFE = y + (alturaUAFE - linesUAFE.length * 4) / 2 + 3;
+
+  // Escribir el texto dentro del segundo rectangulo
+  linesUAFE.forEach((line, index) => {
+    doc.text(line, 10 + 2, offsetYUAFE + index * 4, { align: "justify" });
+  })
 
   // =============================
   // DEVOLVER BUFFER
