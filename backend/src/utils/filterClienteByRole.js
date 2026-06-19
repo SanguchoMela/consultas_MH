@@ -1,5 +1,5 @@
 export const filtrarClientePorRol = (cliente, role) => {
-  switch(role) {
+  switch (role) {
     case "admin":
       return cliente;
     case "supervisor":
@@ -7,7 +7,11 @@ export const filtrarClientePorRol = (cliente, role) => {
         _id: cliente._id,
         datosPersonales: {
           nombrecliente: cliente.datosPersonales.nombrecliente,
-          ci: cliente.datosPersonales.ci,
+          ci: cliente.datosPersonales.ci
+        },
+        datosContacto: {
+          email: cliente.datosContacto.email,
+          telefono: cliente.datosContacto.telefono
         },
         lotes: cliente.lotes
       };
@@ -19,8 +23,14 @@ export const filtrarClientePorRol = (cliente, role) => {
         },
         lotes: cliente.lotes.map(lote => ({
           _id: lote._id,
-          manzana: lote.infoLote.manzana,
-          lote: lote.infoLote.lote,
+          infoLote: {
+            etapa: lote.infoLote.etapa,
+            manzana: lote.infoLote.manzana,
+            lote: lote.infoLote.lote,
+            area: lote.infoLote.area,
+            valorm2: lote.infoLote.valorm2,
+            valortotal: lote.infoLote.valortotal
+          }
         }))
       };
     default:

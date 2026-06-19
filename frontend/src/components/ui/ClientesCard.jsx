@@ -4,7 +4,7 @@ import Spinner from "../feedback/Spinner";
 import LoteCard from "./LoteCard";
 import ClienteInfoCard from "./ClienteInfoCard";
 
-export default function ConsultaClientesAd() {
+export default function ClientesCard() {
     const [resultados, setResultados] = useState([])
     const [loading, setLoading] = useState(false)
     const [loadingDownload, setLoadingDownload] = useState(false)
