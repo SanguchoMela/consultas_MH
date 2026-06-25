@@ -3,10 +3,12 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase.js";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/authContext.jsx";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [mostrarPass, setMostrarPass] = useState(false)
   const { user, loading } = useAuth()
   const navigate = useNavigate();
 
@@ -50,11 +52,20 @@ export default function Login() {
           </div>
           <div>
             <label htmlFor="password" className="sub-label">Contraseña</label>
-            <input
-              type="password"
-              onChange={e => setPassword(e.target.value)}
-              className="input-style block w-full"
-            />
+            <div className="flex items-center">
+              <input
+                type={mostrarPass ? "text" : "password"}
+                onChange={e => setPassword(e.target.value)}
+                className="input-style block w-full"
+              />
+              <button
+                className="px-4 py-2 text-cyan-900/70 hover:text-cyan-900 border-b"
+                type="button"
+                onClick={() => setMostrarPass(prev => !prev)}
+              >
+                {mostrarPass ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
           </div>
           <button className="search-button w-full mt-3">Iniciar Sesión</button>
         </form>
