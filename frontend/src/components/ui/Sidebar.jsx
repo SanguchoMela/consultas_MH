@@ -73,6 +73,9 @@ export default function Sidebar() {
                     <Link to="/inicio" className={linkClass("/inicio")}>
                         Inicio
                     </Link>
+                    <Link to="/mi-perfil" className={linkClass("/mi-perfil")}>
+                        Mi perfil
+                    </Link>
                     <Link to="/lotes" className={linkClass("/lotes")}>
                         Consulta de Clientes
                     </Link>

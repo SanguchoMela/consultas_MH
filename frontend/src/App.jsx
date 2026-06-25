@@ -10,6 +10,7 @@ import Manuales from "./pages/Manuales";
 import Reports from "./pages/Reports";
 import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Dashboard";
+import MyProfile from "./pages/MyProfile";
 
 function App() {
   return (
@@ -21,6 +22,12 @@ function App() {
             <ProtectedRoute>
               <AppLayout>
                 <Dashboard />
+              </AppLayout>
+            </ProtectedRoute>} />
+          <Route path="/mi-perfil" element={
+            <ProtectedRoute>
+              <AppLayout>
+                <MyProfile />
               </AppLayout>
             </ProtectedRoute>} />
           <Route path="/lotes" element={
