@@ -3,12 +3,16 @@ import { useAuth } from "../../context/authContext";
 import { signOut } from "firebase/auth";
 import { auth } from "../../firebase";
 import { useEffect, useState } from "react";
+import { FaChevronDown } from "react-icons/fa";
 import useTranslatedRole from "../../hooks/useTranslatedRole";
 
 export default function Sidebar() {
+    const { user } = useAuth();
     const role = useTranslatedRole();
     const location = useLocation();
     const [open, setOpen] = useState(false)
+
+    const [openDocs, setOpenDocs] = useState(false)
 
     const handleLogout = () => {
         localStorage.clear();
@@ -64,7 +68,8 @@ export default function Sidebar() {
                 <div className="flex flex-col items-center py-4">
                     <img src="/mh.png" alt="Manta Hills Logo" className="w-32" />
                 </div>
-                <div className="flex flex-col text-sm items-center py-2 border-b border-cyan-900/30">
+                <div className="flex flex-col text-sm items-center pb-2 space-y-1 border-b border-cyan-900/30">
+                    <p> {user?.displayName || "Usuario"}</p>
                     <p>{role}</p>
                 </div>
 
@@ -80,16 +85,53 @@ export default function Sidebar() {
                         Consulta de Clientes
                     </Link>
 
-                    <Link to="/documentos" className={linkClass("/documentos")}>
-                        Documentos Importantes
-                    </Link>
+                    {/* Dropdown */}
+                    <div className="mx-4 my-3">
+                        <button
+                            onClick={() => setOpenDocs(prev => !prev)}
+                            className={`w-full flex justify-between items-center py-2 px-4 rounded-md hover:bg-cyan-900/80 hover:text-white ${[
+                                "/documentos",
+                                "/manuales",
+                                "/reportes",
+                            ].includes(location.pathname)
+                                ? "font-semibold bg-cyan-900/80 text-white"
+                                : ""
+                                }`}
+                        >
+                            <span>Documentación</span>
+                            <span
+                                className={`transition-transform duration-300 ${openDocs ? "rotate-180" : ""
+                                    }`}
+                            >
+                                <FaChevronDown />
+                            </span>
+                        </button>
 
-                    <Link to="/manuales" className={linkClass("/manuales")}>
-                        Manuales de Procedimientos
-                    </Link>
-                    <Link to="/reportes" className={linkClass("/reportes")}>
-                        Reportes
-                    </Link>
+                        {openDocs && (
+                            <div className="mt-2 ml-4 border-l border-cyan-900/30">
+                                <Link
+                                    to="/documentos"
+                                    className={linkClass("/documentos")}
+                                >
+                                    Documentos Importantes
+                                </Link>
+
+                                <Link
+                                    to="/manuales"
+                                    className={linkClass("/manuales")}
+                                >
+                                    Manuales de Procedimientos
+                                </Link>
+
+                                <Link
+                                    to="/reportes"
+                                    className={linkClass("/reportes")}
+                                >
+                                    Reportes
+                                </Link>
+                            </div>
+                        )}
+                    </div>
 
                     {role === "Administrador" && (
                         <Link to="/admin" className={linkClass("/admin")}>
