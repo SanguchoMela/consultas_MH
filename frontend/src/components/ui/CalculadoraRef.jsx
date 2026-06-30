@@ -3,7 +3,7 @@ import { useReactToPrint } from "react-to-print"
 import Header from "../layout/Header";
 
 export default function CalculadoraRef({ estadoCuenta, cliente }) {
-    const [tasa, setTasa] = useState(12.99)
+    const [tasa, setTasa] = useState(4.99)
     const [cuotas, setCuotas] = useState(24)
     const [mostrarTabla, setMostrarTabla] = useState(false)
     const printRef = useRef()
