@@ -34,62 +34,90 @@ export default function CalculadoraRef({ estadoCuenta, cliente }) {
         return date;
     };
 
-    const calcularDiasMora = (fechaUltimoPago) => {
-        const ultimoPago = parseFechaDMY(fechaUltimoPago);
-        if (!ultimoPago) return 0;
+    const calcularDiasMoraADARA = (fechaUltimaCuotaPagada) => {
+        const ultimaCuotaPagada = parseFechaDMY(fechaUltimaCuotaPagada)
+
+        if (!ultimaCuotaPagada) return 0;
 
         const hoy = new Date();
 
-        const diffTime = hoy - ultimoPago;
+        const diffTime = hoy - ultimaCuotaPagada;
         const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
         return diffDays > 0 ? diffDays : 0;
-    };
+    }
 
-    const interesMora = useMemo(() => {
+    const interesMoraADARA = useMemo(() => {
         const valorVencido = Number(estadoCuenta.valorvencido) || 0;
         const tasaDecimal = Number(tasa) / 100;
-        const diasMora = calcularDiasMora(estadoCuenta.fechaultimopago);
+        const diasMora = calcularDiasMoraADARA(estadoCuenta.fechaultimacuotapagada);
 
         return (valorVencido * tasaDecimal * diasMora) / 360;
     }, [tasa, estadoCuenta]);
 
-    const totalConMora = useMemo(() => {
+    const totalConMoraADARA = useMemo(() => {
         const valorVencido = Number(estadoCuenta.valorvencido) || 0;
         const valorVigente = Number(estadoCuenta.valorvigente) || 0;
 
-        return valorVencido + valorVigente + interesMora;
-    }, [estadoCuenta, interesMora]);
+        return valorVencido + valorVigente + interesMoraADARA;
+    }, [estadoCuenta, interesMoraADARA]);
 
-    const cuotaInicial = useMemo(() => {
-        return totalConMora * 0.3
-    }, [totalConMora])
+    // const calcularDiasMora = (fechaUltimoPago) => {
+    //     const ultimoPago = parseFechaDMY(fechaUltimoPago);
+    //     if (!ultimoPago) return 0;
 
-    const saldoFinanciado = useMemo(() => {
-        return totalConMora * 0.7
-    }, [totalConMora])
+    //     const hoy = new Date();
 
-    const tablaAmortizacion = useMemo(() => {
-        const principal = saldoFinanciado
+    //     const diffTime = hoy - ultimoPago;
+    //     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
-        if (!principal || cuotas <= 0) return []
+    //     return diffDays > 0 ? diffDays : 0;
+    // };
 
-        const valorCuota = saldoFinanciado / cuotas
-        let saldo = saldoFinanciado
+    // const interesMora = useMemo(() => {
+    //     const valorVencido = Number(estadoCuenta.valorvencido) || 0;
+    //     const tasaDecimal = Number(tasa) / 100;
+    //     const diasMora = calcularDiasMora(estadoCuenta.fechaultimopago);
 
-        const tabla = []
+    //     return (valorVencido * tasaDecimal * diasMora) / 360;
+    // }, [tasa, estadoCuenta]);
 
-        for (let i = 1; i <= cuotas; i++) {
-            saldo -= valorCuota
+    // const totalConMora = useMemo(() => {
+    //     const valorVencido = Number(estadoCuenta.valorvencido) || 0;
+    //     const valorVigente = Number(estadoCuenta.valorvigente) || 0;
 
-            tabla.push({
-                cuota: i,
-                valorCuota,
-                saldo: saldo < 0 ? 0 : saldo
-            })
-        }
-        return tabla
-    }, [saldoFinanciado, cuotas])
+    //     return valorVencido + valorVigente + interesMora;
+    // }, [estadoCuenta, interesMora]);
+
+    // const cuotaInicial = useMemo(() => {
+    //     return totalConMora * 0.3
+    // }, [totalConMora])
+
+    // const saldoFinanciado = useMemo(() => {
+    //     return totalConMora * 0.7
+    // }, [totalConMora])
+
+    // const tablaAmortizacion = useMemo(() => {
+    //     const principal = saldoFinanciado
+
+    //     if (!principal || cuotas <= 0) return []
+
+    //     const valorCuota = saldoFinanciado / cuotas
+    //     let saldo = saldoFinanciado
+
+    //     const tabla = []
+
+    //     for (let i = 1; i <= cuotas; i++) {
+    //         saldo -= valorCuota
+
+    //         tabla.push({
+    //             cuota: i,
+    //             valorCuota,
+    //             saldo: saldo < 0 ? 0 : saldo
+    //         })
+    //     }
+    //     return tabla
+    // }, [saldoFinanciado, cuotas])
 
     return (
         <>
@@ -126,13 +154,17 @@ export default function CalculadoraRef({ estadoCuenta, cliente }) {
                             <td className="sub-label">Valor vencido:</td>
                             <td className="text-red-600">{estadoCuenta.valorvencido}</td>
                         </tr>
-                        <tr className="tr-style">
+                        {/* <tr className="tr-style">
                             <td className="sub-label">Fecha del último pago:</td>
                             <td>{estadoCuenta.fechaultimopago}</td>
+                        </tr> */}
+                        <tr className="tr-style">
+                            <td className="sub-label">Fecha última cuota pagada:</td>
+                            <td>{estadoCuenta.fechaultimacuotapagada}</td>
                         </tr>
                         <tr className="tr-style">
                             <td className="sub-label">Días de mora:</td>
-                            <td>{calcularDiasMora(estadoCuenta.fechaultimopago)}</td>
+                            <td>{calcularDiasMoraADARA(estadoCuenta.fechaultimacuotapagada)}</td>
                         </tr>
                         <tr className="tr-style">
                             <td className="sub-label">Porcentaje de interés (%):
@@ -153,12 +185,12 @@ export default function CalculadoraRef({ estadoCuenta, cliente }) {
                 </table>
 
                 <p className="font-medium my-4 px-3">
-                    Interés generado: <span className="text-red-600">${interesMora.toFixed(2)}</span>
+                    Interés generado: <span className="text-red-600">${interesMoraADARA.toFixed(2)}</span>
                 </p>
                 <p className="border font-bold p-2 rounded-lg bg-cyan-700/10 text-center">
                     Saldo a pagar:{" "}
                     <span className="text-cyan-800">
-                        ${totalConMora.toFixed(2)}
+                        ${totalConMoraADARA.toFixed(2)}
                     </span>
                 </p>
 
