@@ -5,7 +5,7 @@ export default function ClienteInfoCard({ cliente }) {
         {
             label: "Teléfono",
             value: cliente.datosContacto?.telefono
-                ? `+${cliente.datosContacto?.telefono}`
+                ? `${cliente.datosContacto?.telefono}`
                 : null
         },
         { label: "Fecha de reserva", value: cliente.datosAdicionales?.fechareserva }
