@@ -3,22 +3,37 @@ import Cliente from "../models/clienteModel.js";
 import Lote from "../models/loteModel.js";
 import Pagos from "../models/pagoModel.js"
 import { generarPdfBuffer } from "../utils/generarPdfBuffer.js";
+import { agregarDatosMora } from "../utils/agregarDatosMora.js";
 
 export const exportarPdfPorLote = async (req, res) => {
     try {
         const { clienteId, loteId } = req.params
 
-        const cliente = await Cliente.findById(clienteId).lean()
+        // const cliente = await Cliente.findById(clienteId).lean()
+        // if (!cliente) {
+        //     return res.status(404).json({ error: "Cliente no encontrado" })
+        // }
+
+        // // Buscar lote directamente por ID
+        // const lote = await Lote.findById(loteId).lean()
+        // if (!lote || !lote.infoLote) {
+        //     return res.status(404).json({ error: "Lote no encontrado" })
+        // }
+
+        let cliente = await Cliente.findById(clienteId).populate("lotes").lean()
+
         if (!cliente) {
             return res.status(404).json({ error: "Cliente no encontrado" })
         }
 
-        // Buscar lote directamente por ID
-        const lote = await Lote.findById(loteId).lean()
-        if (!lote || !lote.infoLote) {
+        cliente = agregarDatosMora(cliente)
+
+        const lote = cliente.lotes.find(l => l._id.toString() === loteId)
+
+        if (!lote) {
             return res.status(404).json({ error: "Lote no encontrado" })
         }
-
+        // ---------
         const loteKey = lote.infoLote.lote + lote.infoLote.manzana
 
         const pagosDoc = await Pagos.findOne({ lote: loteKey }).lean()

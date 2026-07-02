@@ -1,6 +1,7 @@
 import Cliente from "../models/clienteModel.js";
 import { cors } from "../utils/cors.js"
 import { filtrarClientePorRol } from "../utils/filterClienteByRole.js";
+import { agregarDatosMora } from "../utils/agregarDatosMora.js";
 
 export const buscarClientePorNombre = async (req, res) => {
   const isPreflight = cors(req, res)
@@ -26,6 +27,8 @@ export const buscarClientePorNombre = async (req, res) => {
 
     // Buscar clientes que coincidan con todas las palabras
     let clientes = await Cliente.find({ $and: filtro }).populate('lotes').lean();
+
+    clientes = clientes.map(agregarDatosMora);
 
     if (clientes.length === 0) {
       return res.status(404).json({ error: 'No se encontraron clientes con ese nombre.' })
@@ -56,6 +59,8 @@ export const buscarClientePorCedula = async (req, res) => {
     if (!cliente) {
       return res.status(404).json({ error: 'No se encontró el cliente asociado a la cédula ingresada.' });
     }
+
+    agregarDatosMora(cliente);
 
     // Filtrar segun rol
     const role = req.user.role

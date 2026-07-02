@@ -11,7 +11,7 @@ export async function verifyToken(req, res, next) {
 
   try {
     const decodedToken = await admin.auth().verifyIdToken(token);
-    console.log("Token verificado:", decodedToken);
+    // console.log("Token verificado:", decodedToken);
 
     req.user = {
       uid: decodedToken.uid,

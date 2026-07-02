@@ -9,7 +9,6 @@ export const generarPdfBuffer = async (cliente, lote, pagos = []) => {
   const pageWidth = doc.internal.pageSize.getWidth();
   const tableWidth = pageWidth - 20;
   const cellWidth = tableWidth / 4;
-  const amortizacionCellWidth = tableWidth / 6;
 
   let y = 15;
 
@@ -273,65 +272,6 @@ export const generarPdfBuffer = async (cliente, lote, pagos = []) => {
         3: { cellWidth: cellWidth },
       }
     });
-  }
-
-  // console.log("Tabla amortización:", lote.tablaAmortizacion);
-
-  // Tabla de Amortización
-  y = doc.lastAutoTable.finalY + 5;
-  if (lote.tablaAmortizacion?.length) {
-
-    y = drawSectionBar(doc, y, "TABLA DE AMORTIZACIÓN");
-
-    console.log("Tabla amortización:", lote.tablaAmortizacion[0]);
-
-    const bodyAmortizacion = lote.tablaAmortizacion.map(item => ([
-      // item.cuota,
-      item.fecha,
-      item.diasMora,
-      `$ ${Number(item.valorCuota).toFixed(2)}`,
-      `$ ${Number(item.interes).toFixed(2)}`,
-      `$ ${Number(item.totalPagar).toFixed(2)}`,
-      `$ ${Number(item.saldo).toFixed(2)}`
-    ]));
-
-    autoTable(doc, {
-      startY: y,
-      margin: { left: 10, right: 10 },
-      theme: "grid",
-      head: [[
-        // "Cuota",
-        "Fecha",
-        "Días Mora",
-        "Valor Cuota",
-        "Interés",
-        "Total",
-        "Saldo"
-      ]],
-      body: bodyAmortizacion,
-      styles: {
-        fontSize: 8,
-        cellPadding: 1,
-        overflow: "linebreak",
-        textColor: 0,
-      },
-      headStyles: {
-        fillColor: [155, 198, 209],
-        textColor: 0,
-      },
-      columnStyles: {
-        // 0: { cellWidth: 13 },
-        0: { cellWidth: amortizacionCellWidth },
-        1: { cellWidth: amortizacionCellWidth },
-        2: { cellWidth: amortizacionCellWidth },
-        3: { cellWidth: amortizacionCellWidth },
-        4: { cellWidth: amortizacionCellWidth },
-        5: { cellWidth: amortizacionCellWidth },
-        // 6: { cellWidth: 29 },
-      }
-    });
-
-    y = doc.lastAutoTable.finalY + 5;
   }
 
   // Tabla Informacion Importante
