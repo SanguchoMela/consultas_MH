@@ -78,3 +78,36 @@ export const obtenerUltimoPagoCuota = (pagos) => {
     });
     return totalUltimaCuota
 }
+
+export const obtenerUltimaCuotaPagada = (pagos) => {
+    if (!Array.isArray(pagos) || pagos.length === 0) return 0;
+
+    let ultimaCuota = 0;
+
+    pagos.forEach((pago) => {
+        (pago.detalles || []).forEach(({ detalle }) => {
+            const match = detalle.match(/\d+/);
+            if (!match) return;
+
+            const numeroCuota = Number(match[0]);
+            if (numeroCuota > ultimaCuota) {
+                ultimaCuota = numeroCuota;
+            }
+        });
+    });
+
+    return ultimaCuota;
+};
+
+export const parseFinanciamientoMeses = (financiamiento) => {
+    if (!financiamiento) return 0;
+
+    const texto = String(financiamiento).toLowerCase().trim();
+
+    if (texto.includes("contado")) return 0;
+
+    const match = texto.match(/(\d+)\s*meses?/);
+    if (!match) return 0;
+
+    return Number(match[1]);
+};

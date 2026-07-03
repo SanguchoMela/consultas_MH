@@ -306,8 +306,10 @@ export const generarPdfBuffer = async (
 
     // console.log("Amortizacion en generarPdfBuffer:", lote.tablaAmortizacion[0]);
 
-    const bodyAmortizacion = lote.tablaAmortizacion.map((item) => [
-      // console.log("PDF recibe ultimoValorPagado:", ultimoValorPagado),
+    const inicioCuota = Number(lote.estadoCuenta.ultimaCuotaPagada) || 0
+
+    const bodyAmortizacion = lote.tablaAmortizacion.map((item, index) => [
+      inicioCuota + index + 1,
       item.fecha,
       item.diasMora,
       `$ ${Number(item.valorCuotaAjustado).toFixed(2)}`,
@@ -343,13 +345,13 @@ export const generarPdfBuffer = async (
         textColor: 0,
       },
       columnStyles: {
-        // 0: { cellWidth: 13 },
-        0: { cellWidth: amortizacionCellWidth },
+        0: { cellWidth: 13 },
         1: { cellWidth: amortizacionCellWidth },
         2: { cellWidth: amortizacionCellWidth },
         3: { cellWidth: amortizacionCellWidth },
         4: { cellWidth: amortizacionCellWidth },
         5: { cellWidth: amortizacionCellWidth },
+        6: { cellWidth: amortizacionCellWidth },
         // 6: { cellWidth: 29 },
       },
     });

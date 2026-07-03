@@ -5,21 +5,33 @@ import {
   calcularTotalConMora,
   calcularCuotaConMora,
   obtenerUltimoPagoCuota,
+  obtenerUltimaCuotaPagada,
+  parseFinanciamientoMeses
 } from "./mora.js";
 
 const TASA_MORA = 4.99;
 
 export const agregarDatosMora = (cliente, pagosDocs) => {
   cliente.lotes = cliente.lotes.map((lote) => {
-    const cuotasPorPagar = Number(lote.estadoCuenta.dividendosporpagar);
-    const cuotaBase = Number(lote.infoLote.valorcuota);
+
+    const cuotaBase = Number(lote.infoLote.valorcuota) || 0;
 
     const loteKey =
       String(lote.infoLote.lote).trim() + String(lote.infoLote.manzana).trim();
 
     const pagos = pagosDocs.find((p) => p.lote === loteKey)?.pagos || [];
-    
+
+    const totalCuotas = parseFinanciamientoMeses(lote.infoLote.financiamiento)
+
+    const ultimaCuotaPagadaRaw = obtenerUltimaCuotaPagada(pagos)
     const ultimoValorPagado = obtenerUltimoPagoCuota(pagos);
+
+    const ultimaCuotaPagada =
+      ultimoValorPagado >= cuotaBase
+        ? ultimaCuotaPagadaRaw
+        : Math.max(0, ultimaCuotaPagadaRaw - 1)
+
+    const cuotasPorPagar = Math.max(0, totalCuotas - ultimaCuotaPagada)
 
     const cuotaPrimeraAjustada =
       ultimoValorPagado > 0 && ultimoValorPagado < cuotaBase
@@ -64,12 +76,27 @@ export const agregarDatosMora = (cliente, pagosDocs) => {
       ultimoValorPagado,
     });
 
+    if (cuotasPorPagar === 0) {
+      return {
+        ...lote,
+        estadoCuenta: {
+          ...lote.estadoCuenta,
+          interesMora: 0,
+          interesesPorCuota: [],
+          totalConMora: Number(lote.estadoCuenta.valorporpagar || 0),
+          valorCuotaConMora: 0,
+        },
+        tablaAmortizacion: [],
+      };
+    }
+
     return {
       ...lote,
       estadoCuenta: {
         ...lote.estadoCuenta,
 
         ultimoValorPagado,
+        ultimaCuotaPagada,
 
         diasMora: diasMoraBase,
         interesMora: Number(interesMora.toFixed(2)),
