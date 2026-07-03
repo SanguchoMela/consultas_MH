@@ -18,6 +18,7 @@ export const agregarDatosMora = (cliente, pagosDocs) => {
       String(lote.infoLote.lote).trim() + String(lote.infoLote.manzana).trim();
 
     const pagos = pagosDocs.find((p) => p.lote === loteKey)?.pagos || [];
+    
     const ultimoValorPagado = obtenerUltimoPagoCuota(pagos);
 
     const cuotaPrimeraAjustada =

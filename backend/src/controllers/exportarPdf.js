@@ -4,7 +4,6 @@ import Lote from "../models/loteModel.js";
 import Pagos from "../models/pagoModel.js";
 import { generarPdfBuffer } from "../utils/generarPdfBuffer.js";
 import { agregarDatosMora } from "../utils/agregarDatosMora.js";
-import { obtenerUltimoPagoCuota } from "../utils/mora.js";
 
 export const exportarPdfPorLote = async (req, res) => {
   try {

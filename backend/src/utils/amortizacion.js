@@ -21,7 +21,7 @@ export const generarTablaAmortizacion = ({
   saldoInicial,
   ultimoValorPagado,
 }) => {
-  console.log("AMORTIZACION recibe ultimoValorPagado:", ultimoValorPagado);
+  // console.log("AMORTIZACION recibe ultimoValorPagado:", ultimoValorPagado);
 
   const tabla = [];
   let saldo = Number(saldoInicial);
@@ -55,7 +55,7 @@ export const generarTablaAmortizacion = ({
       saldo: Number(saldo.toFixed(2)),
     });
 
-    console.log("PRIMER ITEM AMORTIZACIÓN COMPLETO:", tabla[0]);
+    // console.log("PRIMER ITEM AMORTIZACIÓN COMPLETO:", tabla[0]);
   }
 
   return tabla;

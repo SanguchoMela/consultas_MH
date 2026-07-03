@@ -54,7 +54,27 @@ export const calcularCuotaConMora = (total, cuotas) =>
     Number(total || 0) / Number(cuotas || 1);
 
 export const obtenerUltimoPagoCuota = (pagos) => {
-    if (!pagos?.length) return 0
+    if (!Array.isArray(pagos) || pagos.length === 0) return 0
 
-    return Number(pagos[0]?.detalles?.[0]?.valorPagado || 0);
-};
+    let ultimaCuota = 0
+    let totalUltimaCuota = 0
+
+    pagos.forEach((pago) => {
+        (pago.detalles || []).forEach(({ detalle, valorPagado }) => {
+            // Extrae el número de la cuota
+            const match = detalle.match(/\d+/)
+            if (!match) return
+
+            const numeroCuota = Number(match[0])
+            const valor = Number(valorPagado || 0)
+
+            if (numeroCuota > ultimaCuota) {
+                ultimaCuota = numeroCuota
+                totalUltimaCuota = valor
+            } else if (numeroCuota === ultimaCuota) {
+                totalUltimaCuota += valor
+            }
+        })
+    });
+    return totalUltimaCuota
+}
