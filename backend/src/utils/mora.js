@@ -9,24 +9,53 @@ export const calcularDiasMora = (fecha) => {
     const f = parseFechaDMY(fecha);
     if (!f) return 0;
 
-    const hoy = new Date();
+    const fechaCorte = new Date(2026, 6, 31); // 31 de julio de 2026
+    // const hoy = new Date();
+    const hoy = new Date(2026, 8, 31);
 
-    let anios = hoy.getFullYear() - f.getFullYear();
-    let meses = hoy.getMonth() - f.getMonth();
-    let dias = hoy.getDate() - f.getDate();
+    const limite = hoy > fechaCorte ? fechaCorte : hoy;
 
-    if (dias < 0) {
-        dias += 30;
-        meses--;
-    }
+    // Ignorar la hora para evitar diferencias por huso horario
+    const fechaInicio = new Date(f.getFullYear(), f.getMonth(), f.getDate());
+    const fechaFin = new Date(
+        limite.getFullYear(),
+        limite.getMonth(),
+        limite.getDate()
+    );
 
-    if (meses < 0) {
-        meses += 12;
-        anios--;
-    }
+    const MS_POR_DIA = 1000 * 60 * 60 * 24;
 
-    return Math.max(0, anios * 360 + meses * 30 + dias);
+    const dias = Math.floor((fechaFin - fechaInicio) / MS_POR_DIA);
+
+    return Math.max(0, dias);
 };
+
+// export const calcularDiasMora = (fecha) => {
+//     const f = parseFechaDMY(fecha);
+//     if (!f) return 0;
+
+//     const fechaCorte = new Date(2026, 5, 30)
+
+//     const hoy = new Date();
+
+//     const limite = hoy > fechaCorte ? fechaCorte : hoy;
+
+//     let anios = limite.getFullYear() - f.getFullYear();
+//     let meses = limite.getMonth() - f.getMonth();
+//     let dias = limite.getDate() - f.getDate();
+
+//     if (dias < 0) {
+//         dias += 30;
+//         meses--;
+//     }
+
+//     if (meses < 0) {
+//         meses += 12;
+//         anios--;
+//     }
+
+//     return Math.max(0, anios * 360 + meses * 30 + dias);
+// };
 
 // interés por cuota individual
 export const calcularInteresMoraPorCuota = (

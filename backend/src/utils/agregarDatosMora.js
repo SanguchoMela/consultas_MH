@@ -21,7 +21,6 @@ export const agregarDatosMora = (cliente, pagosDocs) => {
 
     const pagos = pagosDocs.find((p) => p.lote === loteKey)?.pagos || [];
 
-    const totalCuotas = parseFinanciamientoMeses(lote.infoLote.financiamiento)
 
     const ultimaCuotaPagadaRaw = obtenerUltimaCuotaPagada(pagos)
     const ultimoValorPagado = obtenerUltimoPagoCuota(pagos);
@@ -31,6 +30,8 @@ export const agregarDatosMora = (cliente, pagosDocs) => {
         ? ultimaCuotaPagadaRaw
         : Math.max(0, ultimaCuotaPagadaRaw - 1)
 
+    const totalCuotas = parseFinanciamientoMeses(lote.infoLote.financiamiento)
+    const cuotasPagadasCompletas = ultimaCuotaPagada;
     const cuotasPorPagar = Math.max(0, totalCuotas - ultimaCuotaPagada)
 
     const cuotaPrimeraAjustada =
@@ -97,6 +98,9 @@ export const agregarDatosMora = (cliente, pagosDocs) => {
 
         ultimoValorPagado,
         ultimaCuotaPagada,
+
+        cuotasPagadasCompletas,
+        cuotasPorPagar,
 
         diasMora: diasMoraBase,
         interesMora: Number(interesMora.toFixed(2)),

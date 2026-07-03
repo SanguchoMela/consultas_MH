@@ -13,7 +13,7 @@ export const generarPdfBuffer = async (
   const pageWidth = doc.internal.pageSize.getWidth();
   const tableWidth = pageWidth - 20;
   const cellWidth = tableWidth / 4;
-  const amortizacionCellWidth = tableWidth / 6;
+  const amortizacionCellWidth = (tableWidth - 13) / 6;
 
   let y = 15;
 
@@ -57,6 +57,26 @@ export const generarPdfBuffer = async (
     doc.setTextColor(0, 0, 0);
 
     // Resetear nueva posición Y (debajo de la barra)
+    return y + altura;
+  };
+
+  const drawSubBar = (doc, y, texto, color = [120, 150, 160], altura = 7) => {
+    const pageWidth = doc.internal.pageSize.getWidth();
+
+    doc.setFillColor(...color);
+    doc.rect(10, y, pageWidth - 20, altura, "F");
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(9);
+    doc.setTextColor(255);
+
+    doc.text(texto, pageWidth / 2, y + altura / 2, {
+      align: "center",
+      baseline: "middle",
+    });
+
+    doc.setTextColor(0, 0, 0);
+
     return y + altura;
   };
 
@@ -147,14 +167,14 @@ export const generarPdfBuffer = async (
       head: [
         "Valor Entrada + Reserva",
         "Valor Cuota",
-        "Cuotas Pagadas (Total o Parcialmente)",
+        "Cuotas Pagadas por completo",
         "Valor Cuotas Pagadas",
       ],
       body: [
         [
           lote.infoLote.entradareserva,
           lote.infoLote.valorcuota,
-          lote.estadoCuenta.cuotaspagadas,
+          lote.estadoCuenta.cuotasPagadasCompletas,
           lote.estadoCuenta.valorcuotaspagadas,
         ],
       ],
@@ -171,7 +191,7 @@ export const generarPdfBuffer = async (
           lote.estadoCuenta.valorvencido,
           lote.estadoCuenta.valorpagado,
           lote.estadoCuenta.valorporpagar,
-          lote.estadoCuenta.dividendosporpagar,
+          lote.estadoCuenta.cuotasPorPagar,
         ],
       ],
     },
@@ -300,65 +320,100 @@ export const generarPdfBuffer = async (
   // console.log("Tabla amortización:", lote.tablaAmortizacion);
 
   // Tabla de Amortización
-  y = doc.lastAutoTable.finalY + 5;
+  // Tabla de Amortización
+  y = doc.lastAutoTable.finalY + 6;
+
   if (lote.tablaAmortizacion?.length) {
+    // Encabezado principal
     y = drawSectionBar(doc, y, "TABLA DE AMORTIZACIÓN");
 
-    // console.log("Amortizacion en generarPdfBuffer:", lote.tablaAmortizacion[0]);
+    const inicioCuota =
+      Number(lote.estadoCuenta.ultimaCuotaPagada) || 0;
 
-    const inicioCuota = Number(lote.estadoCuenta.ultimaCuotaPagada) || 0
+    const cuotas = lote.tablaAmortizacion.map((item, index) => ({
+      numero: inicioCuota + index + 1,
+      ...item,
+    }));
 
-    const bodyAmortizacion = lote.tablaAmortizacion.map((item, index) => [
-      inicioCuota + index + 1,
-      item.fecha,
-      item.diasMora,
-      `$ ${Number(item.valorCuotaAjustado).toFixed(2)}`,
-      `$ ${Number(item.interes).toFixed(2)}`,
-      `$ ${Number(item.totalPagar).toFixed(2)}`,
-      `$ ${Number(item.saldo).toFixed(2)}`,
-    ]);
+    const cuotasVencidas = cuotas.filter(
+      (c) => Number(c.diasMora) > 0,
+    );
 
-    autoTable(doc, {
-      startY: y,
-      margin: { left: 10, right: 10 },
-      theme: "grid",
-      head: [
-        [
-          // "Cuota",
+    const cuotasPorVencer = cuotas.filter(
+      (c) => Number(c.diasMora) === 0,
+    );
+
+    const generarTabla = (titulo, datos, esVencidas = false) => {
+      if (!datos.length) return;
+
+      const colorTitulo = esVencidas ? [245, 158, 11] : [120, 150, 160];
+
+      y = drawSubBar(doc, y, titulo, colorTitulo, 7);
+
+      autoTable(doc, {
+        startY: y,
+        margin: { left: 10, right: 10 },
+        theme: "grid",
+
+        head: [[
+          "Cuota",
           "Fecha",
           "Días Mora",
           "Valor Cuota",
           "Interés",
           "Total",
           "Saldo",
-        ],
-      ],
-      body: bodyAmortizacion,
-      styles: {
-        fontSize: 8,
-        cellPadding: 1,
-        overflow: "linebreak",
-        textColor: 0,
-      },
-      headStyles: {
-        fillColor: [155, 198, 209],
-        textColor: 0,
-      },
-      columnStyles: {
-        0: { cellWidth: 13 },
-        1: { cellWidth: amortizacionCellWidth },
-        2: { cellWidth: amortizacionCellWidth },
-        3: { cellWidth: amortizacionCellWidth },
-        4: { cellWidth: amortizacionCellWidth },
-        5: { cellWidth: amortizacionCellWidth },
-        6: { cellWidth: amortizacionCellWidth },
-        // 6: { cellWidth: 29 },
-      },
-    });
+        ]],
 
-    y = doc.lastAutoTable.finalY + 5;
+        body: datos.map((item) => [
+          item.numero,
+          item.fecha,
+          item.diasMora,
+          `$ ${Number(item.valorCuotaAjustado).toFixed(2)}`,
+          `$ ${Number(item.interes).toFixed(2)}`,
+          `$ ${Number(item.totalPagar).toFixed(2)}`,
+          `$ ${Number(item.saldo).toFixed(2)}`,
+        ]),
+
+        styles: {
+          fontSize: 8,
+          cellPadding: 1,
+          overflow: "linebreak",
+          textColor: 0,
+        },
+
+        headStyles: {
+          fillColor: esVencidas
+            ? [251, 191, 36]
+            : [155, 198, 209],
+          textColor: 0
+        },
+
+        didParseCell: (data) => {
+          if (esVencidas && data.section === "body") {
+            data.cell.styles.fillColor = [255, 251, 235];
+            data.cell.styles.textColor = [180, 0, 0];
+            // data.cell.styles.fontStyle = "bold";
+          }
+        },
+
+        columnStyles: {
+          0: { cellWidth: 13 },
+          1: { cellWidth: amortizacionCellWidth },
+          2: { cellWidth: amortizacionCellWidth },
+          3: { cellWidth: amortizacionCellWidth },
+          4: { cellWidth: amortizacionCellWidth },
+          5: { cellWidth: amortizacionCellWidth },
+          6: { cellWidth: amortizacionCellWidth },
+        },
+      });
+
+      y = doc.lastAutoTable.finalY;
+    };
+
+    generarTabla("CUOTAS VENCIDAS", cuotasVencidas, true);
+    generarTabla("CUOTAS POR VENCER", cuotasPorVencer, false);
   }
-
   // Tabla Informacion Importante
   y = doc.lastAutoTable.finalY + 5;
   const infoTexto = `Adjunto a la presente sírvase encontrar su estado de cuenta de todos los pagos realizados a Manta Hills por el terreno reservado por usted hasta el ${fechaInfo}, de igual manera le agradecemos que revise todos los datos que se encuentran consignados en este documento. De no estar de acuerdo con el mismo sírvase comunicarse a los números telefónicos 0983516817, 0987324065, 0992542227 o al correo contabilidad.mantahills@gmail.com`;
