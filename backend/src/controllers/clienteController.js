@@ -1,91 +1,114 @@
 import Cliente from "../models/clienteModel.js";
-import { cors } from "../utils/cors.js"
+import Pagos from "../models/pagoModel.js";
+import { cors } from "../utils/cors.js";
 import { filtrarClientePorRol } from "../utils/filterClienteByRole.js";
 import { agregarDatosMora } from "../utils/agregarDatosMora.js";
 
 export const buscarClientePorNombre = async (req, res) => {
-  const isPreflight = cors(req, res)
-  if (isPreflight) { return; }
+  const isPreflight = cors(req, res);
+  if (isPreflight) return;
 
   try {
     const { nombre } = req.query;
 
     if (!nombre) {
-      return res.status(400).json({ error: 'Debe proporcionar un nombre para la búsqueda.' });
+      return res
+        .status(400)
+        .json({ error: "Debe proporcionar un nombre para la búsqueda." });
     }
 
-    // Separar palabras de búsqueda
-    const palabras = nombre.trim().split(/\s+/)
+    const palabras = nombre.trim().split(/\s+/);
 
-    // Crear filtro AND para cada palabra
-    const filtro = palabras.map(palabra => ({
+    const filtro = palabras.map((palabra) => ({
       "datosPersonales.nombrecliente": {
         $regex: palabra,
-        $options: 'i'
-      }
-    }))
+        $options: "i",
+      },
+    }));
 
-    // Buscar clientes que coincidan con todas las palabras
-    let clientes = await Cliente.find({ $and: filtro }).populate('lotes').lean();
+    let clientes = await Cliente.find({ $and: filtro })
+      .populate("lotes")
+      .lean();
 
-    clientes = clientes.map(agregarDatosMora);
+    // 🔥 PAGOS
+    const pagosDocs = await Pagos.find().lean();
 
-    if (clientes.length === 0) {
-      return res.status(404).json({ error: 'No se encontraron clientes con ese nombre.' })
+    clientes = clientes.map((cliente) => agregarDatosMora(cliente, pagosDocs));
+
+    if (!clientes.length) {
+      return res
+        .status(404)
+        .json({ error: "No se encontraron clientes con ese nombre." });
     }
 
-    // Filtrar segun rol
-    const role = req.user.role
-    clientes = clientes.map(cliente => filtrarClientePorRol(cliente, role))
+    const role = req.user.role;
+
+    clientes = clientes.map((cliente) => filtrarClientePorRol(cliente, role));
 
     return res.json(clientes);
   } catch (error) {
     console.error("🔥 Error en la búsqueda por nombre:", error);
     return res.status(500).json({ error: error.message });
   }
-}
+};
 
 export const buscarClientePorCedula = async (req, res) => {
-  const isPreflight = cors(req, res)
-  if (isPreflight) { return; }
+  const isPreflight = cors(req, res);
+  if (isPreflight) return;
 
   try {
     const { cedula } = req.query;
+
     if (!cedula) {
-      return res.status(400).json({ error: 'Debe proporcionar una cédula para la búsqueda.' });
+      return res
+        .status(400)
+        .json({ error: "Debe proporcionar una cédula para la búsqueda." });
     }
-    const cliente = await Cliente.findOne({ "datosPersonales.ci": cedula }).populate('lotes').lean();
+
+    const cliente = await Cliente.findOne({
+      "datosPersonales.ci": cedula,
+    })
+      .populate("lotes")
+      .lean();
 
     if (!cliente) {
-      return res.status(404).json({ error: 'No se encontró el cliente asociado a la cédula ingresada.' });
+      return res.status(404).json({ error: "No se encontró el cliente." });
     }
 
-    agregarDatosMora(cliente);
+    const pagosDocs = await Pagos.find().lean();
 
-    // Filtrar segun rol
-    const role = req.user.role
-    const clienteFiltrado = filtrarClientePorRol(cliente, role)
+    agregarDatosMora(cliente, pagosDocs);
+
+    const role = req.user.role;
+
+    const clienteFiltrado = filtrarClientePorRol(cliente, role);
 
     return res.json([clienteFiltrado]);
   } catch (error) {
-    console.error("🔥 Error en la búsqueda por cédula:", error)
+    console.error("🔥 Error en la búsqueda por cédula:", error);
     return res.status(500).json({ error: error.message });
   }
-}
+};
 
 export const getClientes = async (req, res) => {
-  const isPreflight = cors(req, res)
-  if (isPreflight) { return; }
+  const isPreflight = cors(req, res);
+  if (isPreflight) {
+    return;
+  }
 
   try {
-    const clientes = await Cliente.find().populate('lotes').lean();
+    const clientes = await Cliente.find().populate("lotes").lean();
 
     const role = req.user.role;
-    const clientesFiltrados = clientes.map(cliente => filtrarClientePorRol(cliente, role));
-    
-    res.status(200).json(clientesFiltrados)
+    const clientesFiltrados = clientes.map((cliente) =>
+      filtrarClientePorRol(cliente, role),
+    );
+
+    res.status(200).json(clientesFiltrados);
   } catch (error) {
-    console.error('Error al obtener clientes:', error.message)
-    res.status(500).json({ message: 'Error al obtener clientes: ', error: error.message })
+    console.error("Error al obtener clientes:", error.message);
+    res
+      .status(500)
+      .json({ message: "Error al obtener clientes: ", error: error.message });
   }
-}
+};

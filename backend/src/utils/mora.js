@@ -53,15 +53,8 @@ export const calcularTotalConMora = (valor, interes) =>
 export const calcularCuotaConMora = (total, cuotas) =>
     Number(total || 0) / Number(cuotas || 1);
 
-export const obtenerUltimoPagoCuota = (flujoPagos) => {
+export const obtenerUltimoPagoCuota = (pagos) => {
+    if (!pagos?.length) return 0
 
-    if (!flujoPagos?.pagos?.length) return 0;
-
-    const ultimoPago = flujoPagos.pagos[0];
-
-    if (!ultimoPago?.detalles?.length) return 0;
-
-    const ultimaCuota = ultimoPago.detalles[0];
-
-    return Number(ultimaCuota?.valorPagado || 0);
+    return Number(pagos[0]?.detalles?.[0]?.valorPagado || 0);
 };

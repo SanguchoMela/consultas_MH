@@ -2,8 +2,12 @@ import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { logoBase64 } from "../assets/mh.js";
 
-export const generarPdfBuffer = async (cliente, lote, pagos = []) => {
-
+export const generarPdfBuffer = async (
+  cliente,
+  lote,
+  pagos = [],
+  ultimoValorPagado = 0,
+) => {
   const doc = new jsPDF("p", "mm", "a4");
 
   const pageWidth = doc.internal.pageSize.getWidth();
@@ -19,15 +23,21 @@ export const generarPdfBuffer = async (cliente, lote, pagos = []) => {
   // Formateo de fecha
   const formatearFecha = (fecha) => {
     if (!(fecha instanceof Date)) return "";
-    const day = String(fecha.getUTCDate()).padStart(2, "0")
-    const month = String(fecha.getUTCMonth() + 1).padStart(2, "0")
-    const year = String(fecha.getUTCFullYear())
+    const day = String(fecha.getUTCDate()).padStart(2, "0");
+    const month = String(fecha.getUTCMonth() + 1).padStart(2, "0");
+    const year = String(fecha.getUTCFullYear());
 
     return `${day}/${month}/${year}`;
   };
 
   // Formato de barras de sección
-  const drawSectionBar = (doc, y, texto, colorRGB = [81, 128, 144], altura = 7) => {
+  const drawSectionBar = (
+    doc,
+    y,
+    texto,
+    colorRGB = [81, 128, 144],
+    altura = 7,
+  ) => {
     const pageWidth = doc.internal.pageSize.getWidth();
 
     // Barra de fondo
@@ -38,14 +48,17 @@ export const generarPdfBuffer = async (cliente, lote, pagos = []) => {
     doc.setFont("helvetica", "normal");
     doc.setFontSize(10);
     doc.setTextColor(255, 255, 255);
-    doc.text(texto, pageWidth / 2, y + altura / 2, { align: "center", baseline: "middle" });
+    doc.text(texto, pageWidth / 2, y + altura / 2, {
+      align: "center",
+      baseline: "middle",
+    });
 
     // Resetear color de texto
     doc.setTextColor(0, 0, 0);
 
     // Resetear nueva posición Y (debajo de la barra)
     return y + altura;
-  }
+  };
 
   // Formato de tablas
   const drawTable = (doc, startY, head, body) => {
@@ -72,96 +85,103 @@ export const generarPdfBuffer = async (cliente, lote, pagos = []) => {
         const valorVencido = Number(body[0][0]) || 0;
 
         if (esTablaValorVencido && valorVencido > 0) {
-          if (
-            data.section === "head" &&
-            data.column.index === 0
-          ) {
+          if (data.section === "head" && data.column.index === 0) {
             data.cell.styles.fillColor = [220, 53, 69];
             data.cell.styles.textColor = [255, 255, 255];
             data.cell.styles.fontStyle = "bold";
           }
 
-          if (
-            data.section === "body" &&
-            data.column.index === 0
-          ) {
+          if (data.section === "body" && data.column.index === 0) {
             data.cell.styles.fillColor = [255, 220, 220];
             data.cell.styles.textColor = [180, 0, 0];
             data.cell.styles.fontStyle = "bold";
           }
-
         }
-
       },
       columnStyles: Object.fromEntries(
-        head.map((_, index) => [index, { cellWidth: colWidthFixed }])
+        head.map((_, index) => [index, { cellWidth: colWidthFixed }]),
       ),
       head: [head],
       body,
     });
 
     return doc.lastAutoTable.finalY;
-  }
+  };
 
   // Datos de la tabla de estado de cuenta
   const tables = [
     {
       head: ["Proyecto", "Cliente", "Correo", "Teléfono"],
-      body: [[
-        "Manta Hills",
-        cliente.datosPersonales.nombrecliente,
-        cliente.datosContacto.email,
-        cliente.datosContacto.telefono,
-      ]]
+      body: [
+        [
+          "Manta Hills",
+          cliente.datosPersonales.nombrecliente,
+          cliente.datosContacto.email,
+          cliente.datosContacto.telefono,
+        ],
+      ],
     },
     {
       head: ["Etapa", "Manzana", "N° Lote", "Financiamiento"],
-      body: [[
-        lote.infoLote.etapa,
-        lote.infoLote.manzana,
-        lote.infoLote.lote,
-        lote.infoLote.financiamiento,
-      ]]
+      body: [
+        [
+          lote.infoLote.etapa,
+          lote.infoLote.manzana,
+          lote.infoLote.lote,
+          lote.infoLote.financiamiento,
+        ],
+      ],
     },
     {
       head: ["Área m²", "Valor m²", "Valor Total", "Descuento"],
-      body: [[
-        lote.infoLote.area,
-        lote.infoLote.valorm2,
-        lote.infoLote.valortotal,
-        lote.infoLote.valordscto,
-      ]]
+      body: [
+        [
+          lote.infoLote.area,
+          lote.infoLote.valorm2,
+          lote.infoLote.valortotal,
+          lote.infoLote.valordscto,
+        ],
+      ],
     },
     {
-      head: ["Valor Entrada + Reserva", "Valor Cuota", "Cuotas Pagadas (Total o Parcialmente)", "Valor Cuotas Pagadas"],
-      body: [[
-        lote.infoLote.entradareserva,
-        lote.infoLote.valorcuota,
-        lote.estadoCuenta.cuotaspagadas,
-        lote.estadoCuenta.valorcuotaspagadas,
-      ]]
+      head: [
+        "Valor Entrada + Reserva",
+        "Valor Cuota",
+        "Cuotas Pagadas (Total o Parcialmente)",
+        "Valor Cuotas Pagadas",
+      ],
+      body: [
+        [
+          lote.infoLote.entradareserva,
+          lote.infoLote.valorcuota,
+          lote.estadoCuenta.cuotaspagadas,
+          lote.estadoCuenta.valorcuotaspagadas,
+        ],
+      ],
     },
     {
-      head: ["Valor Vencido", "Total Recibido", "Saldo por Pagar", "Dividendos por Pagar"],
-      body: [[
-        lote.estadoCuenta.valorvencido,
-        lote.estadoCuenta.valorpagado,
-        lote.estadoCuenta.valorporpagar,
-        lote.estadoCuenta.dividendosporpagar,
-      ]],
+      head: [
+        "Valor Vencido",
+        "Total Recibido",
+        "Saldo por Pagar",
+        "Dividendos por Pagar",
+      ],
+      body: [
+        [
+          lote.estadoCuenta.valorvencido,
+          lote.estadoCuenta.valorpagado,
+          lote.estadoCuenta.valorporpagar,
+          lote.estadoCuenta.dividendosporpagar,
+        ],
+      ],
     },
-  ]
+  ];
 
   // Datos de la tabla Información Bancaria
   const infoBancaria = {
     head: ["Banco", "N° Cuenta", "Tipo de Cuenta", "RUC"],
-    body: [[
-      "Banco Pichincha",
-      "3515150604",
-      "Corriente",
-      "1792331277001",
-    ]]
-  }
+    body: [["Banco Pichincha", "3515150604", "Corriente", "1792331277001"]],
+  };
 
   // =============================================================================
   // Logo y título
@@ -182,7 +202,7 @@ export const generarPdfBuffer = async (cliente, lote, pagos = []) => {
 
   tables.forEach((table) => {
     y = drawTable(doc, y, table.head, table.body);
-  })
+  });
 
   const fechaInfo = process.env.INFO_DATE || "";
   doc.setFont("helvetica", "bold");
@@ -217,29 +237,29 @@ export const generarPdfBuffer = async (cliente, lote, pagos = []) => {
     },
     head: [["Nombre de la Cuenta"]],
     body: [["Constructora Vasconez Paredes"]],
-  })
+  });
 
   y = doc.lastAutoTable.finalY + 5;
 
-  // ====== FLUJO DE PAGOS ====== 
+  // ====== FLUJO DE PAGOS ======
   if (pagos?.length) {
     y = drawSectionBar(doc, y, "FLUJO DE CAJA");
     const filas = [];
-    pagos.forEach(pago => {
+    pagos.forEach((pago) => {
       const detalles = (pago.detalles || [])
         .slice()
         .sort((a, b) => {
-          const numA = parseInt((a.detalle || "").replace(/\D/g, ""), 10)
-          const numB = parseInt((b.detalle || "").replace(/\D/g, ""), 10)
-          return numB - numA
+          const numA = parseInt((a.detalle || "").replace(/\D/g, ""), 10);
+          const numB = parseInt((b.detalle || "").replace(/\D/g, ""), 10);
+          return numB - numA;
         })
-        .map(det => {
+        .map((det) => {
           const valor = Number(det.valorPagado);
           return Number.isFinite(valor)
             ? `${det.detalle}: $ ${valor.toFixed(2)}`
             : `${det.detalle}`;
         })
-        .join("\n")
+        .join("\n");
       filas.push([
         formatearFecha(pago.fechaPago),
         `$ ${Number(pago.totalPorComprobante).toFixed(2)}`,
@@ -252,26 +272,28 @@ export const generarPdfBuffer = async (cliente, lote, pagos = []) => {
       tableWidth,
       margin: { left: 10, right: 10 },
       theme: "grid",
-      head: [["Fecha de Pago", "Valor Pagado", "Forma de Pago", "Detalle del Pago"]],
+      head: [
+        ["Fecha de Pago", "Valor Pagado", "Forma de Pago", "Detalle del Pago"],
+      ],
       body: filas,
       styles: {
         fontSize: 9,
         cellPadding: 1.2,
         overflow: "linebreak",
         textColor: 0,
-        valign: "middle"
+        valign: "middle",
       },
       headStyles: {
         fillColor: [155, 198, 209],
         textColor: 0,
-        valign: "middle"
+        valign: "middle",
       },
       columnStyles: {
         0: { cellWidth: cellWidth },
         1: { cellWidth: cellWidth },
         2: { cellWidth: cellWidth },
         3: { cellWidth: cellWidth },
-      }
+      },
     });
   }
 
@@ -280,34 +302,35 @@ export const generarPdfBuffer = async (cliente, lote, pagos = []) => {
   // Tabla de Amortización
   y = doc.lastAutoTable.finalY + 5;
   if (lote.tablaAmortizacion?.length) {
-
     y = drawSectionBar(doc, y, "TABLA DE AMORTIZACIÓN");
 
-    console.log("Tabla amortización:", lote.tablaAmortizacion[0]);
+    // console.log("Amortizacion en generarPdfBuffer:", lote.tablaAmortizacion[0]);
 
-    const bodyAmortizacion = lote.tablaAmortizacion.map(item => ([
-      // item.cuota,
+    const bodyAmortizacion = lote.tablaAmortizacion.map((item) => [
+      // console.log("PDF recibe ultimoValorPagado:", ultimoValorPagado),
       item.fecha,
       item.diasMora,
-      `$ ${Number(item.valorCuota).toFixed(2)}`,
+      `$ ${Number(item.valorCuotaAjustado).toFixed(2)}`,
       `$ ${Number(item.interes).toFixed(2)}`,
       `$ ${Number(item.totalPagar).toFixed(2)}`,
-      `$ ${Number(item.saldo).toFixed(2)}`
-    ]));
+      `$ ${Number(item.saldo).toFixed(2)}`,
+    ]);
 
     autoTable(doc, {
       startY: y,
       margin: { left: 10, right: 10 },
       theme: "grid",
-      head: [[
-        // "Cuota",
-        "Fecha",
-        "Días Mora",
-        "Valor Cuota",
-        "Interés",
-        "Total",
-        "Saldo"
-      ]],
+      head: [
+        [
+          // "Cuota",
+          "Fecha",
+          "Días Mora",
+          "Valor Cuota",
+          "Interés",
+          "Total",
+          "Saldo",
+        ],
+      ],
       body: bodyAmortizacion,
       styles: {
         fontSize: 8,
@@ -328,7 +351,7 @@ export const generarPdfBuffer = async (cliente, lote, pagos = []) => {
         4: { cellWidth: amortizacionCellWidth },
         5: { cellWidth: amortizacionCellWidth },
         // 6: { cellWidth: 29 },
-      }
+      },
     });
 
     y = doc.lastAutoTable.finalY + 5;
@@ -369,7 +392,8 @@ export const generarPdfBuffer = async (cliente, lote, pagos = []) => {
   // Nueva posicion debajo del primer cuadro
   y = y + alturaCuadro;
 
-  const textoUAFE = "Todos estos ingresos han sido revisados y verificados tanto por la Sociedad Civil Comercial MANTA HILLS como por el Oficial de Cumplimiento de la UAFE.";
+  const textoUAFE =
+    "Todos estos ingresos han sido revisados y verificados tanto por la Sociedad Civil Comercial MANTA HILLS como por el Oficial de Cumplimiento de la UAFE.";
 
   // Texto
   doc.setFont("helvetica", "bold");
@@ -379,8 +403,8 @@ export const generarPdfBuffer = async (cliente, lote, pagos = []) => {
   const alturaUAFE = linesUAFE.length * 4 + 2;
 
   if (y + alturaUAFE > pageHeight - 10) {
-    doc.addPage()
-    y = 15
+    doc.addPage();
+    y = 15;
   }
 
   // Fondo destacado
@@ -394,11 +418,10 @@ export const generarPdfBuffer = async (cliente, lote, pagos = []) => {
   // Escribir el texto dentro del segundo rectangulo
   linesUAFE.forEach((line, index) => {
     doc.text(line, 10 + 2, offsetYUAFE + index * 4, { align: "justify" });
-  })
+  });
 
   // =============================
   // DEVOLVER BUFFER
   // =============================
   return Buffer.from(doc.output("arraybuffer"));
-
 };

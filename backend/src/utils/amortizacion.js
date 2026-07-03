@@ -1,54 +1,62 @@
 import { parseFechaDMY, calcularDiasMora } from "./mora.js";
 
 export const sumarMeses = (fecha, meses) => {
-    const f = new Date(fecha);
-    f.setMonth(f.getMonth() + meses);
-    return f;
+  const f = new Date(fecha);
+  f.setMonth(f.getMonth() + meses);
+  return f;
 };
 
 export const formatearFecha = (fecha) => {
-    const d = String(fecha.getDate()).padStart(2, "0");
-    const m = String(fecha.getMonth() + 1).padStart(2, "0");
-    const y = fecha.getFullYear();
-    return `${d}/${m}/${y}`;
+  const d = String(fecha.getDate()).padStart(2, "0");
+  const m = String(fecha.getMonth() + 1).padStart(2, "0");
+  const y = fecha.getFullYear();
+  return `${d}/${m}/${y}`;
 };
 
 export const generarTablaAmortizacion = ({
-    fechaPrimeraCuota,
-    meses,
-    valorCuota,
-    interesesPorCuota,
-    saldoInicial
+  fechaPrimeraCuota,
+  meses,
+  valorCuota,
+  interesesPorCuota,
+  saldoInicial,
+  ultimoValorPagado,
 }) => {
+  console.log("AMORTIZACION recibe ultimoValorPagado:", ultimoValorPagado);
 
-    const tabla = [];
-    let saldo = Number(saldoInicial);
+  const tabla = [];
+  let saldo = Number(saldoInicial);
+  const cuotaBase = Number(valorCuota);
 
-    const fechaBase = parseFechaDMY(fechaPrimeraCuota);
+  const fechaBase = parseFechaDMY(fechaPrimeraCuota);
 
-    for (let i = 0; i < meses; i++) {
+  for (let i = 0; i < meses; i++) {
+    const fechaCuota = sumarMeses(fechaBase, i);
+    const diasMora = calcularDiasMora(formatearFecha(fechaCuota));
+    const interes = Number(interesesPorCuota[i] || 0);
 
-        const fechaCuota = sumarMeses(fechaBase, i);
+    const valorCuotaAjustado =
+      i === 0 && Number(ultimoValorPagado) < cuotaBase
+        ? Math.max(0, cuotaBase - Number(ultimoValorPagado))
+        : cuotaBase;
 
-        const diasMora = calcularDiasMora(formatearFecha(fechaCuota));
+    const totalPagar = valorCuotaAjustado + interes;
 
-        const interes = Number(interesesPorCuota[i] || 0);
+    saldo -= totalPagar;
+    if (saldo < 0) saldo = 0;
 
-        const totalPagar = Number(valorCuota) + interes;
+    tabla.push({
+      cuota: i + 1,
+      fecha: formatearFecha(fechaCuota),
+      diasMora,
+      valorCuota: cuotaBase,
+      valorCuotaAjustado,
+      interes,
+      totalPagar: Number(totalPagar.toFixed(2)),
+      saldo: Number(saldo.toFixed(2)),
+    });
 
-        saldo -= totalPagar;
-        if (saldo < 0) saldo = 0;
+    console.log("PRIMER ITEM AMORTIZACIÓN COMPLETO:", tabla[0]);
+  }
 
-        tabla.push({
-            cuota: i + 1,
-            fecha: formatearFecha(fechaCuota),
-            diasMora,
-            valorCuota,
-            interes,
-            totalPagar: Number(totalPagar.toFixed(2)),
-            saldo: Number(saldo.toFixed(2))
-        });
-    }
-
-    return tabla;
+  return tabla;
 };
