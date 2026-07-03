@@ -320,7 +320,6 @@ export const generarPdfBuffer = async (
   // console.log("Tabla amortización:", lote.tablaAmortizacion);
 
   // Tabla de Amortización
-  // Tabla de Amortización
   y = doc.lastAutoTable.finalY + 6;
 
   if (lote.tablaAmortizacion?.length) {
@@ -350,6 +349,27 @@ export const generarPdfBuffer = async (
 
       y = drawSubBar(doc, y, titulo, colorTitulo, 7);
 
+      const body = datos.map((item) => [
+        item.numero,
+        item.fecha,
+        item.diasMora,
+        `$ ${Number(item.valorCuotaAjustado).toFixed(2)}`,
+        `$ ${Number(item.interes).toFixed(2)}`,
+        `$ ${Number(item.totalPagar).toFixed(2)}`,
+        `$ ${Number(item.saldo).toFixed(2)}`,
+      ]);
+
+      if (esVencidas) {
+        body.push([
+          "",
+          "",
+          "",
+          "TOTAL INTERÉS",
+          `$ ${Number(lote.estadoCuenta.interesMora || 0).toFixed(2)}`,
+          "",
+        ]);
+      }
+
       autoTable(doc, {
         startY: y,
         margin: { left: 10, right: 10 },
@@ -364,17 +384,7 @@ export const generarPdfBuffer = async (
           "Total",
           "Saldo",
         ]],
-
-        body: datos.map((item) => [
-          item.numero,
-          item.fecha,
-          item.diasMora,
-          `$ ${Number(item.valorCuotaAjustado).toFixed(2)}`,
-          `$ ${Number(item.interes).toFixed(2)}`,
-          `$ ${Number(item.totalPagar).toFixed(2)}`,
-          `$ ${Number(item.saldo).toFixed(2)}`,
-        ]),
-
+        body,
         styles: {
           fontSize: 8,
           cellPadding: 1,
@@ -390,10 +400,16 @@ export const generarPdfBuffer = async (
         },
 
         didParseCell: (data) => {
-          if (esVencidas && data.section === "body") {
+          if (!esVencidas || data.section !== "body") return;
+
+          // Resaltar la última fila (TOTAL INTERÉS)
+          if (data.row.index === body.length - 1) {
+            data.cell.styles.fillColor = [230, 230, 230];
+            data.cell.styles.fontStyle = "bold";
+            data.cell.styles.textColor = [0, 0, 0];
+          } else {
             data.cell.styles.fillColor = [255, 251, 235];
             data.cell.styles.textColor = [180, 0, 0];
-            // data.cell.styles.fontStyle = "bold";
           }
         },
 
