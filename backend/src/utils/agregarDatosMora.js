@@ -84,7 +84,7 @@ export const agregarDatosMora = (cliente, pagosDocs) => {
     const totalInteres = calcularTotalInteres(tablaAmortizacion);
     const totalPagar = calcularTotalConInteres(tablaAmortizacion);
 
-    // console.log(tablaAmortizacion[0]);
+    console.log(tablaAmortizacion[0]);
 
     console.log("Total valor cuotas", totalValorCuotas)
     console.log(typeof totalValorCuotas);

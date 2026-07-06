@@ -118,7 +118,7 @@ export default function LoteCard({
             {error && <p className="text-red-600 mt-2">{error}</p>}
             {showCalculadora && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-                    <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-xl max-h-[95vh] overflow-y-auto relative">
+                    <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-3xl max-h-[95vh] overflow-y-auto relative">
 
                         <button
                             onClick={() => setShowCalculadora(false)}
@@ -128,6 +128,7 @@ export default function LoteCard({
                         </button>
 
                         <CalculadoraRef
+                            lote={lote}
                             estadoCuenta={lote.estadoCuenta}
                         />
                     </div>
