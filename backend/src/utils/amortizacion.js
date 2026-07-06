@@ -54,8 +54,6 @@ export const generarTablaAmortizacion = ({
       totalPagar: Number(totalPagar.toFixed(2)),
       saldo: Number(saldo.toFixed(2)),
     });
-
-    // console.log("PRIMER ITEM AMORTIZACIÓN COMPLETO:", tabla[0]);
   }
 
   return tabla;

@@ -6,14 +6,16 @@ import {
   calcularCuotaConMora,
   obtenerUltimoPagoCuota,
   obtenerUltimaCuotaPagada,
-  parseFinanciamientoMeses
+  parseFinanciamientoMeses,
+  calcularTotalCuotas,
+  calcularTotalInteres,
+  calcularTotalConInteres,
 } from "./mora.js";
 
-const TASA_MORA = 4.99;
+const TASA_MORA = 12;
 
 export const agregarDatosMora = (cliente, pagosDocs) => {
   cliente.lotes = cliente.lotes.map((lote) => {
-
     const cuotaBase = Number(lote.infoLote.valorcuota) || 0;
 
     const loteKey =
@@ -21,18 +23,17 @@ export const agregarDatosMora = (cliente, pagosDocs) => {
 
     const pagos = pagosDocs.find((p) => p.lote === loteKey)?.pagos || [];
 
-
-    const ultimaCuotaPagadaRaw = obtenerUltimaCuotaPagada(pagos)
+    const ultimaCuotaPagadaRaw = obtenerUltimaCuotaPagada(pagos);
     const ultimoValorPagado = obtenerUltimoPagoCuota(pagos);
 
     const ultimaCuotaPagada =
       ultimoValorPagado >= cuotaBase
         ? ultimaCuotaPagadaRaw
-        : Math.max(0, ultimaCuotaPagadaRaw - 1)
+        : Math.max(0, ultimaCuotaPagadaRaw - 1);
 
-    const totalCuotas = parseFinanciamientoMeses(lote.infoLote.financiamiento)
+    const totalCuotas = parseFinanciamientoMeses(lote.infoLote.financiamiento);
     const cuotasPagadasCompletas = ultimaCuotaPagada;
-    const cuotasPorPagar = Math.max(0, totalCuotas - ultimaCuotaPagada)
+    const cuotasPorPagar = Math.max(0, totalCuotas - ultimaCuotaPagada);
 
     const cuotaPrimeraAjustada =
       ultimoValorPagado > 0 && ultimoValorPagado < cuotaBase
@@ -52,6 +53,7 @@ export const agregarDatosMora = (cliente, pagosDocs) => {
       ),
     );
 
+    // Total interés
     const interesMora = interesesPorCuota.reduce((a, b) => a + b, 0);
 
     const totalConMora = calcularTotalConMora(
@@ -76,6 +78,16 @@ export const agregarDatosMora = (cliente, pagosDocs) => {
       saldoInicial: totalConMora,
       ultimoValorPagado,
     });
+
+    // Totales de la tabla de amortizacion
+    const totalValorCuotas = calcularTotalCuotas(tablaAmortizacion);
+    const totalInteres = calcularTotalInteres(tablaAmortizacion);
+    const totalPagar = calcularTotalConInteres(tablaAmortizacion);
+
+    // console.log(tablaAmortizacion[0]);
+
+    console.log("Total valor cuotas", totalValorCuotas)
+    console.log(typeof totalValorCuotas);
 
     if (cuotasPorPagar === 0) {
       return {
@@ -108,6 +120,10 @@ export const agregarDatosMora = (cliente, pagosDocs) => {
 
         totalConMora: Number(totalConMora.toFixed(2)),
         valorCuotaConMora: Number(valorCuotaConMora.toFixed(2)),
+
+        totalValorCuotas: Number(totalValorCuotas.toFixed(2)),
+        totalInteres: Number(totalInteres.toFixed(2)),
+        totalPagar: Number(totalPagar.toFixed(2)),
       },
       tablaAmortizacion,
     };

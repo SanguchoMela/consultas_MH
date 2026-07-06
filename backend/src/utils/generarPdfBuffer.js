@@ -326,21 +326,16 @@ export const generarPdfBuffer = async (
     // Encabezado principal
     y = drawSectionBar(doc, y, "TABLA DE AMORTIZACIÓN");
 
-    const inicioCuota =
-      Number(lote.estadoCuenta.ultimaCuotaPagada) || 0;
+    const inicioCuota = Number(lote.estadoCuenta.ultimaCuotaPagada) || 0;
 
     const cuotas = lote.tablaAmortizacion.map((item, index) => ({
       numero: inicioCuota + index + 1,
       ...item,
     }));
 
-    const cuotasVencidas = cuotas.filter(
-      (c) => Number(c.diasMora) > 0,
-    );
+    const cuotasVencidas = cuotas.filter((c) => Number(c.diasMora) > 0);
 
-    const cuotasPorVencer = cuotas.filter(
-      (c) => Number(c.diasMora) === 0,
-    );
+    const cuotasPorVencer = cuotas.filter((c) => Number(c.diasMora) === 0);
 
     const generarTabla = (titulo, datos, esVencidas = false) => {
       if (!datos.length) return;
@@ -361,12 +356,24 @@ export const generarPdfBuffer = async (
 
       if (esVencidas) {
         body.push([
-          "",
-          "",
-          "",
-          "TOTAL INTERÉS",
-          `$ ${Number(lote.estadoCuenta.interesMora || 0).toFixed(2)}`,
-          "",
+          {
+            content: "TOTALES",
+            colSpan: 3,
+            styles: { halign: "center", fontStyle: "bold" },
+          },
+          {
+            content: `$ ${Number(lote.estadoCuenta.totalValorCuotas || 0).toFixed(2)}`,
+            styles: { fontStyle: "bold" },
+          },
+          {
+            content: `$ ${Number(lote.estadoCuenta.totalInteres || 0).toFixed(2)}`,
+            styles: { fontStyle: "bold" },
+          },
+          {
+            content: `$ ${Number(lote.estadoCuenta.totalPagar || 0).toFixed(2)}`,
+            styles: { fontStyle: "bold" },
+          },
+          { content: "" },
         ]);
       }
 
@@ -375,15 +382,17 @@ export const generarPdfBuffer = async (
         margin: { left: 10, right: 10 },
         theme: "grid",
 
-        head: [[
-          "Cuota",
-          "Fecha",
-          "Días Mora",
-          "Valor Cuota",
-          "Interés",
-          "Total",
-          "Saldo",
-        ]],
+        head: [
+          [
+            "Cuota",
+            "Fecha",
+            "Días Mora",
+            "Valor Cuota",
+            "Interés",
+            "Total a pagar",
+            "Saldo",
+          ],
+        ],
         body,
         styles: {
           fontSize: 8,
@@ -393,10 +402,8 @@ export const generarPdfBuffer = async (
         },
 
         headStyles: {
-          fillColor: esVencidas
-            ? [251, 191, 36]
-            : [155, 198, 209],
-          textColor: 0
+          fillColor: esVencidas ? [251, 191, 36] : [155, 198, 209],
+          textColor: 0,
         },
 
         didParseCell: (data) => {

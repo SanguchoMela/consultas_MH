@@ -140,3 +140,18 @@ export const parseFinanciamientoMeses = (financiamiento) => {
 
     return Number(match[1]);
 };
+
+export const calcularTotalCuotas = (cuotas = []) =>
+    cuotas
+        .filter((c) => Number(c.diasMora) > 0)
+        .reduce((total, cuota) => total + (Number(cuota.valorCuotaAjustado) || 0), 0);
+
+export const calcularTotalInteres = (cuotas = []) =>
+    cuotas
+        .filter((c) => Number(c.diasMora) > 0)
+        .reduce((total, cuota) => total + (Number(cuota.interes) || 0), 0);
+
+export const calcularTotalConInteres = (cuotas = []) =>
+    cuotas
+        .filter((c) => Number(c.diasMora) > 0)
+        .reduce((total, cuota) => total + (Number(cuota.totalPagar) || 0), 0);
