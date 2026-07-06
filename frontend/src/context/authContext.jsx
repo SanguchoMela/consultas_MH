@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { onAuthStateChanged } from "firebase/auth";
+import { EmailAuthProvider, onAuthStateChanged, reauthenticateWithCredential, updatePassword } from "firebase/auth";
 import { auth } from "../firebase.js";
 
 const AuthContext = createContext();
@@ -25,8 +25,24 @@ export function AuthProvider({ children }) {
     return () => unsub();
   }, []);
 
+  const cambiarPassword = async (passwordActual, nuevaPassword) => {
+      if (!user || !user.email) {
+          throw new Error("Usuario no autenticado")
+      }
+  
+      // Reautenticar
+      const credential = EmailAuthProvider.credential(user.email, passwordActual)
+  
+      await reauthenticateWithCredential(user, credential)
+  
+      // Actualizar contraseña
+      await updatePassword(user, nuevaPassword)
+  
+      return true
+  }
+
   return (
-    <AuthContext.Provider value={{ user, role, loading }}>
+    <AuthContext.Provider value={{ user, role, loading, cambiarPassword }}>
       {children}
     </AuthContext.Provider>
   );
