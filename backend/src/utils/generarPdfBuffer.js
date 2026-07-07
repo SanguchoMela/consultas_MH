@@ -320,7 +320,7 @@ export const generarPdfBuffer = async (
   // Tabla de Amortización
   y = doc.lastAutoTable.finalY + 5;
 
-  if (lote.tablaAmortizacion?.length) {
+  if (lote.estadoCuenta.valorporpagar > 0 && lote.tablaAmortizacion?.length) {
     // Encabezado principal
     y = drawSectionBar(doc, y, "TABLA DE AMORTIZACIÓN");
 
@@ -435,83 +435,78 @@ export const generarPdfBuffer = async (
     generarTabla("CUOTAS VENCIDAS", cuotasVencidas, true);
     generarTabla("CUOTAS POR VENCER", cuotasPorVencer, false);
   }
-  // Tabla Informacion Importante
+
+  // =======================
+  // INFORMACIÓN IMPORTANTE
+  // =======================
+
   y = doc.lastAutoTable.finalY + 5;
-  const infoTexto = `Adjunto a la presente sírvase encontrar su estado de cuenta de todos los pagos realizados a Manta Hills por el terreno reservado por usted hasta el ${fechaInfo}, de igual manera le agradecemos que revise todos los datos que se encuentran consignados en este documento. De no estar de acuerdo con el mismo sírvase comunicarse a los números telefónicos 0983516817, 0987324065, 0992542227 o al correo contabilidad.mantahills@gmail.com`;
 
-  const textLines = doc.splitTextToSize(infoTexto, tableWidth - 4);
-
-  if (doc.lastAutoTable.finalY + 20 > doc.internal.pageSize.getHeight()) {
-    doc.addPage();
-    y = 15;
-  } else {
-    y = doc.lastAutoTable.finalY + 10;
-  }
-
-  const textDims = doc.getTextDimensions(textLines);
-  const alturaCuadro = textDims.h + 6;
-
-  // const alturaCuadro = textLines.length * 4 + 2;
-
-  // const espacioNecesario = 7 + alturaCuadro;
   const pageHeight = doc.internal.pageSize.getHeight();
 
-  // if (y + espacioNecesario > pageHeight - 10) {
-  //   doc.addPage();
-  //   y = 15;
-  // }
-  // if (y + alturaCuadro > pageHeight - 10) {
-  //   doc.addPage();
-  //   y = 15;
-  // }
-
-  y = drawSectionBar(doc, y, "INFORMACIÓN IMPORTANTE");
-
-  doc.setTextColor(0, 0, 0);
-
-  // Dibujar el rectangulo
-  doc.setDrawColor(200, 200, 200);
-  doc.rect(10, y, tableWidth, alturaCuadro, "S");
-
-  // Calcular offset para centrar el texto verticalmente
-  const offsetY = y + (alturaCuadro - textLines.length * 4) / 2 + 3;
-
-  // Escribir el texto dentro del rectangulo
-  textLines.forEach((line, index) => {
-    doc.text(line, 10 + 2, offsetY + index * 4, { align: "justify" });
-  });
-
-  // Cuadro adicional de información importante
-  // Nueva posicion debajo del primer cuadro
-  y = y + alturaCuadro;
+  const infoTexto = `Adjunto a la presente sírvase encontrar su estado de cuenta de todos los pagos realizados a Manta Hills por el terreno reservado por usted hasta el ${fechaInfo}, de igual manera le agradecemos que revise todos los datos que se encuentran consignados en este documento. De no estar de acuerdo con el mismo sírvase comunicarse a los números telefónicos 0983516817, 0987324065, 0992542227 o al correo contabilidad.mantahills@gmail.com`;
 
   const textoUAFE =
     "Todos estos ingresos han sido revisados y verificados tanto por la Sociedad Civil Comercial MANTA HILLS como por el Oficial de Cumplimiento de la UAFE.";
 
-  // Texto
+  // Calcular alturas
+  const textLines = doc.splitTextToSize(infoTexto, tableWidth - 4);
+  const alturaCuadro = doc.getTextDimensions(textLines).h + 4;
+
   doc.setFont("helvetica", "bold");
   doc.setFontSize(10);
 
   const linesUAFE = doc.splitTextToSize(textoUAFE, tableWidth - 4);
-  const alturaUAFE = linesUAFE.length * 4 + 2;
+  const alturaUAFE = doc.getTextDimensions(linesUAFE).h + 4;
 
-  if (y + alturaUAFE > pageHeight - 10) {
+  // Espacio total del bloque
+  const alturaBarra = 7;
+
+  const espacioNecesario =
+    alturaBarra +
+    alturaCuadro +
+    alturaUAFE;
+
+  // Si no cabe TODO el bloque, crear nueva página
+  if (y + espacioNecesario > pageHeight - 10) {
     doc.addPage();
     y = 15;
   }
 
-  // Fondo destacado
+  // Barra
+  y = drawSectionBar(doc, y, "INFORMACIÓN IMPORTANTE");
+
+  // ---------- Primer cuadro ----------
+  doc.setDrawColor(200, 200, 200);
+  doc.rect(10, y, tableWidth, alturaCuadro);
+
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(10);
+  doc.setTextColor(0, 0, 0);
+
+  const offsetY = y + (alturaCuadro - textLines.length * 4) / 2 + 3;
+
+  textLines.forEach((line, index) => {
+    doc.text(line, 12, offsetY + index * 4);
+  });
+
+  y += alturaCuadro;
+
+  // ---------- Segundo cuadro ----------
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(10);
+
   doc.setFillColor(245, 249, 252);
   doc.setDrawColor(200, 200, 200);
   doc.rect(10, y, tableWidth, alturaUAFE, "FD");
 
-  // Centrado vertical
   const offsetYUAFE = y + (alturaUAFE - linesUAFE.length * 4) / 2 + 3;
 
-  // Escribir el texto dentro del segundo rectangulo
   linesUAFE.forEach((line, index) => {
-    doc.text(line, 10 + 2, offsetYUAFE + index * 4, { align: "justify" });
+    doc.text(line, 12, offsetYUAFE + index * 4);
   });
+
+  y += alturaUAFE;
 
   // =============================
   // DEVOLVER BUFFER
