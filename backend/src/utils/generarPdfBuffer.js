@@ -174,7 +174,9 @@ export const generarPdfBuffer = async (
         [
           lote.infoLote.entradareserva,
           lote.infoLote.valorcuota,
-          lote.estadoCuenta.cuotasPagadasCompletas,
+          Number(lote.estadoCuenta.valorporpagar) === 0
+            ? lote.estadoCuenta.cuotaspagadas
+            : lote.estadoCuenta.cuotasPagadasCompletas,
           lote.estadoCuenta.valorcuotaspagadas,
         ],
       ],
@@ -191,7 +193,9 @@ export const generarPdfBuffer = async (
           lote.estadoCuenta.valorvencido,
           lote.estadoCuenta.valorpagado,
           lote.estadoCuenta.valorporpagar,
-          lote.estadoCuenta.cuotasPorPagar,
+          Number(lote.estadoCuenta.valorporpagar) === 0
+            ? 0
+            : lote.estadoCuenta.cuotasPorPagar,
         ],
       ],
     },
