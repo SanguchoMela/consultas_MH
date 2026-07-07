@@ -38,10 +38,17 @@ export const generarTablaAmortizacion = ({
     const fechaCuota = sumarMeses(fechaBase, i);
     const diasMora = calcularDiasMora(formatearFecha(fechaCuota));
 
-    const valorCuotaAjustado =
+    let valorCuotaAjustado =
       i === 0 && Number(ultimoValorPagado) < cuotaBase
         ? Math.max(0, cuotaBase - Number(ultimoValorPagado))
         : cuotaBase;
+
+    if (i === meses - 1) {
+      const factor = 1 + ((Number(tasaMora) || 0) * Math.max(0, diasMora)) / 36000;
+      valorCuotaAjustado = saldo / factor;
+    }
+
+    // valorCuotaAjustado = Math.min(valorCuotaAjustado, saldo)
 
     const interes = calcularInteresMoraPorCuota(
       valorCuotaAjustado,
