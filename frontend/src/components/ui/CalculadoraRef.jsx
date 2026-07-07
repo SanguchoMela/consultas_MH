@@ -141,13 +141,9 @@ export default function CalculadoraRef({ estadoCuenta, cliente, lote }) {
               TOTALES
             </td>
 
-            <td className="px-2">
-              ${lote.estadoCuenta.totalValorCuotas}
-            </td>
+            <td className="px-2">${lote.estadoCuenta.totalValorCuotas}</td>
 
-            <td className="px-2">
-              ${lote.estadoCuenta.totalInteres}
-            </td>
+            <td className="px-2">${lote.estadoCuenta.totalInteres}</td>
 
             <td className="px-2">${lote.estadoCuenta.totalPagar}</td>
 
@@ -214,14 +210,14 @@ export default function CalculadoraRef({ estadoCuenta, cliente, lote }) {
             {carteraVencida.length > 0 ? (
               renderTabla(carteraVencida, "Cartera Vencida", true)
             ) : (
-              <p>No hay cuotas vencidas</p>
+              <p></p>
             )}
           </section>
           <section>
             {carteraVigente.length > 0 ? (
               renderTabla(carteraVigente, "Cartera Vigente", false)
             ) : (
-              <p>No hay cuotas vencidas</p>
+              <p></p>
             )}
           </section>
         </section>

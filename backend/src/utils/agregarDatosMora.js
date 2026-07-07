@@ -1,4 +1,8 @@
-import { generarTablaAmortizacion } from "./amortizacion.js";
+import {
+  formatearFecha,
+  generarTablaAmortizacion,
+  sumarMeses,
+} from "./amortizacion.js";
 import {
   calcularDiasMora,
   calcularInteresMoraPorCuota,
@@ -10,6 +14,7 @@ import {
   calcularTotalCuotas,
   calcularTotalInteres,
   calcularTotalConInteres,
+  parseFechaDMY,
 } from "./mora.js";
 
 const TASA_MORA = 12;
@@ -40,20 +45,21 @@ export const agregarDatosMora = (cliente, pagosDocs) => {
         ? cuotaBase - ultimoValorPagado
         : cuotaBase;
 
-    const diasMoraBase = calcularDiasMora(
-      lote.estadoCuenta.fechaultimacuotapagada,
-    );
+    const interesesPorCuota = Array.from({ length: cuotasPorPagar }, (_, i) => {
+      const fechaCuota = sumarMeses(
+        parseFechaDMY(lote.estadoCuenta.fechaultimacuotapagada),
+        i,
+      );
 
-    const interesesPorCuota = Array.from({ length: cuotasPorPagar }, (_, i) =>
-      calcularInteresMoraPorCuota(
+      const diasMoraCuota = calcularDiasMora(formatearFecha(fechaCuota));
+
+      return calcularInteresMoraPorCuota(
         i === 0 ? cuotaPrimeraAjustada : cuotaBase,
         TASA_MORA,
-        diasMoraBase,
-        i + 1,
-      ),
-    );
+        diasMoraCuota,
+      );
+    });
 
-    // Total interés
     const interesMora = interesesPorCuota.reduce((a, b) => a + b, 0);
 
     const totalConMora = calcularTotalConMora(
@@ -111,7 +117,6 @@ export const agregarDatosMora = (cliente, pagosDocs) => {
         cuotasPagadasCompletas,
         cuotasPorPagar,
 
-        diasMora: diasMoraBase,
         interesMora: Number(interesMora.toFixed(2)),
         interesesPorCuota: interesesPorCuota.map((i) => Number(i.toFixed(2))),
 
