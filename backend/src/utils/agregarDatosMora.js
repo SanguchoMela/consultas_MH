@@ -77,17 +77,14 @@ export const agregarDatosMora = (cliente, pagosDocs) => {
       interesesPorCuota,
       saldoInicial: totalConMora,
       ultimoValorPagado,
+      ultimaCuotaPagada,
+      tasaMora: TASA_MORA,
     });
 
     // Totales de la tabla de amortizacion
     const totalValorCuotas = calcularTotalCuotas(tablaAmortizacion);
     const totalInteres = calcularTotalInteres(tablaAmortizacion);
     const totalPagar = calcularTotalConInteres(tablaAmortizacion);
-
-    console.log(tablaAmortizacion[0]);
-
-    console.log("Total valor cuotas", totalValorCuotas)
-    console.log(typeof totalValorCuotas);
 
     if (cuotasPorPagar === 0) {
       return {

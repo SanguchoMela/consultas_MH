@@ -317,10 +317,8 @@ export const generarPdfBuffer = async (
     });
   }
 
-  // console.log("Tabla amortización:", lote.tablaAmortizacion);
-
   // Tabla de Amortización
-  y = doc.lastAutoTable.finalY + 6;
+  y = doc.lastAutoTable.finalY + 5;
 
   if (lote.tablaAmortizacion?.length) {
     // Encabezado principal
@@ -442,15 +440,30 @@ export const generarPdfBuffer = async (
   const infoTexto = `Adjunto a la presente sírvase encontrar su estado de cuenta de todos los pagos realizados a Manta Hills por el terreno reservado por usted hasta el ${fechaInfo}, de igual manera le agradecemos que revise todos los datos que se encuentran consignados en este documento. De no estar de acuerdo con el mismo sírvase comunicarse a los números telefónicos 0983516817, 0987324065, 0992542227 o al correo contabilidad.mantahills@gmail.com`;
 
   const textLines = doc.splitTextToSize(infoTexto, tableWidth - 4);
-  const alturaCuadro = textLines.length * 4 + 2;
 
-  const espacioNecesario = 7 + alturaCuadro;
-  const pageHeight = doc.internal.pageSize.getHeight();
-
-  if (y + espacioNecesario > pageHeight - 10) {
+  if (doc.lastAutoTable.finalY + 20 > doc.internal.pageSize.getHeight()) {
     doc.addPage();
     y = 15;
+  } else {
+    y = doc.lastAutoTable.finalY + 10;
   }
+
+  const textDims = doc.getTextDimensions(textLines);
+  const alturaCuadro = textDims.h + 6;
+
+  // const alturaCuadro = textLines.length * 4 + 2;
+
+  // const espacioNecesario = 7 + alturaCuadro;
+  const pageHeight = doc.internal.pageSize.getHeight();
+
+  // if (y + espacioNecesario > pageHeight - 10) {
+  //   doc.addPage();
+  //   y = 15;
+  // }
+  // if (y + alturaCuadro > pageHeight - 10) {
+  //   doc.addPage();
+  //   y = 15;
+  // }
 
   y = drawSectionBar(doc, y, "INFORMACIÓN IMPORTANTE");
 

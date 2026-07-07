@@ -1,4 +1,8 @@
-import { parseFechaDMY, calcularDiasMora } from "./mora.js";
+import {
+  parseFechaDMY,
+  calcularDiasMora,
+  calcularInteresMoraPorCuota,
+} from "./mora.js";
 
 export const sumarMeses = (fecha, meses) => {
   const f = new Date(fecha);
@@ -20,8 +24,9 @@ export const generarTablaAmortizacion = ({
   interesesPorCuota,
   saldoInicial,
   ultimoValorPagado,
+  ultimaCuotaPagada = 0,
+  tasaMora
 }) => {
-  // console.log("AMORTIZACION recibe ultimoValorPagado:", ultimoValorPagado);
 
   const tabla = [];
   let saldo = Number(saldoInicial);
@@ -32,20 +37,24 @@ export const generarTablaAmortizacion = ({
   for (let i = 0; i < meses; i++) {
     const fechaCuota = sumarMeses(fechaBase, i);
     const diasMora = calcularDiasMora(formatearFecha(fechaCuota));
-    const interes = Number(interesesPorCuota[i] || 0);
 
     const valorCuotaAjustado =
       i === 0 && Number(ultimoValorPagado) < cuotaBase
         ? Math.max(0, cuotaBase - Number(ultimoValorPagado))
         : cuotaBase;
 
+    const interes = calcularInteresMoraPorCuota(
+      valorCuotaAjustado,
+      tasaMora,
+      diasMora,
+    );
     const totalPagar = valorCuotaAjustado + interes;
 
     saldo -= totalPagar;
     if (saldo < 0) saldo = 0;
 
     tabla.push({
-      cuota: i + 1,
+      cuota: Number(ultimaCuotaPagada) + i + 1,
       fecha: formatearFecha(fechaCuota),
       diasMora,
       valorCuota: cuotaBase,

@@ -4,16 +4,19 @@ import Header from "../layout/Header";
 
 export default function CalculadoraRef({ estadoCuenta, cliente, lote }) {
     const [tasa, setTasa] = useState(4.99)
-    const [cuotas, setCuotas] = useState(24)
-    const [mostrarTabla, setMostrarTabla] = useState(false)
     const printRef = useRef()
-
-    console.log(lote)
 
     const handlePrint = useReactToPrint({
         contentRef: printRef,
         documentTitle: "Refinanciamiento"
     })
+
+    const inicioCuota = Number(lote.estadoCuenta.ultimaCuotaPagada) || 0;
+
+    const cuotas = lote.tablaAmortizacion.map((item, index) => ({
+        numero: inicioCuota + index + 1,
+        ...item,
+    }));
 
     return (
         <>
@@ -67,7 +70,7 @@ export default function CalculadoraRef({ estadoCuenta, cliente, lote }) {
                     <table className="min-w-full table-auto shadow-md text-sm">
                         <thead className="sticky top-0 z-10">
                             <tr className="sub-label">
-                                {/* <th className="table-fc-label">Cuota</th> */}
+                                <th className="table-fc-label">Cuota</th>
                                 <th className="table-fc-label">Fecha</th>
                                 <th className="table-fc-label">Dias mora</th>
                                 <th className="table-fc-label">Valor cuota</th>
@@ -80,9 +83,9 @@ export default function CalculadoraRef({ estadoCuenta, cliente, lote }) {
                         <tbody className="w-full">
                             {lote?.tablaAmortizacion?.map((fila, index) => (
                                 <tr key={index} className="border-t border-gray-200">
-                                    {/* <td className="table-fc-sublabel">
+                                    <td className="table-fc-sublabel">
                                         {fila.cuota}
-                                    </td> */}
+                                    </td>
                                     <td className="table-fc-sublabel">
                                         {fila.fecha}
                                     </td>
@@ -93,7 +96,7 @@ export default function CalculadoraRef({ estadoCuenta, cliente, lote }) {
                                         {Number(fila.valorCuotaAjustado).toFixed(2)}
                                     </td>
                                     <td className="table-fc-sublabel">
-                                        {fila.interes}
+                                        {Number(fila.interes).toFixed(2)}
                                     </td>
                                     <td className="table-fc-sublabel">
                                         {fila.totalPagar}
