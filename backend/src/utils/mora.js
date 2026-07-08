@@ -9,19 +9,11 @@ export const calcularDiasMora = (fecha) => {
   const f = parseFechaDMY(fecha);
   if (!f) return 0;
 
-  // const fechaCorte = new Date(2026, 5, 30); // 30 de junio de 2026
-  const fechaCorte = new Date();
-  const hoy = new Date(2026, 8, 31);
-
-  const limite = hoy > fechaCorte ? fechaCorte : hoy;
+  const hoy = new Date();
 
   // Ignorar la hora para evitar diferencias por huso horario
   const fechaInicio = new Date(f.getFullYear(), f.getMonth(), f.getDate());
-  const fechaFin = new Date(
-    limite.getFullYear(),
-    limite.getMonth(),
-    limite.getDate(),
-  );
+  const fechaFin = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
 
   const MS_POR_DIA = 1000 * 60 * 60 * 24;
 
