@@ -67,7 +67,7 @@ export const generarPdfBuffer = async (
     doc.rect(10, y, pageWidth - 20, altura, "F");
 
     doc.setFont("helvetica", "normal");
-    doc.setFontSize(9);
+    doc.setFontSize(10);
     doc.setTextColor(255);
 
     doc.text(texto, pageWidth / 2, y + altura / 2, {
@@ -174,7 +174,9 @@ export const generarPdfBuffer = async (
         [
           lote.infoLote.entradareserva,
           lote.infoLote.valorcuota,
-          lote.estadoCuenta.cuotasPagadasCompletas,
+          Number(lote.estadoCuenta.valorporpagar) === 0
+            ? lote.estadoCuenta.cuotaspagadas
+            : lote.estadoCuenta.cuotasPagadasCompletas,
           lote.estadoCuenta.valorcuotaspagadas,
         ],
       ],
@@ -191,7 +193,9 @@ export const generarPdfBuffer = async (
           lote.estadoCuenta.valorvencido,
           lote.estadoCuenta.valorpagado,
           lote.estadoCuenta.valorporpagar,
-          lote.estadoCuenta.cuotasPorPagar,
+          Number(lote.estadoCuenta.valorporpagar) === 0
+            ? 0
+            : lote.estadoCuenta.cuotasPorPagar,
         ],
       ],
     },
@@ -321,6 +325,12 @@ export const generarPdfBuffer = async (
   y = doc.lastAutoTable.finalY + 5;
 
   if (lote.estadoCuenta.valorporpagar > 0 && lote.tablaAmortizacion?.length) {
+    const pageHeight = doc.internal.pageSize.getHeight()
+    const espacioNecesario = 40
+    if (y + espacioNecesario > pageHeight - 10) {
+      doc.addPage()
+      y = 15
+    }
     // Encabezado principal
     y = drawSectionBar(doc, y, "TABLA DE AMORTIZACIÓN");
 
@@ -339,6 +349,13 @@ export const generarPdfBuffer = async (
       if (!datos.length) return;
 
       const colorTitulo = esVencidas ? [245, 158, 11] : [120, 150, 160];
+
+      const pageHeight = doc.internal.pageSize.getHeight()
+      const espacioNecesario = 40
+      if (y + espacioNecesario > pageHeight - 10) {
+        doc.addPage()
+        y = 15
+      }
 
       y = drawSubBar(doc, y, titulo, colorTitulo, 7);
 
@@ -393,7 +410,7 @@ export const generarPdfBuffer = async (
         ],
         body,
         styles: {
-          fontSize: 8,
+          fontSize: 9,
           cellPadding: 1,
           overflow: "linebreak",
           textColor: 0,
