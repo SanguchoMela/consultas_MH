@@ -10,7 +10,7 @@ export const calcularDiasMora = (fecha) => {
   if (!f) return 0;
 
   const fechaCorte = new Date(2026, 5, 30); // 30 de junio de 2026
-  // const hoy = new Date();
+  // const fechaCorte = new Date();
   const hoy = new Date(2026, 8, 31);
 
   const limite = hoy > fechaCorte ? fechaCorte : hoy;

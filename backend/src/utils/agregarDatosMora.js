@@ -45,6 +45,12 @@ export const agregarDatosMora = (cliente, pagosDocs) => {
         ? cuotaBase - ultimoValorPagado
         : cuotaBase;
 
+    const capitalPendiente = Number(lote.estadoCuenta.valorporpagar);
+
+    const cuotasNormales = cuotasPorPagar - 1;
+
+    const capitalUltimaCuota = capitalPendiente - cuotasNormales * cuotaBase;
+
     const interesesPorCuota = Array.from({ length: cuotasPorPagar }, (_, i) => {
       const fechaCuota = sumarMeses(
         parseFechaDMY(lote.estadoCuenta.fechaultimacuotapagada),
@@ -53,8 +59,14 @@ export const agregarDatosMora = (cliente, pagosDocs) => {
 
       const diasMoraCuota = calcularDiasMora(formatearFecha(fechaCuota));
 
+      let capitalCuota = i === 0 ? cuotaPrimeraAjustada : cuotaBase;
+
+      if (i === cuotasPorPagar - 1) {
+        capitalCuota = capitalUltimaCuota;
+      }
+
       return calcularInteresMoraPorCuota(
-        i === 0 ? cuotaPrimeraAjustada : cuotaBase,
+        capitalCuota,
         TASA_MORA,
         diasMoraCuota,
       );
