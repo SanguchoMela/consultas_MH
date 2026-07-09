@@ -25,14 +25,37 @@ export const generarTablaAmortizacion = ({
   saldoInicial,
   ultimoValorPagado,
   ultimaCuotaPagada = 0,
-  tasaMora
+  tasaMora,
+  esContado,
 }) => {
-
   const tabla = [];
   let saldo = Number(saldoInicial);
   const cuotaBase = Number(valorCuota);
 
   const fechaBase = parseFechaDMY(fechaPrimeraCuota);
+
+  if (esContado) {
+    const diasMora = calcularDiasMora(fechaPrimeraCuota);
+
+    const interes = calcularInteresMoraPorCuota(
+      Number(saldoInicial),
+      tasaMora,
+      diasMora,
+    );
+
+    return [
+      {
+        cuota: 1,
+        fecha: fechaPrimeraCuota,
+        diasMora,
+        valorCuota: Number(saldoInicial),
+        valorCuotaAjustado: Number(saldoInicial),
+        interes: Number(interes.toFixed(2)),
+        totalPagar: Number((Number(saldoInicial) + interes).toFixed(2)),
+        saldo: 0,
+      },
+    ];
+  }
 
   for (let i = 0; i < meses; i++) {
     const fechaCuota = sumarMeses(fechaBase, i);
@@ -44,7 +67,8 @@ export const generarTablaAmortizacion = ({
         : cuotaBase;
 
     if (i === meses - 1) {
-      const factor = 1 + ((Number(tasaMora) || 0) * Math.max(0, diasMora)) / 36000;
+      const factor =
+        1 + ((Number(tasaMora) || 0) * Math.max(0, diasMora)) / 36000;
       valorCuotaAjustado = saldo / factor;
     }
 

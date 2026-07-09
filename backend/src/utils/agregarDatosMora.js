@@ -36,9 +36,24 @@ export const agregarDatosMora = (cliente, pagosDocs) => {
         ? ultimaCuotaPagadaRaw
         : Math.max(0, ultimaCuotaPagadaRaw - 1);
 
-    const totalCuotas = parseFinanciamientoMeses(lote.infoLote.financiamiento);
+    const esContado =
+      lote.infoLote.financiamiento === "Contado" &&
+      Number(lote.estadoCuenta.dividendosporpagar) === 1;
+
+    // console.log("financiamiento:", lote.infoLote.financiamiento);
+    // console.log("dividendos:", lote.estadoCuenta.dividendosporpagar);
+    // console.log("ultimaCuotaPagada:", ultimaCuotaPagada);
+
+    const totalCuotas = esContado
+      ? 1
+      : parseFinanciamientoMeses(lote.infoLote.financiamiento);
     const cuotasPagadasCompletas = ultimaCuotaPagada;
-    const cuotasPorPagar = Math.max(0, totalCuotas - ultimaCuotaPagada);
+    const cuotasPorPagar = esContado
+      ? 1
+      : Math.max(0, totalCuotas - ultimaCuotaPagada);
+
+    // console.log("totalCuotas:", totalCuotas);
+    // console.log("cuotasPorPagar:", cuotasPorPagar);
 
     const cuotaPrimeraAjustada =
       ultimoValorPagado > 0 && ultimoValorPagado < cuotaBase
@@ -74,15 +89,13 @@ export const agregarDatosMora = (cliente, pagosDocs) => {
 
     const interesMora = interesesPorCuota.reduce((a, b) => a + b, 0);
 
-    const totalConMora = calcularTotalConMora(
-      lote.estadoCuenta.valorporpagar,
-      interesMora,
-    );
+    const totalConMora = esContado
+      ? Number(lote.estadoCuenta.valorporpagar) + interesMora
+      : calcularTotalConMora(lote.estadoCuenta.valorporpagar, interesMora);
 
-    const valorCuotaConMora = calcularCuotaConMora(
-      totalConMora,
-      cuotasPorPagar,
-    );
+    const valorCuotaConMora = esContado
+      ? Number(lote.estadoCuenta.valorporpagar)
+      : calcularCuotaConMora(totalConMora, cuotasPorPagar);
 
     const fechaPrimeraCuota =
       lote.estadoCuenta.fechaPrimeraCuota ||
@@ -91,12 +104,17 @@ export const agregarDatosMora = (cliente, pagosDocs) => {
     const tablaAmortizacion = generarTablaAmortizacion({
       fechaPrimeraCuota,
       meses: cuotasPorPagar,
-      valorCuota: cuotaBase,
+      valorCuota: esContado
+        ? Number(lote.estadoCuenta.valorporpagar)
+        : cuotaBase,
       interesesPorCuota,
-      saldoInicial: totalConMora,
+      saldoInicial: esContado
+        ? Number(lote.estadoCuenta.valorporpagar)
+        : totalConMora,
       ultimoValorPagado,
       ultimaCuotaPagada,
       tasaMora: TASA_MORA,
+      esContado,
     });
 
     // Totales de la tabla de amortizacion
