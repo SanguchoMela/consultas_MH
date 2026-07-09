@@ -123,21 +123,21 @@ export default function Sidebar() {
                                     Manuales de Procedimientos
                                 </Link>
 
-                                <Link
+                                {/* <Link
                                     to="/reportes"
                                     className={linkClass("/reportes")}
                                 >
                                     Reportes
-                                </Link>
+                                </Link> */}
                             </div>
                         )}
                     </div>
 
-                    {role === "Administrador" && (
+                    {/* {role === "Administrador" && (
                         <Link to="/admin" className={linkClass("/admin")}>
                             Administración
                         </Link>
-                    )}
+                    )} */}
                 </nav>
 
                 {/* <hr className="text-cyan-900/30" /> */}

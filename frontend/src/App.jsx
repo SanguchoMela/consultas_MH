@@ -48,18 +48,18 @@ function App() {
                 <Manuales />
               </AppLayout>
             </ProtectedRoute>} />
-          <Route path="/reportes" element={
+          {/* <Route path="/reportes" element={
             <ProtectedRoute>
               <AppLayout>
                 <Reports />
               </AppLayout>
-            </ProtectedRoute>} />
-          <Route path="/admin" element={
+            </ProtectedRoute>} /> */}
+          {/* <Route path="/admin" element={
             <ProtectedRoute adminOnly>
               <AppLayout>
                 <Admin />
               </AppLayout>
-            </ProtectedRoute>} />
+            </ProtectedRoute>} /> */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
