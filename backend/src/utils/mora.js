@@ -9,7 +9,8 @@ export const calcularDiasMora = (fecha) => {
   const f = parseFechaDMY(fecha);
   if (!f) return 0;
 
-  const hoy = new Date();
+  // const hoy = new Date();
+  const hoy = new Date(2026, 5, 30);
 
   // Ignorar la hora para evitar diferencias por huso horario
   const fechaInicio = new Date(f.getFullYear(), f.getMonth(), f.getDate());
