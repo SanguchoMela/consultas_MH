@@ -2,6 +2,7 @@ import {
   parseFechaDMY,
   calcularDiasMora,
   calcularInteresMoraPorCuota,
+  generarFechaCuota
 } from "./mora.js";
 
 export const sumarMeses = (fecha, meses) => {
@@ -11,6 +12,9 @@ export const sumarMeses = (fecha, meses) => {
 };
 
 export const formatearFecha = (fecha) => {
+  if (!(fecha instanceof Date) || isNaN(fecha.getTime())) {
+    return "Fecha inválida";
+  }
   const d = String(fecha.getDate()).padStart(2, "0");
   const m = String(fecha.getMonth() + 1).padStart(2, "0");
   const y = fecha.getFullYear();
@@ -68,7 +72,8 @@ export const generarTablaAmortizacion = ({
   // });
 
   for (let i = 0; i < meses; i++) {
-    const fechaCuota = sumarMeses(fechaBase, i);
+    // const fechaCuota = sumarMeses(fechaBase, i);
+    const fechaCuota = generarFechaCuota(fechaBase, i);
     const diasMora = calcularDiasMora(formatearFecha(fechaCuota));
 
     let valorCuotaAjustado

@@ -5,6 +5,34 @@ export const parseFechaDMY = (fecha) => {
   return new Date(Number(y), Number(m) - 1, Number(d));
 };
 
+export const generarFechaCuota = (fechaBase, indice) => {
+  const f = new Date(fechaBase);
+
+  if (isNaN(f.getTime())) {
+    return null;
+  }
+
+  // Primera cuota conserva la fecha original
+  if (indice === 0) {
+    return f;
+  }
+
+  f.setMonth(f.getMonth() + indice);
+
+  const anio = f.getFullYear();
+  const mes = f.getMonth();
+
+  const ultimoDiaMes = new Date(
+    anio,
+    mes + 1,
+    0
+  ).getDate();
+
+  const dia = Math.min(30, ultimoDiaMes);
+
+  return new Date(anio, mes, dia);
+};
+
 export const calcularDiasMora = (fecha) => {
   const f = parseFechaDMY(fecha);
   if (!f) return 0;
