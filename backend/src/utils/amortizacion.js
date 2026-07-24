@@ -23,14 +23,17 @@ export const generarTablaAmortizacion = ({
   valorCuota,
   interesesPorCuota,
   saldoInicial,
+  saldoConMora,
   ultimoValorPagado,
   ultimaCuotaPagada = 0,
   tasaMora,
   esContado,
 }) => {
   const tabla = [];
-  let saldo = Number(saldoInicial);
   const cuotaBase = Number(valorCuota);
+
+  const saldoCapitalInicial = Number(saldoInicial);
+  let saldo = Number(saldoConMora);
 
   const fechaBase = parseFechaDMY(fechaPrimeraCuota);
 
@@ -56,33 +59,49 @@ export const generarTablaAmortizacion = ({
       },
     ];
   }
+  // console.log("DATOS AMORTIZACION", {
+  //   saldoInicial,
+  //   saldoConMora,
+  //   meses,
+  //   valorCuota,
+  //   ultimoValorPagado
+  // });
 
   for (let i = 0; i < meses; i++) {
     const fechaCuota = sumarMeses(fechaBase, i);
     const diasMora = calcularDiasMora(formatearFecha(fechaCuota));
 
-    let valorCuotaAjustado =
-      i === 0 && Number(ultimoValorPagado) < cuotaBase
-        ? Math.max(0, cuotaBase - Number(ultimoValorPagado))
-        : cuotaBase;
+    let valorCuotaAjustado
 
-    if (i === meses - 1) {
-      const factor =
-        1 + ((Number(tasaMora) || 0) * Math.max(0, diasMora)) / 36000;
-      valorCuotaAjustado = saldo / factor;
+    // Primera cuota con abono previo
+    if (i === 0 && Number(ultimoValorPagado) < cuotaBase) {
+      valorCuotaAjustado = Math.max(0, cuotaBase - Number(ultimoValorPagado));
     }
-
-    // valorCuotaAjustado = Math.min(valorCuotaAjustado, saldo)
+    // Última cuota calculada por diferencia
+    else if (i === meses - 1) {
+      const cuotasAnteriores = tabla.reduce(
+        (total, cuota) =>
+          total + Number(cuota.valorCuotaAjustado),
+        0
+      );
+      valorCuotaAjustado = Number((saldoCapitalInicial - cuotasAnteriores).toFixed(2));
+    }
+    // Cuotas normales
+    else { valorCuotaAjustado = cuotaBase; }
 
     const interes = calcularInteresMoraPorCuota(
       valorCuotaAjustado,
       tasaMora,
       diasMora,
     );
-    const totalPagar = valorCuotaAjustado + interes;
+    const totalPagar = Number(valorCuotaAjustado + interes).toFixed(2);
 
-    saldo -= totalPagar;
+    // Saldo para mostrar: resta cuota + interes
+    saldo = Number((saldo - totalPagar).toFixed(2));
+
     if (saldo < 0) saldo = 0;
+
+    // saldo -= totalPagar;
 
     tabla.push({
       cuota: Number(ultimaCuotaPagada) + i + 1,
@@ -91,8 +110,8 @@ export const generarTablaAmortizacion = ({
       valorCuota: cuotaBase,
       valorCuotaAjustado,
       interes,
-      totalPagar: Number(totalPagar.toFixed(2)),
-      saldo: Number(saldo.toFixed(2)),
+      totalPagar,
+      saldo,
     });
   }
 

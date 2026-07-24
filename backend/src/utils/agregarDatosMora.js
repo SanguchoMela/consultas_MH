@@ -62,9 +62,7 @@ export const agregarDatosMora = (cliente, pagosDocs) => {
 
     const capitalPendiente = Number(lote.estadoCuenta.valorporpagar);
 
-    const cuotasNormales = cuotasPorPagar - 1;
-
-    const capitalUltimaCuota = capitalPendiente - cuotasNormales * cuotaBase;
+    const capitalUltimaCuota = capitalPendiente - cuotaPrimeraAjustada - (cuotasPorPagar - 2) * cuotaBase
 
     const interesesPorCuota = Array.from({ length: cuotasPorPagar }, (_, i) => {
       const fechaCuota = sumarMeses(
@@ -87,7 +85,22 @@ export const agregarDatosMora = (cliente, pagosDocs) => {
       );
     });
 
-    const interesMora = interesesPorCuota.reduce((a, b) => a + b, 0);
+    const interesesPorCuotaRedondeados = interesesPorCuota.map(
+      (i) => Number(i.toFixed(2))
+    );
+
+    const interesMora = interesesPorCuotaRedondeados.reduce(
+      (a, b) => a + b,
+      0
+    );
+
+    // console.log({
+    //   capitalPendiente,
+    //   interesesPorCuota,
+    //   interesMora,
+    //   totalCalculado:
+    //     Number(lote.estadoCuenta.valorporpagar) + interesMora
+    // });
 
     const totalConMora = esContado
       ? Number(lote.estadoCuenta.valorporpagar) + interesMora
@@ -108,9 +121,11 @@ export const agregarDatosMora = (cliente, pagosDocs) => {
         ? Number(lote.estadoCuenta.valorporpagar)
         : cuotaBase,
       interesesPorCuota,
-      saldoInicial: esContado
-        ? Number(lote.estadoCuenta.valorporpagar)
-        : totalConMora,
+      // saldoInicial: esContado
+      //   ? Number(lote.estadoCuenta.valorporpagar)
+      //   : totalConMora,
+      saldoInicial: Number(lote.estadoCuenta.valorporpagar),
+      saldoConMora: Number(totalConMora),
       ultimoValorPagado,
       ultimaCuotaPagada,
       tasaMora: TASA_MORA,
@@ -148,7 +163,7 @@ export const agregarDatosMora = (cliente, pagosDocs) => {
         cuotasPorPagar,
 
         interesMora: Number(interesMora.toFixed(2)),
-        interesesPorCuota: interesesPorCuota.map((i) => Number(i.toFixed(2))),
+        interesesPorCuota: interesesPorCuotaRedondeados,
 
         totalConMora: Number(totalConMora.toFixed(2)),
         valorCuotaConMora: Number(valorCuotaConMora.toFixed(2)),
