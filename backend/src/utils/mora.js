@@ -8,29 +8,26 @@ export const parseFechaDMY = (fecha) => {
 export const generarFechaCuota = (fechaBase, indice) => {
   const f = new Date(fechaBase);
 
-  if (isNaN(f.getTime())) {
-    return null;
-  }
+  if (isNaN(f.getTime())) return null;
 
   // Primera cuota conserva la fecha original
-  if (indice === 0) {
-    return f;
-  }
-
-  f.setMonth(f.getMonth() + indice);
-
+  if (indice === 0) return f;
+  
   const anio = f.getFullYear();
-  const mes = f.getMonth();
+  const mes = f.getMonth() + indice;
+
+  // Crear siempre desde el día 1
+  const nuevaFecha = new Date (anio, mes, 1)
 
   const ultimoDiaMes = new Date(
-    anio,
-    mes + 1,
+    nuevaFecha.getFullYear(),
+    nuevaFecha.getMonth() + 1,
     0
   ).getDate();
 
-  const dia = Math.min(30, ultimoDiaMes);
+  nuevaFecha.setDate(Math.min(30, ultimoDiaMes))
 
-  return new Date(anio, mes, dia);
+  return nuevaFecha;
 };
 
 export const calcularDiasMora = (fecha) => {
