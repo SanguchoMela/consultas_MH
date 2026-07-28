@@ -48,33 +48,6 @@ export const calcularDiasMora = (fecha) => {
   return Math.max(0, dias);
 };
 
-// export const calcularDiasMora = (fecha) => {
-//     const f = parseFechaDMY(fecha);
-//     if (!f) return 0;
-
-//     const fechaCorte = new Date(2026, 5, 30)
-
-//     const hoy = new Date();
-
-//     const limite = hoy > fechaCorte ? fechaCorte : hoy;
-
-//     let anios = limite.getFullYear() - f.getFullYear();
-//     let meses = limite.getMonth() - f.getMonth();
-//     let dias = limite.getDate() - f.getDate();
-
-//     if (dias < 0) {
-//         dias += 30;
-//         meses--;
-//     }
-
-//     if (meses < 0) {
-//         meses += 12;
-//         anios--;
-//     }
-
-//     return Math.max(0, anios * 360 + meses * 30 + dias);
-// };
-
 // interés por cuota individual
 export const calcularInteresMoraPorCuota = (valorCuota, tasa, diasMora) => {
   const cuota = Number(valorCuota) || 0;

@@ -5,12 +5,6 @@ import {
   generarFechaCuota
 } from "./mora.js";
 
-export const sumarMeses = (fecha, meses) => {
-  const f = new Date(fecha);
-  f.setMonth(f.getMonth() + meses);
-  return f;
-};
-
 export const formatearFecha = (fecha) => {
   if (!(fecha instanceof Date) || isNaN(fecha.getTime())) {
     return "Fecha inválida";
@@ -63,16 +57,8 @@ export const generarTablaAmortizacion = ({
       },
     ];
   }
-  // console.log("DATOS AMORTIZACION", {
-  //   saldoInicial,
-  //   saldoConMora,
-  //   meses,
-  //   valorCuota,
-  //   ultimoValorPagado
-  // });
 
   for (let i = 0; i < meses; i++) {
-    // const fechaCuota = sumarMeses(fechaBase, i);
     const fechaCuota = generarFechaCuota(fechaBase, i);
     const diasMora = calcularDiasMora(formatearFecha(fechaCuota));
 
@@ -105,8 +91,6 @@ export const generarTablaAmortizacion = ({
     saldo = Number((saldo - totalPagar).toFixed(2));
 
     if (saldo < 0) saldo = 0;
-
-    // saldo -= totalPagar;
 
     tabla.push({
       cuota: Number(ultimaCuotaPagada) + i + 1,
