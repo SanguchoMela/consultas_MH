@@ -192,7 +192,7 @@ export const generarPdfBuffer = async (
         [
           lote.estadoCuenta.valorvencido,
           lote.estadoCuenta.valorpagado,
-          lote.estadoCuenta.valorporpagar,
+          lote.estadoCuenta.totalConMora,
           Number(lote.estadoCuenta.valorporpagar) === 0
             ? 0
             : lote.estadoCuenta.cuotasPorPagar,
